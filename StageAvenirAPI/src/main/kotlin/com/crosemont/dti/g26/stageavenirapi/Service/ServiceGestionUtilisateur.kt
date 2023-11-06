@@ -1,6 +1,6 @@
 package com.crosemont.dti.g26.stageavenirapi.Service
 
-import com.crosemont.dti.g26.stageavenirapi.modèle.Utilisateur
+import com.crosemont.dti.g26.stageavenirapi.Modèle.Utilisateur
 import org.springframework.stereotype.Service
 
 @Service

@@ -1,4 +1,5 @@
-package com.crosemont.dti.g26.stageavenirapi.controlleurs
+package com.crosemont.dti.g26.stageavenirapi.Controleurs
+import com.crosemont.dti.g26.stageavenirapi.Modèle.Catégorie
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody

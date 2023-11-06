@@ -1,7 +1,6 @@
 package com.crosemont.dti.g26.stageavenirapi.DAO
 
-import com.crosemont.dti.g26.stageavenirapi.modèle.Candidature
-import com.crosemont.dti.g26.stageavenirapi.modèle.Demande_Stage
+import com.crosemont.dti.g26.stageavenirapi.Modèle.Candidature
 
 interface CandidatureDAO :DAO<Candidature> {
 
