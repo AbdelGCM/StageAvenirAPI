@@ -5,12 +5,17 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class EntrepriseControleur {
+class Offres_StageControlleur {
 
-    @PostMapping("/profil")
-    fun changerPhoto(){}
+    @GetMapping("/offres_Stages")
+    fun obtenirOffresStages(){
+    }
 
-    @PostMapping("/profil/info")
-    fun changerInfos(){}
+    @GetMapping("/offres_Stages/{code}")
+    fun obtenirOffresStagesParCode(){
+    }
+
+
+
 
 }
