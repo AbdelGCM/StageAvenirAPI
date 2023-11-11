@@ -4,7 +4,9 @@ import com.crosemont.dti.g26.stageavenirapi.modèle.Utilisateur
 import org.springframework.stereotype.Service
 
 @Service
-class ServiceGestionUtilisateur {
+class ServiceGestionUtilisateur  {
+
+
 
     fun obtenirInformations(code : Int): Utilisateur {
         TODO("Not yet implemented")
