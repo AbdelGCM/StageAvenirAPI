@@ -1,7 +1,9 @@
 package com.crosemont.dti.g26.stageavenirapi.DAO
 
 import com.crosemont.dti.g26.stageavenirapi.Modèle.Utilisateur
+import org.springframework.stereotype.Repository
 
+@Repository
 class UtilisateurDAOImplement:UtilisateurDAO {
     override fun ajouter(element: Utilisateur): Utilisateur? {
         TODO("Not yet implemented")

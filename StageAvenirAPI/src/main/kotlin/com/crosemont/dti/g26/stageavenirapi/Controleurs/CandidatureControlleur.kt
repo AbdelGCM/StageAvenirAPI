@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RestController
 class CandidatureControlleur {
 
     @GetMapping("/candidatures")
-    fun obtenirCandidatures(@PathVariable code: Int){
+    fun obtenirCandidatures(@PathVariable codeUtilisateur: Int){
 
     }
 
-    @PutMapping("/candidatures/{id}")
-    fun annulerCandidature(@PathVariable code: Int){
+    @PutMapping("/candidature")
+    fun annulerCandidature(@PathVariable code: Int, @PathVariable candidature: Candidature){
     }
 
     @PostMapping("/candidature")

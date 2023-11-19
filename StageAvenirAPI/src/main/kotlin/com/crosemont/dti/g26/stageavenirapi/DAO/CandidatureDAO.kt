@@ -9,6 +9,6 @@ interface CandidatureDAO :DAO<Candidature> {
     override fun chercherTous(): List<Candidature>
     override fun modifier(element: Candidature): Candidature?
     override fun supprimer(element: Candidature): Boolean
-    fun annuler(element: Candidature):Boolean
+
 
 }

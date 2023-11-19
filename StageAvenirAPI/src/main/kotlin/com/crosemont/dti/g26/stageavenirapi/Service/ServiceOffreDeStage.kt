@@ -11,6 +11,6 @@ class ServiceOffreDeStage {
     fun obtenirOffreParCode (codeCandidature: Int){}
     fun postuler (codeEtudiant : Int , candidature: Candidature, documents: List<Document>){}
     fun obtenirCandidatures (codeEtudian:Int){}
-    fun annulerCandidature (codeCandidature : Int){}
+
 
 }
