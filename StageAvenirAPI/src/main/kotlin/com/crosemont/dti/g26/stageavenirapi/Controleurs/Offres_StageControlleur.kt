@@ -1,0 +1,21 @@
+package com.crosemont.dti.g26.stageavenirapi.Controleurs
+
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RestController
+
+@RestController
+class Offres_StageControlleur {
+
+    @GetMapping("/offres_Stages")
+    fun obtenirOffresStages(){
+    }
+
+    @GetMapping("/offres_Stages/{code}")
+    fun obtenirOffresStagesParCode(){
+    }
+
+
+
+
+}
