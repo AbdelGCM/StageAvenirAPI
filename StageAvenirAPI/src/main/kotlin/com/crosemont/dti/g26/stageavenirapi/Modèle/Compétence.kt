@@ -1,6 +1,6 @@
 package com.crosemont.dti.g26.stageavenirapi.Modèle
 
-data class Comprétence(
+data class Compétence(
     val idComprétence: Int,
     val nom: String,
     val description: String,
