@@ -1,10 +1,11 @@
 package com.crosemont.dti.g26.stageavenirapi.DAO
 
 import com.crosemont.dti.g26.stageavenirapi.Modèle.Candidature
+import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Repository
 
 @Repository
-class CandidatureDAOImplement : CandidatureDAO {
+class CandidatureDAOImplement(val bd : JdbcTemplate) : CandidatureDAO {
     override fun ajouter(element: Candidature): Candidature? {
         TODO("Not yet implemented")
     }
