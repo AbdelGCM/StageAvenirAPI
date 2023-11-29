@@ -1,3 +1,4 @@
+/*
 package com.crosemont.dti.g26.stageavenirapi.DAO
 
 import com.crosemont.dti.g26.stageavenirapi.Modèle.Utilisateur
@@ -29,4 +30,10 @@ class UtilisateurDAOImplement(val bd : JdbcTemplate):UtilisateurDAO {
     override fun cahangerPhoto(element: Utilisateur, urlPhoto: String): Boolean {
         TODO("Not yet implemented")
     }
+
+    override fun effacer(code: Int) {
+        TODO("Not yet implemented")
+    }
 }
+
+ */
