@@ -8,18 +8,46 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class Demandes_StagesControlleur {
+    @GetMapping
+    fun obtenirToutesDemandesStage() = service.obtenirToutesDemandesStage()
 
+    @GetMapping("/{code}")
+    fun obtenirDemandeStageParCode(@PathVariable code: Int) =
+        service.obtenirDemandeParId(code) ?: throw RessourceInexistanteException("La demande de stage $code n'est pas inscrite au service.")
 
+    @PostMapping
+    fun ajouterDemandeStage(@RequestBody demande: DemandeStage): ResponseEntity<DemandeStage> {
+        val nouvelleDemande = service.ajouterDemande(demande)
 
-    @GetMapping("/demandes")
-    fun obtenirDemandes() {
+        return nouvelleDemande?.let {
+            val uri = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{code}")
+                .buildAndExpand(it.idDemandeStage)
+                .toUri()
+
+            ResponseEntity.created(uri).body(it)
+        } ?: ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build()
     }
 
-    @PostMapping("/demande")
-    fun ajouterDemande(@RequestBody demande: Demandes_StagesControlleur) {
+    @DeleteMapping("/{code}")
+    fun supprimerDemandeStage(@PathVariable code: Int): ResponseEntity<Void> {
+        service.effacerDemande(code)
+        return ResponseEntity.noContent().build()
     }
 
-    @PutMapping("/demande/{code}")
-    fun modifierStatutDemande(@RequestBody demande: Demandes_StagesControlleur, statut : Boolean) {
+    @PutMapping("/{code}")
+    fun modifierDemandeStage(@PathVariable code: Int, @RequestBody demande: DemandeStage): ResponseEntity<DemandeStage> {
+        val nouvelleDemande = service.modifierDemande(code, demande)
+
+        return nouvelleDemande?.let {
+            val uri = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{code}")
+                .buildAndExpand(it.idDemandeStage)
+                .toUri()
+
+            ResponseEntity.created(uri).body(it)
+        } ?: ResponseEntity.ok(demande)
     }
 }

@@ -7,28 +7,38 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class DemandeStageDAOImplement() : DemandeStageDAO {
-    override fun ajouter(element: DemandeStage): DemandeStage? {
-        TODO("Not yet implemented")
-    }
+    override fun ajouter(demande: DemandeStage): DemandeStage? {
+        val index = SourceDonnées.demande.indexOfFirst{it.idDemandeStage == demande.idDemandeStage}
 
-    override fun chercherParCode(code: Int): DemandeStage? {
-        TODO("Not yet implemented")
-    }
-
-    override fun chercherTous(): List<DemandeStage> {
-        TODO("Not yet implemented")
-    }
-
-    override fun modifier(id: Int, element: DemandeStage): DemandeStage? {
-        TODO("Not yet implemented")
-    }
-
-    /*
-        override fun modifier(element: DemandeStage): DemandeStage? {
-            TODO("Not yet implemented")
+        if (index != -1) {
+            throw ConflitAvecUneRessourceExistanteException("La demande de stage ${demande.idDemandeStage} est déjà inscrit au service.")
         }
-        */
+        SourceDonnées.demande.add(demande)
+        return demande
+    }
+
+    override fun chercherParCode(code: Int): DemandeStage? =SourceDonnées.demande.find { it.idDemandeStage == code }
+
+    override fun chercherTous(): List<OffreStage> = SourceDonnées.demande
+
+    override fun modifier(id: Int, demande: DemandeStage): DemandeStage? {
+        val index = SourceDonnées.demande.indexOfFirst{it.idDemandeStage == id}
+
+        if (index != -1) {
+            SourceDonnées.demande.set(index, demande)
+            return null
+        } else {
+            return ajouter(demande)
+        }
+    }
+
+
     override fun effacer(code: Int) {
-        TODO("Not yet implemented")
+        val demande = SourceDonnées.demande.find{it.idDemandeStage == code}
+        if(demande != null) {
+            SourceDonnées.demande.remove(demande)
+        } else {
+            throw RessourceInexistanteException("La demande $demande n'est pas inscrit au service.")
+        }
     }
 }

@@ -19,6 +19,18 @@ class SourceDonnées {
                 OffreStage(9, "Analyste QA", "Ingénieur QA", "Assurez la qualité des logiciels par le biais de tests approfondis", true, LocalDate.of(2023, 9, 1), LocalDate.of(2024, 2, 28), 4, 3),
                 OffreStage(10, "Ingénieur DevOps", "Ingénieur DevOps", "Automatisez et améliorez le processus de développement", false, LocalDate.of(2023, 10, 1), LocalDate.of(2024, 3, 31), 5, 1)
         )
+        val demande = mutableListOf(
+            DemandeStage(1, "Demande de stage Développeur Web", "Intéressé par le développement web", "Développeur Web", 1),
+            DemandeStage(2, "Candidature pour Analyste de données", "Passionné par l'analyse des données", "Analyste de données", 2),
+            DemandeStage(3, "Stage en Développement mobile", "Expérience antérieure en développement mobile", "Développeur mobile", 3),
+            DemandeStage(4, "Intérêt pour Administrateur système", "Compétences en gestion de systèmes informatiques", "Administrateur système", 1),
+            DemandeStage(5, "Stage Concepteur UX/UI", "Connaissance approfondie en conception d'interfaces", "Concepteur UX/UI", 2),
+            DemandeStage(6, "Candidature Développeur backend", "Familiarité avec la logique serveur et les bases de données", "Développeur backend", 3),
+            DemandeStage(7, "Demande en cybersécurité", "Intérêt marqué pour la sécurité informatique", "Spécialiste en cybersécurité", 1),
+            DemandeStage(8, "Stage Développeur front-end", "Expérience en création d'interfaces attrayantes", "Développeur front-end", 2),
+            DemandeStage(9, "Candidature pour Analyste QA", "Compétences approfondies en assurance qualité", "Analyste QA", 3),
+            DemandeStage(10, "Stage Ingénieur DevOps", "Intéressé par l'automatisation des processus de développement", "Ingénieur DevOps", 1)
+        )
 
     }
 
