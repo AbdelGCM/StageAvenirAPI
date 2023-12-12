@@ -11,11 +11,8 @@ class ServiceOffreDeStage(val dao: OffreStageDAO){
 
     fun obtenirOffresStage(): List<OffreStage> = dao.chercherTous()
     fun obtenirOffreParCode (code: Int): OffreStage? = dao.chercherParCode(code)
-    fun postuler (codeEtudiant : Int , candidature: Candidature, documents: List<Document>){}
-    fun obtenirCandidatures (codeEtudian:Int){}
     fun ajouter (offre: OffreStage): OffreStage? = dao.ajouter(offre)
     fun effacer(code: Int) = dao.effacer(code)
-
     fun modifier(code: Int, offre: OffreStage): OffreStage? = dao.modifier(code, offre)
 
 }

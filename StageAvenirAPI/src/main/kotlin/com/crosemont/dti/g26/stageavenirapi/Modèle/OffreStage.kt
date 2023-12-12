@@ -10,6 +10,7 @@ data class OffreStage(
     val estRémunéré: Boolean,
     val dateDébut: LocalDate,
     val dateFin: LocalDate,
-    val entrepriseIdEntreprise: Int,
-    val catégorieIdCatégorie: Int
+    val estVisible: Boolean,
+    val utilisateur: Utilisateur,
+    val catégorie:Catégorie
 )

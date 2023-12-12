@@ -15,4 +15,6 @@ interface OffreStageDAO : DAO<OffreStage> {
 
     override fun modifier(id: Int,offre: OffreStage): OffreStage?
 
+    fun modifierVisibilité(id: Int,offre: OffreStage): OffreStage?
+
 }
