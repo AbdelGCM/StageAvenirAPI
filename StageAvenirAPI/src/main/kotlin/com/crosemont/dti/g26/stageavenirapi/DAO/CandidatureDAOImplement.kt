@@ -1,3 +1,4 @@
+
 package com.crosemont.dti.g26.stageavenirapi.DAO
 
 import com.crosemont.dti.g26.stageavenirapi.Modèle.Candidature
@@ -26,5 +27,10 @@ class CandidatureDAOImplement(val bd : JdbcTemplate) : CandidatureDAO {
         TODO("Not yet implemented")
     }
 
+    override fun effacer(code: Int) {
+        TODO("Not yet implemented")
+    }
+
 
 }
+

@@ -1,3 +1,4 @@
+
 package com.crosemont.dti.g26.stageavenirapi.DAO
 
 
@@ -29,12 +30,19 @@ class UtilisateurDAOImplement(val bd : JdbcTemplate):UtilisateurDAO {
         TODO("Not yet implemented")
     }
 
-    override fun supprimer(element: Utilisateur): Boolean {
+    override fun effacer(element: Utilisateur): Boolean {
         TODO("Not yet implemented")
     }
+
+
 
     override fun cahangerPhoto(element: Utilisateur, urlPhoto: String): Boolean {
         TODO("Not yet implemented")
     }
+
+
+   
 }
+
+
 

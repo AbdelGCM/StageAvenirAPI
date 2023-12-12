@@ -7,7 +7,6 @@ data class OffreStage(
     val titreOffre: String,
     val posteOffert: String,
     val description: String,
-    val favori: Boolean,
     val estRémunéré: Boolean,
     val dateDébut: LocalDate,
     val dateFin: LocalDate,
