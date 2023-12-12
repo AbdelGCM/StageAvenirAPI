@@ -23,23 +23,27 @@ class OffreStageDAOImplement(): OffreStageDAO {
 
     override fun chercherParCode(code: Int): OffreStage? =SourceDonnées.offres.find { it.idOffreStage == code }
 
-    override fun modifier(id: Int,offre: OffreStage): OffreStage? {
-        val index = SourceDonnées.offres.indexOfFirst{it.idOffreStage == id}
+    override fun modifier(offre: OffreStage): Boolean {
+        /*val index = SourceDonnées.offres.indexOfFirst{it.idOffreStage == id}
 
         if (index != -1) {
             SourceDonnées.offres.set(index, offre)
             return null
         } else {
             return ajouter(offre)
-        }
+        }*/
+         TODO()
     }
 
-    override fun effacer(code: Int) {
+    override fun effacer(offre: OffreStage):Boolean {
+        var code = offre.idOffreStage
         val offre = SourceDonnées.offres.find{it.idOffreStage == code}
         if(offre != null) {
             SourceDonnées.offres.remove(offre)
+            return true
         } else {
             throw RessourceInexistanteException("L'offre $code n'est pas inscrit au service.")
+            return false
         }
     }
 }

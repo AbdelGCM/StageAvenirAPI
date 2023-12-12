@@ -11,8 +11,8 @@ interface OffreStageDAO : DAO<OffreStage> {
 
     override fun ajouter(offre: OffreStage): OffreStage?
 
-    override fun effacer(code: Int)
+    override fun effacer(offre: OffreStage): Boolean
 
-    override fun modifier(id: Int,offre: OffreStage): OffreStage?
+    override fun modifier(offre: OffreStage): Boolean
 
 }
