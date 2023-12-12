@@ -1,4 +1,4 @@
-/*
+
 package com.crosemont.dti.g26.stageavenirapi.DAO
 
 import com.crosemont.dti.g26.stageavenirapi.Modèle.Candidature
@@ -11,7 +11,7 @@ class CandidatureDAOImplement(val bd : JdbcTemplate) : CandidatureDAO {
         TODO("Not yet implemented")
     }
 
-    override fun chercherParCode(code: String): Candidature? {
+    override fun chercherParCode(code: Int): Candidature? {
         TODO("Not yet implemented")
     }
 
@@ -34,4 +34,3 @@ class CandidatureDAOImplement(val bd : JdbcTemplate) : CandidatureDAO {
 
 }
 
- */
