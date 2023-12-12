@@ -10,7 +10,7 @@ class DemandeStageDAOImplement(val bd : JdbcTemplate) : DemandeStageDAO {
         TODO("Not yet implemented")
     }
 
-    override fun chercherParCode(code: String): DemandeStage? {
+    override fun chercherParCode(code: Int): DemandeStage? {
         TODO("Not yet implemented")
     }
 
