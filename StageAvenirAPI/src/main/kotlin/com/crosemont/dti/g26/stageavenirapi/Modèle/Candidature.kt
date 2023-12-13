@@ -6,6 +6,8 @@ data class Candidature(
     val idCandidature: Int,
     val etat: Etat,
     val commentaire: String?,
-
+    val offre: OffreStage?,
+    val etudiant : Etudiant?
 ){
+
 }

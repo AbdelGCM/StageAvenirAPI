@@ -7,7 +7,7 @@ interface DemandeStageDAO :DAO<DemandeStage> {
     override fun ajouter(element: DemandeStage): DemandeStage?
     override fun chercherParCode(code: Int): DemandeStage?
     override fun chercherTous(): List<DemandeStage>
-    override fun modifier(element: DemandeStage): Boolean
+    override fun modifier(element: DemandeStage): DemandeStage
     override fun effacer(element: DemandeStage): Boolean
 
 }

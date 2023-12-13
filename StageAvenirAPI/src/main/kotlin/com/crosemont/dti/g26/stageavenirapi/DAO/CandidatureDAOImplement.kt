@@ -12,19 +12,7 @@ class CandidatureDAOImplement(val bd : JdbcTemplate) : CandidatureDAO {
     private var mappage = MappageEnum()
 
     override fun ajouter(element: Candidature): Candidature? {
-        var idCandidature = bd.update(
-            "INSERT INTO candidature (etat, description, offreStage_idoffreStage) VALUES (?, ?, ?)",
-            element.etat.toString(), // Assuming etat is an enum and needs to be converted to a string
-            element.commentaire,
-           // element.offreStageIdOffreStage
-        )
-
-      if (idCandidature > 0){
-          return  chercherParCode(idCandidature)
-      }else{
-          return null
-      }
-
+      TODO()
     }
 
     override fun chercherParCode(code: Int): Candidature? {
@@ -36,8 +24,8 @@ class CandidatureDAOImplement(val bd : JdbcTemplate) : CandidatureDAO {
                     idCandidature = response.getInt("id"),
                     etat = mappage.mapToEtat(response.getString("etat")),
                     commentaire = response.getString("description"),
-                    //offreStageIdOffreStage = response.getInt("offreStage_idoffreStage")
-
+                    offre = null,
+                    etudiant = null
                 )
             }
         }
@@ -53,7 +41,8 @@ class CandidatureDAOImplement(val bd : JdbcTemplate) : CandidatureDAO {
                     idCandidature = response.getInt("id"),
                     etat = mappage.mapToEtat(response.getString("etat")),
                     commentaire = response.getString("description"),
-                    //offreStageIdOffreStage = response.getInt("offreStage_idoffreStage")
+                    offre = null,
+                    etudiant = null
                 )
                 candidatures.add(candidature)
             }
@@ -61,13 +50,14 @@ class CandidatureDAOImplement(val bd : JdbcTemplate) : CandidatureDAO {
         return candidatures
     }
 
-    override fun modifier(element: Candidature): Boolean {
-        var ligne_affectée = bd.update(
+    override fun modifier(element: Candidature): Candidature {
+        bd.update(
             "UPDATE candidature SET description = ? WHERE idcandidature = ?",
              element.commentaire,
              element.idCandidature
         )
-        return  ligne_affectée > 0
+
+        return chercherParCode(element.idCandidature)!!
     }
 
     override fun effacer(element: Candidature): Boolean {
@@ -78,44 +68,85 @@ class CandidatureDAOImplement(val bd : JdbcTemplate) : CandidatureDAO {
         return  ligne_affectée > 0
     }
 
-    override fun chercherParEtudiant(code_etudiant: Int): Candidature? {
-        var candidature: Candidature? = null
+    override fun chercherParEtudiant(code_etudiant: Int): List<Candidature> {
+        var candidatures = mutableListOf<Candidature>()
 
         bd.query("SELECT * FROM candidature WHERE utilisateur_idutilisateur = ?", arrayOf(code_etudiant)) { response, _ ->
             if (response.next()) {
-                candidature = Candidature(
+                var candidature = Candidature(
                     idCandidature = response.getInt("id"),
                     etat = mappage.mapToEtat(response.getString("etat")),
-                    commentaire = response.getString("description")
-                    //offreStageIdOffreStage = response.getInt("offreStage_idoffreStage")
-
+                    commentaire = response.getString("description"),
+                    offre = null,
+                    etudiant = null
                 )
+                candidatures.add(candidature)
             }
         }
 
-        return candidature
+        return candidatures
     }
 
-    override fun chercherParOffreStage(code_offre: Int): Candidature? {
-        var candidature: Candidature? = null
+    override fun chercherParOffreStage(code_offre: Int): List<Candidature> {
+        var candidatures = mutableListOf<Candidature>()
 
         bd.query("SELECT * FROM candidature WHERE offreStage_idoffreStage = ?", arrayOf(code_offre)) { response, _ ->
             if (response.next()) {
-                candidature = Candidature(
+                var candidature = Candidature(
                     idCandidature = response.getInt("id"),
                     etat = mappage.mapToEtat(response.getString("etat")),
-                    commentaire = response.getString("description")
-                    //offre = response.getInt("offreStage_idoffreStage")
-
+                    commentaire = response.getString("description"),
+                    offre = null,
+                    etudiant = null
                 )
+                candidatures.add(candidature)
             }
         }
 
-        return candidature
+        return candidatures
     }
 
-    override fun postulerPourUneOffre() {
-        TODO("Not yet implemented")
+    override fun postulerPourUneOffre(candidature: Candidature, code_etudiant: Int,idOffre:Int):Candidature? {
+        var idCandidature = bd.update(
+            "INSERT INTO candidature (etat, description, utilisateur_idutilisateur, offreStage_idoffreStage) VALUES (?, ?, ?, ?)",
+            candidature.etat.toString(),
+            candidature.commentaire,
+            code_etudiant,
+            idOffre
+        )
+
+        if (idCandidature > 0){
+            return  chercherParCode(idCandidature)
+        }else{
+            return null
+        }
+    }
+
+    override fun annulerCandidature(candidature: Candidature): Candidature? {
+        bd.update(
+            "UPDATE candidature SET etat = 'annulee' WHERE idcandidature = ?",
+
+            candidature.idCandidature
+        )
+        return chercherParCode(candidature.idCandidature)
+    }
+
+    override fun accepterCandidature(candidature: Candidature): Candidature? {
+        bd.update(
+            "UPDATE candidature SET etat = 'acceptee' WHERE idcandidature = ?",
+
+            candidature.idCandidature
+        )
+        return chercherParCode(candidature.idCandidature)
+    }
+
+    override fun refuserCandidature(candidature: Candidature): Candidature? {
+        bd.update(
+            "UPDATE candidature SET etat = 'refusee' WHERE idcandidature = ?",
+
+            candidature.idCandidature
+        )
+        return chercherParCode(candidature.idCandidature)
     }
 
 
