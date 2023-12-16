@@ -12,8 +12,8 @@ import org.springframework.stereotype.Repository
 class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
 
     override fun ajouter(offre: OffreStage): OffreStage? {
-        val sql = "INSERT INTO OffreStage (idOffreStage, titreOffre, posteOffert, description, estRémunéré, dateDébut, dateFin, estVisible,catégorieId) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        val sql = "INSERT INTO OffreStage (idOffreStage, titre, poste_offert, description, remunere, date,catégorieId) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)"
 
         db.update(
                 sql,
@@ -22,9 +22,7 @@ class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
                 offre.posteOffert,
                 offre.description,
                 offre.estRémunéré,
-                offre.dateDébut,
-                offre.dateFin,
-                offre.estVisible,
+                offre.dateDePublication,
                 offre.catégorie.idCatégorie
         )
 
@@ -37,12 +35,11 @@ class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
         return db.query(sql) { résultat, _ ->
             OffreStage(
                     idOffreStage = résultat.getInt("idOffreStage"),
-                    titreOffre = résultat.getString("titreOffre"),
-                    posteOffert = résultat.getString("posteOffert"),
+                    titreOffre = résultat.getString("titre"),
+                    posteOffert = résultat.getString("poste_offert"),
                     description = résultat.getString("description"),
-                    estRémunéré = résultat.getBoolean("estRémunéré"),
-                    dateDébut = résultat.getDate("dateDébut").toLocalDate(),
-                    dateFin = résultat.getDate("dateFin").toLocalDate(),
+                    estRémunéré = résultat.getBoolean("remunere"),
+                    dateDePublication = résultat.getDate("date").toLocalDate(),
                     estVisible = résultat.getBoolean("estVisible"),
                     utilisateur = Employeur(),
                     catégorie = Categorie(
@@ -74,8 +71,7 @@ class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
                 offre.posteOffert,
                 offre.description,
                 offre.estRémunéré,
-                offre.dateDébut,
-                offre.dateFin,
+                offre.date,
                 offre.estVisible,
                 offre.catégorie.idCatégorie,
                 id

@@ -28,6 +28,14 @@ class DocumentDAOImplement (val bd : JdbcTemplate): DocumentDAO {
         }
     }
 
+    override fun modifier(id: Int, element: Document): Document? {
+        TODO("Not yet implemented")
+    }
+
+    override fun effacer(code: Int) {
+        TODO("Not yet implemented")
+    }
+
     override fun ajouter(element: Document): Document? {
         TODO("Not yet implemented")
     }
@@ -39,7 +47,7 @@ class DocumentDAOImplement (val bd : JdbcTemplate): DocumentDAO {
     override fun chercherTous(): List<Document> {
         TODO("Not yet implemented")
     }
-
+/*
     override fun modifier(element: Document): Boolean {
         TODO("Not yet implemented")
     }
@@ -47,7 +55,7 @@ class DocumentDAOImplement (val bd : JdbcTemplate): DocumentDAO {
     override fun effacer(element: Document): Boolean {
         TODO("Not yet implemented")
     }
-
+*/
 
 
 }

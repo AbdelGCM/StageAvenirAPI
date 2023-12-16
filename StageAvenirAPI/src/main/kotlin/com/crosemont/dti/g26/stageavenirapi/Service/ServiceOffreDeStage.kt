@@ -14,5 +14,9 @@ class ServiceOffreDeStage(val dao: OffreStageDAO){
     fun ajouter (offre: OffreStage): OffreStage? = dao.ajouter(offre)
     fun effacer(code: Int) = dao.effacer(code)
     fun modifier(code: Int, offre: OffreStage): OffreStage? = dao.modifier(code, offre)
+    fun modifierVisibilité(code: Int, offre: OffreStage): OffreStage? {
+        return dao.modifierVisibilité(code, offre)
+    }
+
 
 }

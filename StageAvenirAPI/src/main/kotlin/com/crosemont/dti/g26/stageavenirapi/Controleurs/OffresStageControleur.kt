@@ -41,14 +41,14 @@ class OffresStageControleur(val service: ServiceOffreDeStage) {
 
     @DeleteMapping("/offres_Stage/{code}")
     fun supprimerOffreStage(@PathVariable code: Int): ResponseEntity<OffreStage>{
-       /* service.effacer(code)*/
+       service.effacer(code)
         return ResponseEntity.noContent().build()
 
     }
 
     @PutMapping("offres_Stage/{code}")
     fun modifierOffreStage(@PathVariable code: Int, @RequestBody offre: OffreStage):ResponseEntity<OffreStage>{
-        /*val nouvelOffre = service.modifier(code, offre)
+        val nouvelOffre = service.modifier(code, offre)
 
         if (nouvelOffre != null) {
             val uri = ServletUriComponentsBuilder
@@ -58,9 +58,27 @@ class OffresStageControleur(val service: ServiceOffreDeStage) {
                     .toUri()
 
             return ResponseEntity.created(uri).body(nouvelOffre)
-        }*/
+        }
         return ResponseEntity.ok(offre)
     }
+
+    @PutMapping("/offres_Stage/visibilite/{code}")
+    fun modifierVisibiliteOffreStage(@PathVariable code: Int, @RequestBody offre: OffreStage): ResponseEntity<OffreStage> {
+        val nouvelleOffre = service.modifierVisibilité(code, offre)
+
+        if (nouvelleOffre != null) {
+            val uri = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{code}")
+                    .buildAndExpand(nouvelleOffre.idOffreStage)
+                    .toUri()
+
+            return ResponseEntity.created(uri).body(nouvelleOffre)
+        }
+
+        return ResponseEntity.notFound().build()
+    }
+
 
 
 

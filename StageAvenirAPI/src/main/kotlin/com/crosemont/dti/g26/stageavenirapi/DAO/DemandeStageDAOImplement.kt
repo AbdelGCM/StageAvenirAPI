@@ -19,6 +19,14 @@ class DemandeStageDAOImplement(val bd : JdbcTemplate) : DemandeStageDAO {
         TODO("Not yet implemented")
     }
 
+    override fun modifier(id: Int, element: DemandeStage): DemandeStage? {
+        TODO("Not yet implemented")
+    }
+
+    override fun effacer(code: Int) {
+        TODO("Not yet implemented")
+    }
+/*
     override fun modifier(element: DemandeStage): Boolean {
         TODO("Not yet implemented")
     }
@@ -26,5 +34,5 @@ class DemandeStageDAOImplement(val bd : JdbcTemplate) : DemandeStageDAO {
     override fun effacer(element: DemandeStage): Boolean {
         TODO("Not yet implemented")
     }
-
+*/
 }

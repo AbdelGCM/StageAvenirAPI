@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository
 class CandidatureDAOImplement(val bd : JdbcTemplate) : CandidatureDAO {
 
     private var mappage = MappageEnum()
-
     override fun ajouter(element: Candidature): Candidature? {
         var idCandidature = bd.update(
             "INSERT INTO candidature (etat, description, offreStage_idoffreStage) VALUES (?, ?, ?)",
@@ -60,7 +59,7 @@ class CandidatureDAOImplement(val bd : JdbcTemplate) : CandidatureDAO {
         }
         return candidatures
     }
-
+/*
     override fun modifier(element: Candidature): Boolean {
         var ligne_affectée = bd.update(
             "UPDATE candidature SET description = ? WHERE idcandidature = ?",
@@ -70,12 +69,22 @@ class CandidatureDAOImplement(val bd : JdbcTemplate) : CandidatureDAO {
         return  ligne_affectée > 0
     }
 
+ */
+
+    override fun modifier(id: Int, element: Candidature): Candidature? {
+        TODO("Not yet implemented")
+    }
+/*
     override fun effacer(element: Candidature): Boolean {
         var ligne_affectée = bd.update(
             "DELETE FROM candidature WHERE idcandidature = ?",
             element.idCandidature
         )
         return  ligne_affectée > 0
+    }
+*/
+    override fun effacer(code: Int) {
+        TODO("Not yet implemented")
     }
 
     override fun chercherParEtudiant(code_etudiant: Int): Candidature? {
