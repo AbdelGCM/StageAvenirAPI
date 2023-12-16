@@ -9,10 +9,10 @@ class MappageEnum {
     fun mapToEtat(etatString: String?): Etat {
 
             return when (etatString) {
-                "acceptee" -> Etat.ACCEPTÉE
-                "en cours" -> Etat.EN_ATTENTE
-                "refusee" -> Etat.REFUSÉE
-                "annulee" -> Etat.ANNULÉE
+                "ACCEPTEE" -> Etat.ACCEPTEE
+                "EN_COURS" -> Etat.EN_COURS
+                "REFUSEE" -> Etat.REFUSEE
+                "ANNULEE" -> Etat.ANNULEE
                 else -> throw Exception("Une erreur est survenue au mappage de l'état")
             }
 

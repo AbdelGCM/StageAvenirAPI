@@ -9,8 +9,8 @@ interface DocumentDAO:DAO<Document> {
     override fun ajouter(element: Document): Document?
     override fun chercherParCode(code: Int): Document?
     override fun chercherTous(): List<Document>
-    override fun modifier(element: Document): Document
-    override fun effacer(element: Document): Boolean
+    override fun modifier(id :Int, element: Document): Document
+    override fun effacer(element: Document)
 
     fun ajouterDocumentACandidature(element: Document, code: Int):Document?
     fun ajouterDocumentADemandeStage(element: Document, code: Int):Document?

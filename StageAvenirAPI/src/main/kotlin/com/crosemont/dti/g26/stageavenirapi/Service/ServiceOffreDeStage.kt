@@ -33,24 +33,35 @@ class ServiceOffreDeStage(val daoOffreStage: OffreStageDAO, val daoCandidature: 
     }
 
     fun obtenirCandidaturesParEtudiant (codeEtudiant:Int):List<Candidature>{
-        return daoCandidature.chercherParEtudiant(codeEtudiant)
+        var candidatures = daoCandidature.chercherParEtudiant(codeEtudiant)
+        for (candidature in candidatures){
+            var documents = daoDocument.chercherParCandidature(candidature.idCandidature)
+            for (document in documents){
+                candidature.documents?.add(document)
+            }
+        }
+        return candidatures
     }
 
-    fun obtenirCandidaturesParOffreStage (codeOffre:Int):List<Candidature>{
-        return daoCandidature.chercherParOffreStage(codeOffre)
+    fun obtenirCandidaturesParDemandeStage (codeDemande:Int):List<Candidature>{
+        var candidatures =  daoCandidature.chercherParOffreStage(codeDemande)
+        for (candidature in candidatures){
+            var documents = daoDocument.chercherParDemandeStage(candidature.idCandidature)
+            for (document in documents){
+                candidature.documents?.add(document)
+            }
+        }
+        return candidatures
     }
 
     fun annulerCandidature(idCandidature: Int):Candidature?{
-        var candidature = daoCandidature.chercherParCode(idCandidature)
-        return candidature?.let { daoCandidature.annulerCandidature(it) }
+        return daoCandidature.annulerCandidature(idCandidature)
     }
     fun accepterCandidature(idCandidature: Int):Candidature?{
-        var candidature = daoCandidature.chercherParCode(idCandidature)
-        return candidature?.let { daoCandidature.accepterCandidature(it) }
+        return daoCandidature.accepterCandidature(idCandidature)
     }
     fun refuserCandidature(idCandidature: Int):Candidature?{
-        var candidature = daoCandidature.chercherParCode(idCandidature)
-        return candidature?.let { daoCandidature.refuserCandidature(it) }
+        return daoCandidature.refuserCandidature(idCandidature)
     }
 
 

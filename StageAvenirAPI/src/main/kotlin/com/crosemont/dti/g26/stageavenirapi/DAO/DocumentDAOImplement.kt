@@ -47,13 +47,13 @@ class DocumentDAOImplement (val bd : JdbcTemplate): DocumentDAO {
         var documents = mutableListOf<Document>()
         var cand = chercherCandidatureParCode(candidature)
 
-        bd.query("SELECT * FROM candidature WHERE candidature_idcandidature = ?", arrayOf(candidature)) { response, _ ->
+        bd.query("SELECT * FROM document   WHERE candidature_idcandidature = ?", arrayOf(candidature)) { response, _ ->
             if (response.next()) {
                 var  document = Document(
-                    idDocument = response.getInt("id"),
+                    idDocument = response.getInt("iddocument"),
                     nom = response.getString("nom"),
                     type = mappage.mapToType(response.getString("type")),
-                    contenu = response.getBytes("description"),
+                    contenu = response.getBytes("contenu"),
                     etudiant = null,
                     demande = null,
                     candidature= cand
@@ -106,7 +106,7 @@ class DocumentDAOImplement (val bd : JdbcTemplate): DocumentDAO {
 
     override fun modifierCv(cv: Document): Document? {
         val rowsAffected = bd.update(
-            "UPDATE document SET nom = ?, type = ?, contenu = ? WHERE AND iddocument = ?",
+            "UPDATE document SET nom = ?, type = ?, contenu = ? WHERE  iddocument = ?",
             cv.nom,
             "cv",
             cv.contenu,
@@ -147,17 +147,18 @@ class DocumentDAOImplement (val bd : JdbcTemplate): DocumentDAO {
         bd.query("SELECT * FROM document ") { response, _ ->
             if (response.next()) {
                 var  document = Document(
-                    idDocument = response.getInt("id"),
+                    idDocument = response.getInt("iddocument"),
                     nom = response.getString("nom"),
                     type = mappage.mapToType(response.getString("type")),
-                    contenu = response.getBytes("description"),
+                    contenu = response.getBytes("contenu"),
                     etudiant = null,
                     demande = null,
                     candidature= null
                 )
+                documents.add(document)
             }
         }
-
+        println("DAO tous les docs taille tab :"+ documents.size)
         return documents
     }
 
@@ -172,7 +173,9 @@ class DocumentDAOImplement (val bd : JdbcTemplate): DocumentDAO {
                     etat = mappage.mapToEtat(response.getString("etat")),
                     commentaire = response.getString("description"),
                     offre = null,
-                    etudiant = null
+                    etudiant = null,
+                    documents = mutableListOf<Document>()
+
                 )
             }
         }
@@ -202,11 +205,11 @@ class DocumentDAOImplement (val bd : JdbcTemplate): DocumentDAO {
 
     //inutiles
 
-    override fun modifier(element: Document): Document {
+    override fun modifier(id :Int, element: Document): Document {
         TODO("Not yet implemented")
     }
 
-    override fun effacer(element: Document): Boolean {
+    override fun effacer(element: Document) {
         TODO("Not yet implemented")
     }
 
