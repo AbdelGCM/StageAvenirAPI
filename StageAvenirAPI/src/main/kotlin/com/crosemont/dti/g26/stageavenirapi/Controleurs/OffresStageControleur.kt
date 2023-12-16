@@ -23,8 +23,8 @@ class OffresStageControleur(val service: ServiceOffreDeStage) {
     @GetMapping("/offres_Stages/{code}")
     fun obtenirOffresStagesParCode(@PathVariable code: Int) = service.obtenirOffreParCode(code) ?: throw RessourceInexistanteException("L'offre $code n'est pas inscrit au service.")
 
-    @PostMapping("/offres_Stage")
-    fun ajouterOffreStage(@RequestBody offre: OffreStage): ResponseEntity<OffreStage> {
+    @PostMapping("/employeur/{employeur_id}/offres_Stage")
+    fun ajouterOffreStage(@RequestBody offre: OffreStage, @PathVariable employeur_id : String ): ResponseEntity<OffreStage> {
         val nouvelleOffre = service.ajouter(offre)
 
         if (nouvelleOffre != null) {

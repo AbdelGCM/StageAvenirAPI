@@ -45,7 +45,7 @@ class CandidatureDAOImplement(val bd : JdbcTemplate) : CandidatureDAO {
     override fun chercherTous(): List<Candidature> {
        val candidatures = mutableListOf<Candidature>()
        bd.query("SELECT * FROM candidature") { response, _ ->
-            if (response.next()) {
+            while (response.next()) {
                 val candidature =  Candidature(
                     idCandidature = response.getInt("id"),
                     etat = mappage.mapToEtat(response.getString("etat")),

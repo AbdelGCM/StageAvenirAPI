@@ -22,8 +22,7 @@ class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
                 offre.posteOffert,
                 offre.description,
                 offre.estRémunéré,
-                offre.dateDébut,
-                offre.dateFin,
+                offre.datePost,
                 offre.estVisible,
                 offre.catégorie.idCatégorie
         )
@@ -35,18 +34,17 @@ class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
         val sql = "SELECT * FROM OffreStage"
         return db.query(sql) { résultat, _ ->
             OffreStage(
-                idOffreStage = résultat.getInt("idOffreStage"),
-                titreOffre = résultat.getString("titreOffre"),
-                posteOffert = résultat.getString("posteOffert"),
+                idOffreStage = résultat.getInt("idoffreStage"),
+                titreOffre = résultat.getString("titre"),
+                posteOffert = résultat.getString("poste_offert"),
                 description = résultat.getString("description"),
-                estRémunéré = résultat.getBoolean("estRémunéré"),
-                dateDébut = résultat.getDate("dateDébut").toLocalDate(),
-                dateFin = résultat.getDate("dateFin").toLocalDate(),
-                estVisible = résultat.getBoolean("estVisible"),
+                estRémunéré = résultat.getBoolean("remunere"),
+                datePost = résultat.getDate("date").toLocalDate(),
+                estVisible = résultat.getBoolean("visible"),
                 utilisateur = Employeur(),
                 catégorie = Categorie(
-                    idCatégorie = résultat.getInt("catégorie_idCatégorie"),
-                    cursus = résultat.getString("catégorie_cursus")
+                    idCatégorie = résultat.getInt("categorie_idcategorie"),
+                    cursus = null
                 )
             )
         }
@@ -54,13 +52,26 @@ class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
 
 
     override fun chercherParCode(code: Int): OffreStage? {
-        val sql = "SELECT * FROM OffreStage WHERE idOffreStage = ?"
-
-        return try {
-            db.queryForObject(sql, OffreStage::class.java, code)
-        } catch (ex: EmptyResultDataAccessException) {
-            null
+        val sql = "SELECT * FROM offreStage WHERE idoffreStage = ?"
+        println("OFFRE DAO")
+        val result =  db.query(sql, arrayOf(code)) { résultat, _ ->
+            OffreStage(
+                idOffreStage = résultat.getInt("idoffreStage"),
+                titreOffre = résultat.getString("titre"),
+                posteOffert = résultat.getString("poste_offert"),
+                description = résultat.getString("description"),
+                estRémunéré = résultat.getBoolean("remunere"),
+                datePost = résultat.getDate("date").toLocalDate(),
+                estVisible = résultat.getBoolean("visible"),
+                utilisateur = Employeur(),
+                catégorie = Categorie(
+                    idCatégorie = résultat.getInt("categorie_idcategorie"),
+                    cursus = null
+                )
+            )
         }
+
+        return result.firstOrNull()
     }
 
 
@@ -74,8 +85,7 @@ class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
                 offre.posteOffert,
                 offre.description,
                 offre.estRémunéré,
-                offre.dateDébut,
-                offre.dateFin,
+                offre.datePost,
                 offre.estVisible,
                 offre.catégorie.idCatégorie,
                 id
