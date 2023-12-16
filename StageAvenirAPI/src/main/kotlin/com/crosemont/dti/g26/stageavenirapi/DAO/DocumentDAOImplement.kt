@@ -209,7 +209,7 @@ class DocumentDAOImplement (val bd : JdbcTemplate): DocumentDAO {
         TODO("Not yet implemented")
     }
 
-    override fun effacer(element: Document) {
+    override fun effacer(element: Int) {
         TODO("Not yet implemented")
     }
 

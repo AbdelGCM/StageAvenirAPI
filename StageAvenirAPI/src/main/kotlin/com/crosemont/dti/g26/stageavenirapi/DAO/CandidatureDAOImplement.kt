@@ -70,10 +70,10 @@ class CandidatureDAOImplement(val bd : JdbcTemplate) : CandidatureDAO {
         return chercherParCode(element.idCandidature)!!
     }
 
-    override fun effacer(element: Candidature) {
+    override fun effacer(element: Int) {
          bd.update(
             "DELETE FROM candidature WHERE idcandidature = ?",
-            element.idCandidature
+            element
         )
 
     }

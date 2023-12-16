@@ -11,12 +11,14 @@ import org.springframework.stereotype.Service
 @Service
 class ServiceOffreDeStage(val daoOffreStage: OffreStageDAO, val daoCandidature: CandidatureDAO, val daoDocument: DocumentDAO){
 
+
     //Offres de stage
     fun obtenirOffresStage(): List<OffreStage> = daoOffreStage.chercherTous()
     fun obtenirOffreParCode (code: Int): OffreStage? = daoOffreStage.chercherParCode(code)
     fun ajouter (offre: OffreStage): OffreStage? = daoOffreStage.ajouter(offre)
-    // fun effacer(code: Int) = dao.effacer(code)
-    //fun modifier(code: Int, offre: OffreStage): OffreStage? = dao.modifier(code, offre)
+    fun effacer(code: Int) = daoOffreStage.effacer(code)
+    fun modifier(code: Int, offre: OffreStage): OffreStage? = daoOffreStage.modifier(code, offre)
+
 
 
 
@@ -68,14 +70,7 @@ class ServiceOffreDeStage(val daoOffreStage: OffreStageDAO, val daoCandidature: 
 
 
 
-    //Demandes de stages
-
-
-
-
-
-
-
+    //Offres de stages
 
 
 

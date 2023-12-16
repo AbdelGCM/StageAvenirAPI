@@ -23,7 +23,7 @@ class DemandeStageDAOImplement(val bd : JdbcTemplate) : DemandeStageDAO {
         TODO("Not yet implemented")
     }
 
-    override fun effacer(element: DemandeStage) {
+    override fun effacer(elementId: Int) {
         TODO("Not yet implemented")
     }
 
