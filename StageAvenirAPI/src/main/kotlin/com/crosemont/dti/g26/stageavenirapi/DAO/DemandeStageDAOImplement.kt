@@ -6,7 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Repository
 
 @Repository
-class DemandeStageDAOImplement() : DemandeStageDAO {
+class DemandeStageDAOImplement(val bd : JdbcTemplate) : DemandeStageDAO {
     override fun ajouter(element: DemandeStage): DemandeStage? {
         TODO("Not yet implemented")
     }
@@ -19,16 +19,12 @@ class DemandeStageDAOImplement() : DemandeStageDAO {
         TODO("Not yet implemented")
     }
 
-    override fun modifier(id: Int, element: DemandeStage): DemandeStage? {
+    override fun modifier(id :Int, element: DemandeStage): DemandeStage {
         TODO("Not yet implemented")
     }
 
-    /*
-        override fun modifier(element: DemandeStage): DemandeStage? {
-            TODO("Not yet implemented")
-        }
-        */
-    override fun effacer(code: Int) {
+    override fun effacer(elementId: Int) {
         TODO("Not yet implemented")
     }
+
 }

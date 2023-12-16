@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 
 @RestController
-class Offres_StageControlleur(val service: ServiceOffreDeStage) {
+class OffresStageControleur(val service: ServiceOffreDeStage) {
 
     @GetMapping("/offres_Stages")
     fun obtenirOffresStages() = service.obtenirOffresStage()
@@ -23,8 +23,8 @@ class Offres_StageControlleur(val service: ServiceOffreDeStage) {
     @GetMapping("/offres_Stages/{code}")
     fun obtenirOffresStagesParCode(@PathVariable code: Int) = service.obtenirOffreParCode(code) ?: throw RessourceInexistanteException("L'offre $code n'est pas inscrit au service.")
 
-    @PostMapping("/offres_Stage")
-    fun ajouterOffreStage(@RequestBody offre: OffreStage): ResponseEntity<OffreStage> {
+    @PostMapping("/employeur/{employeur_id}/offres_Stage")
+    fun ajouterOffreStage(@RequestBody offre: OffreStage, @PathVariable employeur_id : String ): ResponseEntity<OffreStage> {
         val nouvelleOffre = service.ajouter(offre)
 
         if (nouvelleOffre != null) {
@@ -41,13 +41,14 @@ class Offres_StageControlleur(val service: ServiceOffreDeStage) {
 
     @DeleteMapping("/offres_Stage/{code}")
     fun supprimerOffreStage(@PathVariable code: Int): ResponseEntity<OffreStage>{
-        service.effacer(code)
+       /* service.effacer(code)*/
         return ResponseEntity.noContent().build()
+
     }
 
     @PutMapping("offres_Stage/{code}")
     fun modifierOffreStage(@PathVariable code: Int, @RequestBody offre: OffreStage):ResponseEntity<OffreStage>{
-        val nouvelOffre = service.modifier(code, offre)
+        /*val nouvelOffre = service.modifier(code, offre)
 
         if (nouvelOffre != null) {
             val uri = ServletUriComponentsBuilder
@@ -57,7 +58,7 @@ class Offres_StageControlleur(val service: ServiceOffreDeStage) {
                     .toUri()
 
             return ResponseEntity.created(uri).body(nouvelOffre)
-        }
+        }*/
         return ResponseEntity.ok(offre)
     }
 
