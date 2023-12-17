@@ -40,10 +40,10 @@ class CandidatureDAOImplement(val bd : JdbcTemplate , val daoDoc :DocumentDAO  )
 
     override fun chercherTous(): List<Candidature> {
        val candidatures = mutableListOf<Candidature>()
-       bd.query("SELECT * FROM candidature") { response, _ ->
+       bd.query("SELECT * FROM candidature order by idcandidature") { response, _ ->
             while (response.next()) {
                 val candidature =  Candidature(
-                    idCandidature = response.getInt("id"),
+                    idCandidature = response.getInt("idcandidature"),
                     etat = mappage.mapToEtat(response.getString("etat")),
                     commentaire = response.getString("description"),
                     offre = null,
@@ -122,18 +122,19 @@ class CandidatureDAOImplement(val bd : JdbcTemplate , val daoDoc :DocumentDAO  )
     }
 
     override fun postulerPourUneOffre(candidature: Candidature, code_etudiant: Int,idOffre:Int):Candidature? {
-        println("postuler offffffre :" +candidature)
-        var generatedId: Int? = null
+        var nouvelleCandidature = candidature
          var result = bd.update(
             "INSERT INTO candidature ( etat, description, utilisateur_idutilisateur, offreStage_idoffreStage) VALUES ( ?, ?, ?, ?)",
 
-            candidature.etat?.name ?: "EN_ATTENTE",
+             candidature.etat?.name ?: "EN_ATTENTE",
             candidature.commentaire,
             code_etudiant,
             idOffre
         )
-
-       return candidature
+        var generatedId = chercherTous().get(chercherTous().size - 1).idCandidature
+        nouvelleCandidature.idCandidature = generatedId
+        println("DAO POSTULER " + generatedId)
+       return nouvelleCandidature
     }
 
     override fun annulerCandidature(candidature: Int): Candidature? {
