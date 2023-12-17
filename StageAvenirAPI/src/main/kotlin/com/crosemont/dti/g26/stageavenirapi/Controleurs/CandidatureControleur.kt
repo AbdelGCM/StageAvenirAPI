@@ -34,7 +34,7 @@ class CandidatureControleur(val service : ServiceOffreDeStage) {
     fun posterCandidature(@RequestBody candidature: Candidature, @PathVariable id : String , @PathVariable id_offre  :String) : ResponseEntity<Candidature>? {
         println(candidature.toString())
         println(candidature.documents.toString())
-         var nouveauCandidature = service.postulerPourUneOffre(id.toInt()  ,id_offre.toInt(), candidature)
+         var nouveauCandidature = service.postulerPourUneOffre(id.toInt()  ,id_offre.toInt(), candidature, id.toInt())
 
         println(nouveauCandidature.toString())
         if (candidature != null) {

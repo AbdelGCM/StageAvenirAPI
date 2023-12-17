@@ -6,7 +6,14 @@ data class Etudiant(
     val prénom: String?,
     val noÉtudiant: String?,
     val courriel: String?,
-    val cvIdCv: Int,
-    val coordonnateurIdCoordonnateur: Int,
-    val catégorieIdCatégorie: Int
-)
+
+){
+
+    constructor(idEtudiant: Int) : this(
+            idEtudiant = idEtudiant,
+            nom = null,
+            prénom = null,
+            noÉtudiant = null,
+            courriel = null,
+    )
+}
