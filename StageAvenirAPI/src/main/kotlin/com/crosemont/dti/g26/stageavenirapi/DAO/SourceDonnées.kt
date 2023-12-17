@@ -6,7 +6,7 @@ import java.time.LocalDate
 
 @Component
 class SourceDonnées {
-    companion object {
+  /*  companion object {
 
         val catégories = listOf(
                 Categorie(1, "Informatique"),
@@ -66,5 +66,5 @@ class SourceDonnées {
                         Employeur(), catégories[1]
                 )
         )
-    }
+    } */
 }

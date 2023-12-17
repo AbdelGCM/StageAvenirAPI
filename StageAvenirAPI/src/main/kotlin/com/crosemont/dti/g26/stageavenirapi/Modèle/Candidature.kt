@@ -4,8 +4,11 @@ import com.crosemont.dti.g26.stageavenirapi.Modèle.Enum.Etat
 
 data class Candidature(
     val idCandidature: Int,
-    val etat: Etat,
+    val etat: Etat?,
     val commentaire: String?,
-
+    val offre: OffreStage?,
+    val etudiant : Etudiant?,
+    val documents: MutableList<Document>? = mutableListOf()
 ){
+
 }

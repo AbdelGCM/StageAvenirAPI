@@ -1,3 +1,4 @@
+
 USE `stageavenirapi` ;
 
 -- -----------------------------------------------------
@@ -271,3 +272,8 @@ CREATE TABLE IF NOT EXISTS  `utilisateur_has_utilisateur` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
     ENGINE = InnoDB;
+
+
+
+
+

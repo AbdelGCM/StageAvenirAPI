@@ -23,8 +23,8 @@ class OffresStageControleur(val service: ServiceOffreDeStage) {
     @GetMapping("/offres_Stages/{code}")
     fun obtenirOffresStagesParCode(@PathVariable code: Int) = service.obtenirOffreParCode(code) ?: throw RessourceInexistanteException("L'offre $code n'est pas inscrit au service.")
 
-    @PostMapping("/offres_Stage")
-    fun ajouterOffreStage(@RequestBody offre: OffreStage): ResponseEntity<OffreStage> {
+    @PostMapping("/employeur/{employeur_id}/offres_Stage")
+    fun ajouterOffreStage(@RequestBody offre: OffreStage, @PathVariable employeur_id : String ): ResponseEntity<OffreStage> {
         val nouvelleOffre = service.ajouter(offre)
 
         if (nouvelleOffre != null) {
@@ -41,7 +41,7 @@ class OffresStageControleur(val service: ServiceOffreDeStage) {
 
     @DeleteMapping("/offres_Stage/{code}")
     fun supprimerOffreStage(@PathVariable code: Int): ResponseEntity<OffreStage>{
-       service.effacer(code)
+        service.effacer(code)
         return ResponseEntity.noContent().build()
 
     }
@@ -61,24 +61,6 @@ class OffresStageControleur(val service: ServiceOffreDeStage) {
         }
         return ResponseEntity.ok(offre)
     }
-
-    @PutMapping("/offres_Stage/visibilite/{code}")
-    fun modifierVisibiliteOffreStage(@PathVariable code: Int, @RequestBody offre: OffreStage): ResponseEntity<OffreStage> {
-        val nouvelleOffre = service.modifierVisibilité(code, offre)
-
-        if (nouvelleOffre != null) {
-            val uri = ServletUriComponentsBuilder
-                    .fromCurrentRequest()
-                    .path("/{code}")
-                    .buildAndExpand(nouvelleOffre.idOffreStage)
-                    .toUri()
-
-            return ResponseEntity.created(uri).body(nouvelleOffre)
-        }
-
-        return ResponseEntity.notFound().build()
-    }
-
 
 
 

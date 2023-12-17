@@ -12,8 +12,8 @@ import org.springframework.stereotype.Repository
 class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
 
     override fun ajouter(offre: OffreStage): OffreStage? {
-        val sql = "INSERT INTO OffreStage (idOffreStage, titre, poste_offert, description, remunere, date,catégorieId) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)"
+        val sql = "INSERT INTO OffreStage (idOffreStage, titreOffre, posteOffert, description, estRémunéré, dateDébut, dateFin, estVisible,catégorieId) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
         db.update(
                 sql,
@@ -22,7 +22,8 @@ class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
                 offre.posteOffert,
                 offre.description,
                 offre.estRémunéré,
-                offre.dateDePublication,
+                offre.datePost,
+                offre.estVisible,
                 offre.catégorie.idCatégorie
         )
 
@@ -31,33 +32,46 @@ class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
 
     override fun chercherTous(): List<OffreStage> {
         val sql = "SELECT * FROM OffreStage"
-
         return db.query(sql) { résultat, _ ->
             OffreStage(
-                    idOffreStage = résultat.getInt("idOffreStage"),
+                    idOffreStage = résultat.getInt("idoffreStage"),
                     titreOffre = résultat.getString("titre"),
                     posteOffert = résultat.getString("poste_offert"),
                     description = résultat.getString("description"),
                     estRémunéré = résultat.getBoolean("remunere"),
-                    dateDePublication = résultat.getDate("date").toLocalDate(),
-                    estVisible = résultat.getBoolean("estVisible"),
+                    datePost = résultat.getDate("date").toLocalDate(),
+                    estVisible = résultat.getBoolean("visible"),
                     utilisateur = Employeur(),
                     catégorie = Categorie(
-                            idCatégorie = résultat.getInt("catégorie_idCatégorie"),
-                            cursus = résultat.getString("catégorie_cursus")
+                            idCatégorie = résultat.getInt("categorie_idcategorie"),
+                            cursus = null
                     )
             )
         }
     }
 
-    override fun chercherParCode(code: Int): OffreStage? {
-        val sql = "SELECT * FROM OffreStage WHERE idOffreStage = ?"
 
-        return try {
-            db.queryForObject(sql, OffreStage::class.java, code)
-        } catch (ex: EmptyResultDataAccessException) {
-            null
+    override fun chercherParCode(code: Int): OffreStage? {
+        val sql = "SELECT * FROM offreStage WHERE idoffreStage = ?"
+        println("OFFRE DAO")
+        val result =  db.query(sql, arrayOf(code)) { résultat, _ ->
+            OffreStage(
+                    idOffreStage = résultat.getInt("idoffreStage"),
+                    titreOffre = résultat.getString("titre"),
+                    posteOffert = résultat.getString("poste_offert"),
+                    description = résultat.getString("description"),
+                    estRémunéré = résultat.getBoolean("remunere"),
+                    datePost = résultat.getDate("date").toLocalDate(),
+                    estVisible = résultat.getBoolean("visible"),
+                    utilisateur = Employeur(),
+                    catégorie = Categorie(
+                            idCatégorie = résultat.getInt("categorie_idcategorie"),
+                            cursus = null
+                    )
+            )
         }
+
+        return result.firstOrNull()
     }
 
 
@@ -71,7 +85,7 @@ class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
                 offre.posteOffert,
                 offre.description,
                 offre.estRémunéré,
-                offre.date,
+                offre.datePost,
                 offre.estVisible,
                 offre.catégorie.idCatégorie,
                 id
@@ -100,5 +114,6 @@ class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
         if (affectedRows == 0) {
             throw RessourceInexistanteException("L'offre $code n'est pas inscrite au service.")
         }
+
     }
 }

@@ -7,8 +7,8 @@ data class Document(
     val nom: String,
     val type: Type,
     val contenu: ByteArray,
-    val etudiant: Etudiant,
-    //val demande:DemandeStage,
-    //val candidature: Candidature
+    val etudiant: Etudiant?,
+    val demande:DemandeStage?,
+    val candidature: Candidature?
 
 )
