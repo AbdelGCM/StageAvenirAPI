@@ -23,11 +23,14 @@ class ServiceOffreDeStage(val daoOffreStage: OffreStageDAO, val daoCandidature: 
 
 
     //Candidatures
-    fun postulerPourUneOffre (codeEtudiant : Int ,codeOffre:Int, candidature: Candidature, listeDocuments: List<Document>):Candidature?{
+    fun postulerPourUneOffre (codeEtudiant : Int ,codeOffre:Int, candidature: Candidature):Candidature?{
         var nouvelleCandidature = daoCandidature.postulerPourUneOffre(candidature,codeEtudiant,codeOffre)
-
-        if (nouvelleCandidature != null){
-            for (document in listeDocuments){
+        if (nouvelleCandidature != null) {
+            println("SERVICE :" + nouvelleCandidature.idCandidature )
+        }
+        if (nouvelleCandidature != null ){
+            for (document in nouvelleCandidature.documents!!){
+                println("document : " + document.idDocument)
                 daoDocument.ajouterDocumentACandidature(document, nouvelleCandidature.idCandidature)
             }
         }
@@ -51,10 +54,6 @@ class ServiceOffreDeStage(val daoOffreStage: OffreStageDAO, val daoCandidature: 
     fun refuserCandidature(idCandidature: Int):Candidature?{
         return daoCandidature.refuserCandidature(idCandidature)
     }
-
-
-
-
 
     //Offres de stages
 

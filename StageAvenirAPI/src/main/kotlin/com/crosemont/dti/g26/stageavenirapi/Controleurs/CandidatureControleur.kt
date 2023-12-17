@@ -34,11 +34,8 @@ class CandidatureControleur(val service : ServiceOffreDeStage) {
     fun posterCandidature(@RequestBody candidature: Candidature, @PathVariable id : String , @PathVariable id_offre  :String) : ResponseEntity<Candidature>? {
         println(candidature.toString())
         println(candidature.documents.toString())
-         var nouveauCandidature = candidature.documents?.let {
-            service.postulerPourUneOffre(id.toInt()  ,id_offre.toInt(), candidature,
-                it
-            )
-        }
+         var nouveauCandidature = service.postulerPourUneOffre(id.toInt()  ,id_offre.toInt(), candidature)
+
         println(nouveauCandidature.toString())
         if (candidature != null) {
             val uri = nouveauCandidature?.let {
