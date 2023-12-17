@@ -15,6 +15,7 @@ class ServiceOffreDeStage(val daoOffreStage: OffreStageDAO, val daoCandidature: 
     //Offres de stage
     fun obtenirOffresStage(): List<OffreStage> = daoOffreStage.chercherTous()
     fun obtenirOffreParCode (code: Int): OffreStage? = daoOffreStage.chercherParCode(code)
+    fun obtenirOffresParCatégorie (code: Int): List<OffreStage> = daoOffreStage.chercherParCodeCatégorie(code)
     fun ajouter (offre: OffreStage): OffreStage? = daoOffreStage.ajouter(offre)
     fun effacer(code: Int) = daoOffreStage.effacer(code)
     fun modifier(code: Int, offre: OffreStage): OffreStage? = daoOffreStage.modifier(code, offre)

@@ -12,9 +12,12 @@ interface OffreStageDAO : DAO<OffreStage> {
     override fun ajouter(offre: OffreStage): OffreStage?
 
     override fun modifier(id:Int,offre: OffreStage): OffreStage?
+
     override fun effacer(code: Int)
 
     fun modifierVisibilité(id: Int,offre: OffreStage): OffreStage?
+
+    fun chercherParCodeCatégorie(code_categorie: Int): List<OffreStage>
 
 
 }

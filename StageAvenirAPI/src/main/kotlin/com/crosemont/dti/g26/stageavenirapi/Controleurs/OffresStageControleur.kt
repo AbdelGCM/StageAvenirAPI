@@ -19,9 +19,11 @@ class OffresStageControleur(val service: ServiceOffreDeStage) {
     @GetMapping("/offres_Stages")
     fun obtenirOffresStages() = service.obtenirOffresStage()
 
-
     @GetMapping("/offres_Stages/{code}")
-    fun obtenirOffresStagesParCode(@PathVariable code: Int) = service.obtenirOffreParCode(code) ?: throw RessourceInexistanteException("L'offre $code n'est pas inscrit au service.")
+    fun obtenirOffresStagesParCode(@PathVariable code: Int) = service.obtenirOffreParCode(code) ?: throw RessourceInexistanteException("L'offre $code n'est pas inscrite au service.")
+
+    @GetMapping("offres_Stages/offresParCategorie/{categorie_id}")
+    fun obtenirOffresStagesParCatégorie(@PathVariable categorie_id: Int ) = service.obtenirOffresParCatégorie(categorie_id) ?: throw RessourceInexistanteException("La catégorie $categorie_id n'est pas inscrite au service.")
 
     @PostMapping("/employeur/{employeur_id}/offres_Stage")
     fun ajouterOffreStage(@RequestBody offre: OffreStage, @PathVariable employeur_id : String ): ResponseEntity<OffreStage> {
@@ -43,7 +45,6 @@ class OffresStageControleur(val service: ServiceOffreDeStage) {
     fun supprimerOffreStage(@PathVariable code: Int): ResponseEntity<OffreStage>{
         service.effacer(code)
         return ResponseEntity.noContent().build()
-
     }
 
     @PutMapping("offres_Stage/{code}")

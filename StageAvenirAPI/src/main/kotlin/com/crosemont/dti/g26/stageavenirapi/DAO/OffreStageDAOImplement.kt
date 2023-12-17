@@ -12,8 +12,8 @@ import org.springframework.stereotype.Repository
 class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
 
     override fun ajouter(offre: OffreStage): OffreStage? {
-        val sql = "INSERT INTO OffreStage (idOffreStage, titreOffre, posteOffert, description, estRémunéré, dateDébut, dateFin, estVisible,catégorieId) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        val sql = "INSERT INTO OffreStage (idOffreStage, titre, poste_offert, description, remunere, date,visible,categorie_idcategorie) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
 
         db.update(
                 sql,
@@ -53,9 +53,8 @@ class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
 
     override fun chercherParCode(code: Int): OffreStage? {
         val sql = "SELECT * FROM offreStage WHERE idoffreStage = ?"
-        println("OFFRE DAO")
         val result =  db.query(sql, arrayOf(code)) { résultat, _ ->
-            OffreStage(
+            OffreStage (
                     idOffreStage = résultat.getInt("idoffreStage"),
                     titreOffre = résultat.getString("titre"),
                     posteOffert = résultat.getString("poste_offert"),
@@ -76,8 +75,8 @@ class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
 
 
     override fun modifier(id: Int, offre: OffreStage): OffreStage? {
-        val sql = "UPDATE OffreStage SET titreOffre = ?, posteOffert = ?, description = ?, estRémunéré = ?, dateDébut = ?, dateFin = ?, estVisible = ?,catégorieId = ? " +
-                "WHERE idOffreStage = ?"
+        val sql = "UPDATE OffreStage SET titre = ?, poste_offert = ?, description = ?, remunere = ?, date = ?, visible = ?,categorie_idcategorie = ?" +
+                " WHERE idOffreStage = ?"
 
         db.update(
                 sql,
@@ -105,6 +104,29 @@ class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
 
             return ajouter(offre)
         }
+    }
+
+    override fun chercherParCodeCatégorie(code_categorie: Int): List<OffreStage> {
+        val sql = "SELECT * FROM offreStage WHERE categorie_idcategorie = ?"
+        val result =  db.query(sql, arrayOf(code_categorie)) { résultat, _ ->
+            OffreStage (
+                    idOffreStage = résultat.getInt("idoffreStage"),
+                    titreOffre = résultat.getString("titre"),
+                    posteOffert = résultat.getString("poste_offert"),
+                    description = résultat.getString("description"),
+                    estRémunéré = résultat.getBoolean("remunere"),
+                    datePost = résultat.getDate("date").toLocalDate(),
+                    estVisible = résultat.getBoolean("visible"),
+                    utilisateur = Employeur(),
+                    catégorie = Categorie(
+                            idCatégorie = résultat.getInt("categorie_idcategorie"),
+                            cursus = null
+                    )
+            )
+        }
+
+        return result.toList()
+
     }
 
     override fun effacer(code: Int) {
