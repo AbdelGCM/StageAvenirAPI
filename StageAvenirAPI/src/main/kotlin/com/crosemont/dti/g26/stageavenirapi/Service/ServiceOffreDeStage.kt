@@ -23,11 +23,14 @@ class ServiceOffreDeStage(val daoOffreStage: OffreStageDAO, val daoCandidature: 
 
 
     //Candidatures
-    fun postulerPourUneOffre (codeEtudiant : Int ,codeOffre:Int, candidature: Candidature, listeDocuments: List<Document>):Candidature?{
+    fun postulerPourUneOffre (codeEtudiant : Int ,codeOffre:Int, candidature: Candidature):Candidature?{
         var nouvelleCandidature = daoCandidature.postulerPourUneOffre(candidature,codeEtudiant,codeOffre)
-
-        if (nouvelleCandidature != null){
-            for (document in listeDocuments){
+        if (nouvelleCandidature != null) {
+            println("SERVICE :" + nouvelleCandidature.idCandidature )
+        }
+        if (nouvelleCandidature != null ){
+            for (document in nouvelleCandidature.documents!!){
+                println("document : " + document.idDocument)
                 daoDocument.ajouterDocumentACandidature(document, nouvelleCandidature.idCandidature)
             }
         }
@@ -35,25 +38,11 @@ class ServiceOffreDeStage(val daoOffreStage: OffreStageDAO, val daoCandidature: 
     }
 
     fun obtenirCandidaturesParEtudiant (codeEtudiant:Int):List<Candidature>{
-        var candidatures = daoCandidature.chercherParEtudiant(codeEtudiant)
-        for (candidature in candidatures){
-            var documents = daoDocument.chercherParCandidature(candidature.idCandidature)
-            for (document in documents){
-                candidature.documents?.add(document)
-            }
-        }
-        return candidatures
+        return daoCandidature.chercherParEtudiant(codeEtudiant)
     }
 
     fun obtenirCandidaturesParDemandeStage (codeDemande:Int):List<Candidature>{
-        var candidatures =  daoCandidature.chercherParOffreStage(codeDemande)
-        for (candidature in candidatures){
-            var documents = daoDocument.chercherParDemandeStage(candidature.idCandidature)
-            for (document in documents){
-                candidature.documents?.add(document)
-            }
-        }
-        return candidatures
+        return  daoCandidature.chercherParOffreStage(codeDemande)
     }
 
     fun annulerCandidature(idCandidature: Int):Candidature?{
@@ -65,10 +54,6 @@ class ServiceOffreDeStage(val daoOffreStage: OffreStageDAO, val daoCandidature: 
     fun refuserCandidature(idCandidature: Int):Candidature?{
         return daoCandidature.refuserCandidature(idCandidature)
     }
-
-
-
-
 
     //Offres de stages
 

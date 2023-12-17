@@ -21,7 +21,7 @@ class DocumentControleur(var service : ServiceGestionUtilisateur) {
 
 
     @GetMapping("/employeur/offresStage/{offre_id}/candidatures/{candidature_id}/documents")
-    fun obtenirLesDocumentsParCandidature(@PathVariable candidature_id:String):List<Document>{
+    fun obtenirLesDocumentsParCandidature(@PathVariable candidature_id:String):List<Document>?{
         return service.récupérerDocumentsParCandidatures(candidature_id.toInt())
     }
 

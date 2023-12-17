@@ -14,7 +14,7 @@ interface DocumentDAO:DAO<Document> {
 
     fun ajouterDocumentACandidature(element: Document, code: Int):Document?
     fun ajouterDocumentADemandeStage(element: Document, code: Int):Document?
-    fun chercherParCandidature (candidature: Int):List<Document>
+    fun chercherParCandidature (candidature: Int):List<Document>?
     fun chercherParDemandeStage (demandeStage: Int):List<Document>
     fun ajouterCv(cv :Document, idEtudiant:Int):Document?
     fun modifierCv(cv: Document):Document?

@@ -12,6 +12,7 @@ class DocumentDAOImplement (val bd : JdbcTemplate): DocumentDAO {
     private var mappage = MappageEnum()
 
     override fun ajouterDocumentACandidature(element: Document, code: Int): Document? {
+        println("CODE" + code)
         var idDocument = bd.update(
             "INSERT INTO document (nom,type,contenu,candidature_idcandidature) VALUES (?, ?, ?, ?)",
             element.nom,
@@ -22,6 +23,7 @@ class DocumentDAOImplement (val bd : JdbcTemplate): DocumentDAO {
 
         if (idDocument > 0){
             return  chercherParCode(idDocument)
+            println("DAO DOCUMENT :" + idDocument)
         }else{
             return null
         }
@@ -43,12 +45,12 @@ class DocumentDAOImplement (val bd : JdbcTemplate): DocumentDAO {
         }
     }
 
-    override fun chercherParCandidature(candidature: Int): List<Document> {
+    override fun chercherParCandidature(candidature: Int): List<Document>? {
         var documents = mutableListOf<Document>()
         var cand = chercherCandidatureParCode(candidature)
 
         bd.query("SELECT * FROM document   WHERE candidature_idcandidature = ?", arrayOf(candidature)) { response, _ ->
-            if (response.next()) {
+            while (response.next()) {
                 var  document = Document(
                     idDocument = response.getInt("iddocument"),
                     nom = response.getString("nom"),
@@ -58,7 +60,7 @@ class DocumentDAOImplement (val bd : JdbcTemplate): DocumentDAO {
                     demande = null,
                     candidature= cand
                 )
-
+                println("DAO DOC : ")
                 documents.add(document)
             }
         }

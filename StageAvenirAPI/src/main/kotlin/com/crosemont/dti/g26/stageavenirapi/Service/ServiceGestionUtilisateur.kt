@@ -27,7 +27,7 @@ class ServiceGestionUtilisateur (var daoDocument : DocumentDAO, var daoCandidatu
     fun modifierUnCv(cv : Document):Document?{
         return daoDocument.modifierCv(cv)
     }
-    fun récupérerDocumentsParCandidatures(idCandidature: Int):List<Document>{
+    fun récupérerDocumentsParCandidatures(idCandidature: Int):List<Document>?{
         return daoDocument.chercherParCandidature(idCandidature)
     }
 
