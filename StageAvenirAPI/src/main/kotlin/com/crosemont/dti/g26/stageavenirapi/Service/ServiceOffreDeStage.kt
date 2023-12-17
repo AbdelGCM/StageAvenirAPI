@@ -35,25 +35,11 @@ class ServiceOffreDeStage(val daoOffreStage: OffreStageDAO, val daoCandidature: 
     }
 
     fun obtenirCandidaturesParEtudiant (codeEtudiant:Int):List<Candidature>{
-        var candidatures = daoCandidature.chercherParEtudiant(codeEtudiant)
-        for (candidature in candidatures){
-            var documents = daoDocument.chercherParCandidature(candidature.idCandidature)
-            for (document in documents){
-                candidature.documents?.add(document)
-            }
-        }
-        return candidatures
+        return daoCandidature.chercherParEtudiant(codeEtudiant)
     }
 
     fun obtenirCandidaturesParDemandeStage (codeDemande:Int):List<Candidature>{
-        var candidatures =  daoCandidature.chercherParOffreStage(codeDemande)
-        for (candidature in candidatures){
-            var documents = daoDocument.chercherParDemandeStage(candidature.idCandidature)
-            for (document in documents){
-                candidature.documents?.add(document)
-            }
-        }
-        return candidatures
+        return  daoCandidature.chercherParOffreStage(codeDemande)
     }
 
     fun annulerCandidature(idCandidature: Int):Candidature?{
