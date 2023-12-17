@@ -12,22 +12,7 @@ import org.springframework.stereotype.Repository
 class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
 
     override fun ajouter(offre: OffreStage): OffreStage? {
-        val sql = "INSERT INTO OffreStage (idOffreStage, titre, poste_offert, description, remunere, date,visible,categorie_idcategorie) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
-
-        db.update(
-                sql,
-                offre.idOffreStage,
-                offre.titreOffre,
-                offre.posteOffert,
-                offre.description,
-                offre.estRémunéré,
-                offre.datePost,
-                offre.estVisible,
-                offre.catégorie.idCatégorie
-        )
-
-        return offre
+        TODO()
     }
 
     override fun chercherTous(): List<OffreStage> {
@@ -41,7 +26,7 @@ class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
                     estRémunéré = résultat.getBoolean("remunere"),
                     datePost = résultat.getDate("date").toLocalDate(),
                     estVisible = résultat.getBoolean("visible"),
-                    utilisateur = Employeur(),
+                    entrepriseIdEntreprise = résultat.getInt("entreprise_identreprise"),
                     catégorie = Categorie(
                             idCatégorie = résultat.getInt("categorie_idcategorie"),
                             cursus = null
@@ -50,11 +35,28 @@ class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
         }
     }
 
+    override fun ajouterUneOffre(codeEntreprise: Int, offre: OffreStage): OffreStage? {
+        println("l'Offre en question :" + offre)
+        db.update(
+                "INSERT INTO OffreStage (titre, poste_offert, description, remunere, date,visible,categorie_idcategorie,entreprise_identreprise) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                offre.titreOffre,
+                offre.posteOffert,
+                offre.description,
+                offre.estRémunéré,
+                offre.datePost,
+                offre.estVisible,
+                offre.catégorie.idCatégorie,
+                offre.entrepriseIdEntreprise
+        );
+
+        return offre
+    }
+
 
     override fun chercherParCode(code: Int): OffreStage? {
         val sql = "SELECT * FROM offreStage WHERE idoffreStage = ?"
         val result =  db.query(sql, arrayOf(code)) { résultat, _ ->
-            OffreStage (
+            OffreStage(
                     idOffreStage = résultat.getInt("idoffreStage"),
                     titreOffre = résultat.getString("titre"),
                     posteOffert = résultat.getString("poste_offert"),
@@ -62,7 +64,7 @@ class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
                     estRémunéré = résultat.getBoolean("remunere"),
                     datePost = résultat.getDate("date").toLocalDate(),
                     estVisible = résultat.getBoolean("visible"),
-                    utilisateur = Employeur(),
+                    entrepriseIdEntreprise = résultat.getInt("entreprise_identreprise"),
                     catégorie = Categorie(
                             idCatégorie = résultat.getInt("categorie_idcategorie"),
                             cursus = null
@@ -109,7 +111,7 @@ class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
     override fun chercherParCodeCatégorie(code_categorie: Int): List<OffreStage> {
         val sql = "SELECT * FROM offreStage WHERE categorie_idcategorie = ?"
         val result =  db.query(sql, arrayOf(code_categorie)) { résultat, _ ->
-            OffreStage (
+            OffreStage(
                     idOffreStage = résultat.getInt("idoffreStage"),
                     titreOffre = résultat.getString("titre"),
                     posteOffert = résultat.getString("poste_offert"),
@@ -117,7 +119,7 @@ class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
                     estRémunéré = résultat.getBoolean("remunere"),
                     datePost = résultat.getDate("date").toLocalDate(),
                     estVisible = résultat.getBoolean("visible"),
-                    utilisateur = Employeur(),
+                    entrepriseIdEntreprise = résultat.getInt("entreprise_identreprise"),
                     catégorie = Categorie(
                             idCatégorie = résultat.getInt("categorie_idcategorie"),
                             cursus = null

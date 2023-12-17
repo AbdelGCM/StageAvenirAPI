@@ -25,9 +25,10 @@ class OffresStageControleur(val service: ServiceOffreDeStage) {
     @GetMapping("offres_Stages/offresParCategorie/{categorie_id}")
     fun obtenirOffresStagesParCatégorie(@PathVariable categorie_id: Int ) = service.obtenirOffresParCatégorie(categorie_id) ?: throw RessourceInexistanteException("La catégorie $categorie_id n'est pas inscrite au service.")
 
-    @PostMapping("/employeur/{employeur_id}/offres_Stage")
-    fun ajouterOffreStage(@RequestBody offre: OffreStage, @PathVariable employeur_id : String ): ResponseEntity<OffreStage> {
-        val nouvelleOffre = service.ajouter(offre)
+    @PostMapping("/entreprise/{id}/offresStages")
+    fun ajouterOffreStage(@RequestBody offre: OffreStage, @PathVariable id : Int ): ResponseEntity<OffreStage> {
+
+        val nouvelleOffre = service.ajouter(offre.entrepriseIdEntreprise,offre)
 
         if (nouvelleOffre != null) {
             val uri = ServletUriComponentsBuilder
@@ -62,10 +63,5 @@ class OffresStageControleur(val service: ServiceOffreDeStage) {
         }
         return ResponseEntity.ok(offre)
     }
-
-
-
-
-
 
 }

@@ -9,7 +9,9 @@ interface OffreStageDAO : DAO<OffreStage> {
 
     override fun chercherTous(): List<OffreStage>
 
-    override fun ajouter(offre: OffreStage): OffreStage?
+    //override fun ajouter(offre: OffreStage): OffreStage?
+
+    fun ajouterUneOffre (codeEntreprise: Int, offre: OffreStage): OffreStage?
 
     override fun modifier(id:Int,offre: OffreStage): OffreStage?
 
@@ -18,6 +20,8 @@ interface OffreStageDAO : DAO<OffreStage> {
     fun modifierVisibilité(id: Int,offre: OffreStage): OffreStage?
 
     fun chercherParCodeCatégorie(code_categorie: Int): List<OffreStage>
+
+
 
 
 }
