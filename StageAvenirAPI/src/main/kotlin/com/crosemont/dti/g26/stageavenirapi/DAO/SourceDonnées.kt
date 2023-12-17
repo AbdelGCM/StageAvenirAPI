@@ -1,5 +1,6 @@
 package com.crosemont.dti.g26.stageavenirapi.DAO
 
+import com.crosemont.dti.g26.stageavenirapi.Modèle.DemandeStage
 import com.crosemont.dti.g26.stageavenirapi.Modèle.OffreStage
 import org.springframework.stereotype.Component
 import java.time.LocalDate

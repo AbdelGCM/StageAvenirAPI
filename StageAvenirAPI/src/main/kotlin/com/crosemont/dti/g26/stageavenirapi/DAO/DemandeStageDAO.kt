@@ -8,7 +8,7 @@ interface DemandeStageDAO :DAO<DemandeStage> {
     override fun chercherParCode(code: Int): DemandeStage?
     override fun chercherTous(): List<DemandeStage>
    override fun modifier(id: Int,element: DemandeStage): DemandeStage?
-    override fun supprimer(id: Int ,element: DemandeStage)
+    override fun effacer (id: Int )
 
 
 }

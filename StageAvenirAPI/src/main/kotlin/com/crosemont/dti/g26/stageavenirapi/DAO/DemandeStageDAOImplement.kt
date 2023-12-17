@@ -1,7 +1,10 @@
 
 package com.crosemont.dti.g26.stageavenirapi.DAO
 
+import com.crosemont.dti.g26.stageavenirapi.Exceptions.ConflitAvecUneRessourceExistanteException
+import com.crosemont.dti.g26.stageavenirapi.Exceptions.RessourceInexistanteException
 import com.crosemont.dti.g26.stageavenirapi.Modèle.DemandeStage
+import com.crosemont.dti.g26.stageavenirapi.Modèle.OffreStage
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Repository
 
@@ -19,7 +22,7 @@ class DemandeStageDAOImplement() : DemandeStageDAO {
 
     override fun chercherParCode(code: Int): DemandeStage? =SourceDonnées.demande.find { it.idDemandeStage == code }
 
-    override fun chercherTous(): List<OffreStage> = SourceDonnées.demande
+    override fun chercherTous(): List<DemandeStage> = SourceDonnées.demande
 
     override fun modifier(id: Int, demande: DemandeStage): DemandeStage? {
         val index = SourceDonnées.demande.indexOfFirst{it.idDemandeStage == id}

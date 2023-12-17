@@ -1,9 +1,13 @@
 package com.crosemont.dti.g26.stageavenirapi.Service
 
 import com.crosemont.dti.g26.stageavenirapi.DAO.DemandeStageDAOImplement
+import com.crosemont.dti.g26.stageavenirapi.Modèle.Candidature
 import com.crosemont.dti.g26.stageavenirapi.Modèle.Catégorie
 import com.crosemont.dti.g26.stageavenirapi.Modèle.DemandeStage
+import com.crosemont.dti.g26.stageavenirapi.Modèle.Document
+import org.springframework.stereotype.Service
 
+@Service
 class ServiceDemandeDeStage(val dao : DemandeStageDAOImplement) {
 
     fun obtenirToutesDemandesStage(): List<DemandeStage> = dao.chercherTous()
