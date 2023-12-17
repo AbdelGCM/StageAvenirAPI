@@ -7,8 +7,8 @@ data class Candidature(
     val etat: Etat?,
     val commentaire: String?,
     val offre: OffreStage?,
-    val etudiant : Etudiant?,
-    val documents: MutableList<Document>? = mutableListOf()
+    val etudiant: Etudiant?,
+    val documents: List<Document>? = mutableListOf()
 ){
 
 }

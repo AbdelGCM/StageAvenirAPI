@@ -12,19 +12,19 @@ import org.springframework.stereotype.Repository
 class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
 
     override fun ajouter(offre: OffreStage): OffreStage? {
-        val sql = "INSERT INTO OffreStage (idOffreStage, titreOffre, posteOffert, description, estRémunéré, dateDébut, dateFin, estVisible,catégorieId) " +
+        val sql = "INSERT INTO OffreStage ( titreOffre, posteOffert, description, estRémunéré, dateDébut, dateFin, estVisible,catégorieId) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
         db.update(
                 sql,
-                offre.idOffreStage,
+
                 offre.titreOffre,
                 offre.posteOffert,
                 offre.description,
                 offre.estRémunéré,
                 offre.datePost,
                 offre.estVisible,
-                offre.catégorie.idCatégorie
+                offre.catégorie?.idCatégorie ?: 0
         )
 
         return offre
@@ -41,7 +41,7 @@ class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
                 estRémunéré = résultat.getBoolean("remunere"),
                 datePost = résultat.getDate("date").toLocalDate(),
                 estVisible = résultat.getBoolean("visible"),
-                utilisateur = Employeur(),
+                employeur = Employeur(),
                 catégorie = Categorie(
                     idCatégorie = résultat.getInt("categorie_idcategorie"),
                     cursus = null
@@ -63,7 +63,7 @@ class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
                 estRémunéré = résultat.getBoolean("remunere"),
                 datePost = résultat.getDate("date").toLocalDate(),
                 estVisible = résultat.getBoolean("visible"),
-                utilisateur = Employeur(),
+                employeur = Employeur(),
                 catégorie = Categorie(
                     idCatégorie = résultat.getInt("categorie_idcategorie"),
                     cursus = null
@@ -77,7 +77,7 @@ class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
 
     override fun modifier(id: Int, offre: OffreStage): OffreStage? {
         val sql = "UPDATE OffreStage SET titreOffre = ?, posteOffert = ?, description = ?, estRémunéré = ?, dateDébut = ?, dateFin = ?, estVisible = ?,catégorieId = ? " +
-                "WHERE idOffreStage = ?"
+                " WHERE idOffreStage = ?"
 
         db.update(
                 sql,
@@ -87,7 +87,7 @@ class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
                 offre.estRémunéré,
                 offre.datePost,
                 offre.estVisible,
-                offre.catégorie.idCatégorie,
+                offre.catégorie?.idCatégorie ?: 0,
                 id
         )
 
