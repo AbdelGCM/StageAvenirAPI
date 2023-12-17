@@ -9,7 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Repository
 
 @Repository
-class CandidatureDAOImplement(val bd : JdbcTemplate , val daoDoc :DocumentDAO  ) : CandidatureDAO {
+class CandidatureDAOImplement(val bd : JdbcTemplate , val daoDoc :DocumentDAO , val daoOffre : OffreStageDAO ) : CandidatureDAO {
 
     private var mappage = MappageEnum()
 
@@ -46,7 +46,7 @@ class CandidatureDAOImplement(val bd : JdbcTemplate , val daoDoc :DocumentDAO  )
                     idCandidature = response.getInt("idcandidature"),
                     etat = mappage.mapToEtat(response.getString("etat")),
                     commentaire = response.getString("description"),
-                    offre = null,
+                    offre = daoOffre.chercherParCode(response.getInt("offreStage_idoffreStage")),
                     etudiant = null,
                     documents =  daoDoc.chercherParCandidature(response.getInt("idcandidature"))
                 )
@@ -133,7 +133,7 @@ class CandidatureDAOImplement(val bd : JdbcTemplate , val daoDoc :DocumentDAO  )
         )
         var generatedId = chercherTous().get(chercherTous().size - 1).idCandidature
         nouvelleCandidature.idCandidature = generatedId
-        println("DAO POSTULER " + generatedId)
+        nouvelleCandidature = chercherTous().get(chercherTous().size - 1)
        return nouvelleCandidature
     }
 

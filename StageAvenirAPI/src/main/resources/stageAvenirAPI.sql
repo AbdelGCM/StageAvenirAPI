@@ -155,7 +155,7 @@ CREATE TABLE IF NOT EXISTS `stageavenirapi`.`candidature` (
 CREATE TABLE IF NOT EXISTS `stageavenirapi`.`document` (
                                                            `iddocument` INT NOT NULL AUTO_INCREMENT,
                                                            `nom` VARCHAR(255) NOT NULL,
-    `type` ENUM('cv', 'supplement') NOT NULL,
+    `type` ENUM('CV', 'SUPPLEMENT') NOT NULL,
     `contenu` BLOB NOT NULL,
     `utilisateur_idutilisateur` INT NULL,
     `demandeStage_iddemandeStage` INT NULL,
@@ -205,7 +205,7 @@ CREATE TABLE IF NOT EXISTS `stageavenirapi`.`competence` (
 CREATE TABLE IF NOT EXISTS `stageavenirapi`.`accordStage` (
                                                               `idaccordStage` INT NOT NULL AUTO_INCREMENT,
                                                               `commentaire` VARCHAR(45) NULL,
-    `etat` ENUM('en cours', 'accepte', 'refuse') NOT NULL DEFAULT 'en cours',
+    `etat` ENUM('EN_COURS', 'ACCEPTEE', 'REFUSEE', 'ANNULEE') NOT NULL DEFAULT 'EN_COURS',
     `utilisateur_idutilisateur` INT NOT NULL,
     `offreStage_idoffreStage` INT NOT NULL,
     PRIMARY KEY (`idaccordStage`),
@@ -230,7 +230,7 @@ CREATE TABLE IF NOT EXISTS `stageavenirapi`.`accordStage` (
 CREATE TABLE IF NOT EXISTS `stageavenirapi`.`proposition` (
                                                               `idproposition` INT NOT NULL AUTO_INCREMENT,
                                                               `message` VARCHAR(45) NOT NULL,
-    `etat` ENUM('en cours', 'acceptee', 'refusee') NOT NULL DEFAULT 'en cours',
+    `etat` ENUM('EN_COURS', 'ACCEPTEE', 'REFUSEE', 'ANNULEE') NOT NULL DEFAULT 'EN_COURS',
     `demandeStage_iddemandeStage` INT NOT NULL,
     PRIMARY KEY (`idproposition`),
     INDEX `fk_proposition_demandeStage1_idx` (`demandeStage_iddemandeStage` ASC) VISIBLE,
@@ -262,6 +262,11 @@ CREATE TABLE IF NOT EXISTS `stageavenirapi`.`utilisateur_has_utilisateur` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
     ENGINE = InnoDB;
+
+
+
+
+
 
 
 
