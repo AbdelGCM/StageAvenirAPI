@@ -12,25 +12,43 @@ import org.springframework.stereotype.Repository
 class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
 
     override fun ajouter(offre: OffreStage): OffreStage? {
-        TODO()
+
+        val sql = "INSERT INTO OffreStage ( titreOffre, posteOffert, description, estRémunéré, dateDébut, dateFin, estVisible,catégorieId) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+
+        db.update(
+                sql,
+
+                offre.titreOffre,
+                offre.posteOffert,
+                offre.description,
+                offre.estRémunéré,
+                offre.datePost,
+                offre.estVisible,
+                offre.catégorie?.idCatégorie ?: 0
+        )
+
+        return offre
+
     }
 
     override fun chercherTous(): List<OffreStage> {
         val sql = "SELECT * FROM OffreStage"
         return db.query(sql) { résultat, _ ->
             OffreStage(
-                    idOffreStage = résultat.getInt("idoffreStage"),
-                    titreOffre = résultat.getString("titre"),
-                    posteOffert = résultat.getString("poste_offert"),
-                    description = résultat.getString("description"),
-                    estRémunéré = résultat.getBoolean("remunere"),
-                    datePost = résultat.getDate("date").toLocalDate(),
-                    estVisible = résultat.getBoolean("visible"),
-                    entrepriseIdEntreprise = résultat.getInt("entreprise_identreprise"),
-                    catégorie = Categorie(
-                            idCatégorie = résultat.getInt("categorie_idcategorie"),
-                            cursus = null
-                    )
+                idOffreStage = résultat.getInt("idoffreStage"),
+                titreOffre = résultat.getString("titre"),
+                posteOffert = résultat.getString("poste_offert"),
+                description = résultat.getString("description"),
+                estRémunéré = résultat.getBoolean("remunere"),
+                datePost = résultat.getDate("date").toLocalDate(),
+                estVisible = résultat.getBoolean("visible"),
+                employeur = Employeur(),
+                catégorie = Categorie(
+                    idCatégorie = résultat.getInt("categorie_idcategorie"),
+                    cursus = null
+                )
+
             )
         }
     }
@@ -45,8 +63,8 @@ class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
                 offre.estRémunéré,
                 offre.datePost,
                 offre.estVisible,
-                offre.catégorie.idCatégorie,
-                offre.entrepriseIdEntreprise
+                offre.catégorie?.idCatégorie ?: null,
+                codeEntreprise
         );
 
         return offre
@@ -57,18 +75,20 @@ class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
         val sql = "SELECT * FROM offreStage WHERE idoffreStage = ?"
         val result =  db.query(sql, arrayOf(code)) { résultat, _ ->
             OffreStage(
-                    idOffreStage = résultat.getInt("idoffreStage"),
-                    titreOffre = résultat.getString("titre"),
-                    posteOffert = résultat.getString("poste_offert"),
-                    description = résultat.getString("description"),
-                    estRémunéré = résultat.getBoolean("remunere"),
-                    datePost = résultat.getDate("date").toLocalDate(),
-                    estVisible = résultat.getBoolean("visible"),
-                    entrepriseIdEntreprise = résultat.getInt("entreprise_identreprise"),
-                    catégorie = Categorie(
-                            idCatégorie = résultat.getInt("categorie_idcategorie"),
-                            cursus = null
-                    )
+
+                idOffreStage = résultat.getInt("idoffreStage"),
+                titreOffre = résultat.getString("titre"),
+                posteOffert = résultat.getString("poste_offert"),
+                description = résultat.getString("description"),
+                estRémunéré = résultat.getBoolean("remunere"),
+                datePost = résultat.getDate("date").toLocalDate(),
+                estVisible = résultat.getBoolean("visible"),
+                employeur = Employeur(),
+                catégorie = Categorie(
+                    idCatégorie = résultat.getInt("categorie_idcategorie"),
+                    cursus = null
+                )
+
             )
         }
 
@@ -77,8 +97,9 @@ class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
 
 
     override fun modifier(id: Int, offre: OffreStage): OffreStage? {
-        val sql = "UPDATE OffreStage SET titre = ?, poste_offert = ?, description = ?, remunere = ?, date = ?, visible = ?,categorie_idcategorie = ?" +
-                " WHERE idOffreStage = ?"
+
+        val sql = "UPDATE offeStage SET titreOffre = ?, posteOffert = ?, description = ?, estRémunéré = ?, dateDébut = ?, dateFin = ?, estVisible = ?,catégorieId = ? " +
+                " WHERE idoffreStage = ?"
 
         db.update(
                 sql,
@@ -88,7 +109,7 @@ class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
                 offre.estRémunéré,
                 offre.datePost,
                 offre.estVisible,
-                offre.catégorie.idCatégorie,
+                offre.catégorie?.idCatégorie ?: 0,
                 id
         )
 
@@ -119,7 +140,7 @@ class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
                     estRémunéré = résultat.getBoolean("remunere"),
                     datePost = résultat.getDate("date").toLocalDate(),
                     estVisible = résultat.getBoolean("visible"),
-                    entrepriseIdEntreprise = résultat.getInt("entreprise_identreprise"),
+                    employeur = Employeur(),
                     catégorie = Categorie(
                             idCatégorie = résultat.getInt("categorie_idcategorie"),
                             cursus = null

@@ -28,7 +28,7 @@ class OffresStageControleur(val service: ServiceOffreDeStage) {
     @PostMapping("/entreprise/{id}/offresStages")
     fun ajouterOffreStage(@RequestBody offre: OffreStage, @PathVariable id : Int ): ResponseEntity<OffreStage> {
 
-        val nouvelleOffre = service.ajouter(offre.entrepriseIdEntreprise,offre)
+        val nouvelleOffre = service.ajouter(id,offre)
 
         if (nouvelleOffre != null) {
             val uri = ServletUriComponentsBuilder

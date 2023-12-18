@@ -1,19 +1,19 @@
 package com.crosemont.dti.g26.stageavenirapi.Service
 
+import com.crosemont.dti.g26.stageavenirapi.DAO.AccordStageDAO
 import com.crosemont.dti.g26.stageavenirapi.DAO.CandidatureDAO
 import com.crosemont.dti.g26.stageavenirapi.DAO.DocumentDAO
 import com.crosemont.dti.g26.stageavenirapi.DAO.OffreStageDAO
 import com.crosemont.dti.g26.stageavenirapi.Modèle.Candidature
-import com.crosemont.dti.g26.stageavenirapi.Modèle.Document
 import com.crosemont.dti.g26.stageavenirapi.Modèle.OffreStage
-import com.crosemont.dti.g26.stageavenirapi.modèle.Entreprise
+import com.crosemont.dti.g26.stageavenirapi.Modèle.*
 import org.springframework.stereotype.Service
 
 @Service
-class ServiceOffreDeStage(val daoOffreStage: OffreStageDAO, val daoCandidature: CandidatureDAO, val daoDocument: DocumentDAO){
+class ServiceOffreDeStage(val daoOffreStage: OffreStageDAO, val daoCandidature: CandidatureDAO,val daoAccord:AccordStageDAO, val daoDocument: DocumentDAO){
 
 
-    //Offres de stage
+    //======================================Offres de stage
     fun obtenirOffresStage(): List<OffreStage> = daoOffreStage.chercherTous()
     fun obtenirOffreParCode (code: Int): OffreStage? = daoOffreStage.chercherParCode(code)
     fun obtenirOffresParCatégorie (code: Int): List<OffreStage> = daoOffreStage.chercherParCodeCatégorie(code)
@@ -21,55 +21,52 @@ class ServiceOffreDeStage(val daoOffreStage: OffreStageDAO, val daoCandidature: 
     fun effacer(code: Int) = daoOffreStage.effacer(code)
     fun modifier(code: Int, offre: OffreStage): OffreStage? = daoOffreStage.modifier(code, offre)
 
-    //Candidatures
-    fun postulerPourUneOffre (codeEtudiant : Int ,codeOffre:Int, candidature: Candidature, listeDocuments: List<Document>):Candidature?{
+
+
+
+
+    //========================================Candidatures
+    fun postulerPourUneOffre (codeEtudiant : Int ,codeOffre:Int, candidature: Candidature, idEtudiant:Int):Candidature?{
         var nouvelleCandidature = daoCandidature.postulerPourUneOffre(candidature,codeEtudiant,codeOffre)
 
-        if (nouvelleCandidature != null){
-            for (document in listeDocuments){
+        if (nouvelleCandidature != null ){
+            for (document in nouvelleCandidature.documents!!){
                 daoDocument.ajouterDocumentACandidature(document, nouvelleCandidature.idCandidature)
             }
+            var accordStage =  AccordStage(0, null, nouvelleCandidature.etat, etudiant = Etudiant(idEtudiant), nouvelleCandidature.offre)
+            daoAccord.ajouter(accordStage)
         }
         return nouvelleCandidature
     }
 
     fun obtenirCandidaturesParEtudiant (codeEtudiant:Int):List<Candidature>{
-        var candidatures = daoCandidature.chercherParEtudiant(codeEtudiant)
-        for (candidature in candidatures){
-            var documents = daoDocument.chercherParCandidature(candidature.idCandidature)
-            for (document in documents){
-                candidature.documents?.add(document)
-            }
-        }
-        return candidatures
+        return daoCandidature.chercherParEtudiant(codeEtudiant)
     }
 
     fun obtenirCandidaturesParDemandeStage (codeDemande:Int):List<Candidature>{
-        var candidatures =  daoCandidature.chercherParOffreStage(codeDemande)
-        for (candidature in candidatures){
-            var documents = daoDocument.chercherParDemandeStage(candidature.idCandidature)
-            for (document in documents){
-                candidature.documents?.add(document)
-            }
-        }
-        return candidatures
+        return  daoCandidature.chercherParOffreStage(codeDemande)
     }
 
     fun annulerCandidature(idCandidature: Int):Candidature?{
         return daoCandidature.annulerCandidature(idCandidature)
     }
     fun accepterCandidature(idCandidature: Int):Candidature?{
+
         return daoCandidature.accepterCandidature(idCandidature)
     }
     fun refuserCandidature(idCandidature: Int):Candidature?{
         return daoCandidature.refuserCandidature(idCandidature)
     }
 
+    //==============================================Accords de stages
 
 
-
-
-    //Offres de stages
+    fun approuverAccordStage(idAccordStage : Int):AccordStage?{
+        return daoAccord.approuverUnAccord(idAccordStage)
+    }
+    fun refuserAccordStage(idAccordStage: Int):AccordStage?{
+        return daoAccord.désaprouverUnAccord(idAccordStage)
+    }
 
 
 
