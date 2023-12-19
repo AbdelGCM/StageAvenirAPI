@@ -70,4 +70,5 @@ class ServiceOffreDeStage(val daoOffreStage: OffreStageDAO, val daoCandidature: 
 
 
 
+
 }
