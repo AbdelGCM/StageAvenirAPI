@@ -4,6 +4,8 @@ import com.crosemont.dti.g26.stageavenirapi.DAO.AccordStageDAO
 import com.crosemont.dti.g26.stageavenirapi.DAO.CandidatureDAO
 import com.crosemont.dti.g26.stageavenirapi.DAO.DocumentDAO
 import com.crosemont.dti.g26.stageavenirapi.DAO.OffreStageDAO
+import com.crosemont.dti.g26.stageavenirapi.Modèle.Candidature
+import com.crosemont.dti.g26.stageavenirapi.Modèle.OffreStage
 import com.crosemont.dti.g26.stageavenirapi.Modèle.*
 import org.springframework.stereotype.Service
 
@@ -14,9 +16,11 @@ class ServiceOffreDeStage(val daoOffreStage: OffreStageDAO, val daoCandidature: 
     //======================================Offres de stage
     fun obtenirOffresStage(): List<OffreStage> = daoOffreStage.chercherTous()
     fun obtenirOffreParCode (code: Int): OffreStage? = daoOffreStage.chercherParCode(code)
-    fun ajouter (offre: OffreStage): OffreStage? = daoOffreStage.ajouter(offre)
+    fun obtenirOffresParCatégorie (code: Int): List<OffreStage> = daoOffreStage.chercherParCodeCatégorie(code)
+    fun ajouter (codeEntreprise: Int, offre: OffreStage): OffreStage? = daoOffreStage.ajouterUneOffre(codeEntreprise,offre)
     fun effacer(code: Int) = daoOffreStage.effacer(code)
     fun modifier(code: Int, offre: OffreStage): OffreStage? = daoOffreStage.modifier(code, offre)
+
 
 
 
@@ -31,8 +35,6 @@ class ServiceOffreDeStage(val daoOffreStage: OffreStageDAO, val daoCandidature: 
             }
             var accordStage =  AccordStage(0, null, nouvelleCandidature.etat, etudiant = Etudiant(idEtudiant), nouvelleCandidature.offre)
             daoAccord.ajouter(accordStage)
-
-
         }
         return nouvelleCandidature
     }

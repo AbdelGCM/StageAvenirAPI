@@ -55,9 +55,7 @@ class AccordStageImplement (val bd : JdbcTemplate) : AccordStageDAO {
             println("ici 1")
             return chercherParCode(element)
         } catch (e: Exception) {
-            // Log or print the exception for debugging purposes
             e.printStackTrace()
-            // Handle the exception as needed (e.g., throw a custom exception or return null)
             return null
         }
     }
