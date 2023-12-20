@@ -28,12 +28,9 @@ class ServeurRessourcesOAuth2ConfigurationAccès {
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http {
             authorizeHttpRequests {
-                //authorize("/", permitAll)
-                //authorize(HttpMethod.GET, "/**", permitAll)
-                //authorize(HttpMethod.POST, "/restaurants/*/menus", permitAll)
-                //authorize(HttpMethod.POST, "/**", authenticated)
-                //authorize(HttpMethod.PUT, "/**", authenticated)
-                //authorize(HttpMethod.DELETE, "/**", authenticated)
+                 authorize("/", permitAll)
+                authorize("/api/**", authenticated) // Require authentication for URLs starting with /api/
+                authorize(anyRequest, authenticated)
                 authorize(anyRequest, authenticated)
             }
             oauth2ResourceServer {
