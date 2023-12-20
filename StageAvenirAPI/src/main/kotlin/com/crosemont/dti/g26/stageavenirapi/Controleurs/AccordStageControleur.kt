@@ -14,7 +14,7 @@ class AccordStageControleur(val service :ServiceOffreDeStage) {
     }
 
     @PutMapping("coordonnateur/{idCoordonnateur}/accordStages/{idAccordStage}/desaprouver")
-    fun DésapprouverAccordStage(@PathVariable idAccordStage:String):AccordStage?{
+    fun désapprouverAccordStage(@PathVariable idAccordStage:String):AccordStage?{
         return service.refuserAccordStage(idAccordStage.toInt())
     }
 }

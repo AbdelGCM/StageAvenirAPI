@@ -18,6 +18,7 @@ interface DocumentDAO:DAO<Document> {
     fun chercherParDemandeStage (demandeStage: Int):List<Document>
     fun ajouterCv(cv :Document, idEtudiant:Int):Document?
     fun modifierCv(cv: Document):Document?
+    fun obtenirCvParEtudiant (idEtudiant: Int):Document?
 
 
 }

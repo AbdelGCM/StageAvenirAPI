@@ -25,7 +25,7 @@ class OffresStageControleur(val service: ServiceOffreDeStage) {
     @GetMapping("offres_Stages/offresParCategorie/{categorie_id}")
     fun obtenirOffresStagesParCatégorie(@PathVariable categorie_id: Int ) = service.obtenirOffresParCatégorie(categorie_id) ?: throw RessourceInexistanteException("La catégorie $categorie_id n'est pas inscrite au service.")
 
-    @PostMapping("/entreprise/{id}/offresStages")
+    @PostMapping("/employeur/entreprise/{id}/offresStages")
     fun ajouterOffreStage(@RequestBody offre: OffreStage, @PathVariable id : Int ): ResponseEntity<OffreStage> {
 
         val nouvelleOffre = service.ajouter(id,offre)

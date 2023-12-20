@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class EtudiantControleur {
+class UttilisateurControleur {
 
     @PostMapping("/profil")
     fun changerPhoto() {

@@ -9,7 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Repository
 
 @Repository
-class CandidatureDAOImplement(val bd : JdbcTemplate , val daoDoc :DocumentDAO , val daoOffre : OffreStageDAO ) : CandidatureDAO {
+class CandidatureDAOImplement(val bd : JdbcTemplate , val daoDoc :DocumentDAO , val daoOffre : OffreStageDAO, var daoUser : UtilisateurDAO ) : CandidatureDAO {
 
     private var mappage = MappageEnum()
 
@@ -27,8 +27,8 @@ class CandidatureDAOImplement(val bd : JdbcTemplate , val daoDoc :DocumentDAO , 
                         idCandidature = response.getInt("idcandidature"),
                         etat = mappage.mapToEtat(response.getString("etat")),
                         commentaire = response.getString("description"),
-                        offre = null,
-                        etudiant = null ,
+                         offre = daoOffre.chercherParCode(response.getInt("offreStage_idoffreStage")),
+                        etudiant = daoUser.chercherParCode(response.getInt("utilisateur_idutilisateur")) ,
                         documents =  daoDoc.chercherParCandidature(response.getInt("idcandidature"))
 
                     )
@@ -48,7 +48,7 @@ class CandidatureDAOImplement(val bd : JdbcTemplate , val daoDoc :DocumentDAO , 
                     etat = mappage.mapToEtat(response.getString("etat")),
                     commentaire = response.getString("description"),
                     offre = daoOffre.chercherParCode(response.getInt("offreStage_idoffreStage")),
-                    etudiant = null,
+                    etudiant = daoUser.chercherParCode(response.getInt("utilisateur_idutilisateur")),
                     documents =  daoDoc.chercherParCandidature(response.getInt("idcandidature"))
                 )
                 candidatures.add(candidature)
@@ -86,8 +86,8 @@ class CandidatureDAOImplement(val bd : JdbcTemplate , val daoDoc :DocumentDAO , 
                     idCandidature = response.getInt("idcandidature"),
                     etat = mappage.mapToEtat(response.getString("etat")),
                     commentaire = response.getString("description"),
-                    offre = null,
-                    etudiant = null,
+                    offre = daoOffre.chercherParCode(response.getInt("offreStage_idoffreStage")),
+                    etudiant = daoUser.chercherParCode(response.getInt("utilisateur_idutilisateur")),
                     documents = daoDoc.chercherParCandidature(response.getInt("idcandidature"))
             )
 
@@ -112,8 +112,8 @@ class CandidatureDAOImplement(val bd : JdbcTemplate , val daoDoc :DocumentDAO , 
                     idCandidature = response.getInt("idcandidature"),
                     etat = mappage.mapToEtat(response.getString("etat")),
                     commentaire = response.getString("description"),
-                    offre = null,
-                    etudiant = null,
+                    offre = daoOffre.chercherParCode(response.getInt("offreStage_idoffreStage")),
+                    etudiant = daoUser.chercherParCode(response.getInt("utilisateur_idutilisateur")),
                     documents =  daoDoc.chercherParCandidature(response.getInt("idcandidature"))
                 )
                 candidatures.add(candidature)
@@ -134,9 +134,9 @@ class CandidatureDAOImplement(val bd : JdbcTemplate , val daoDoc :DocumentDAO , 
             code_etudiant,
             idOffre
         )
-        var generatedId = chercherTous().get(chercherTous().size - 1).idCandidature
+        var generatedId = chercherTous().get(chercherTous().size -1 ).idCandidature
         nouvelleCandidature.idCandidature = generatedId
-        nouvelleCandidature = chercherTous().get(chercherTous().size - 1)
+        nouvelleCandidature = chercherTous().get(chercherTous().size -1 )
        return nouvelleCandidature
 
     }
