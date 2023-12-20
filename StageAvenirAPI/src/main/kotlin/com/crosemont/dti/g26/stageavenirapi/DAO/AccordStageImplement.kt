@@ -1,7 +1,6 @@
 package com.crosemont.dti.g26.stageavenirapi.DAO
 
 import com.crosemont.dti.g26.stageavenirapi.Modèle.AccordStage
-import com.crosemont.dti.g26.stageavenirapi.Modèle.Candidature
 import com.crosemont.dti.g26.stageavenirapi.Modèle.MappingEnum.MappageEnum
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Repository
@@ -15,7 +14,7 @@ class AccordStageImplement (val bd : JdbcTemplate) : AccordStageDAO {
 
                 element.commentaire,
                 element.etat.toString(),
-                element.etudiant?.idEtudiant ?: 0,
+                element.etudiant?.idUtilisateur ?: 0,
                 element.offre?.idOffreStage ?: 0,
 
         )

@@ -12,7 +12,7 @@ data class OffreStage(
         val estRémunéré: Boolean,
         val datePost: LocalDate,
         val estVisible: Boolean,
-        val employeur: Employeur?,
+        val entreprise: Entreprise?,
         val catégorie: Categorie?
 
 )

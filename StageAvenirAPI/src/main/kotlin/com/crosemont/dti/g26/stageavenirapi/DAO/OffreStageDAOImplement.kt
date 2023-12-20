@@ -1,15 +1,12 @@
 package com.crosemont.dti.g26.stageavenirapi.DAO
 
-import com.crosemont.dti.g26.stageavenirapi.Exceptions.ConflitAvecUneRessourceExistanteException
 import com.crosemont.dti.g26.stageavenirapi.Exceptions.RessourceInexistanteException
 import com.crosemont.dti.g26.stageavenirapi.Modèle.*
-import org.springframework.dao.EmptyResultDataAccessException
-import org.springframework.data.annotation.Id
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Repository
 
 @Repository
-class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
+class OffreStageDAOImplement(val db: JdbcTemplate, var daoCategorie : CategorieDAO, var daoEntreprise : EntrepriseDAO): OffreStageDAO {
 
     override fun ajouter(offre: OffreStage): OffreStage? {
 
@@ -43,11 +40,8 @@ class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
                 estRémunéré = résultat.getBoolean("remunere"),
                 datePost = résultat.getDate("date").toLocalDate(),
                 estVisible = résultat.getBoolean("visible"),
-                employeur = Employeur(),
-                catégorie = Categorie(
-                    idCatégorie = résultat.getInt("categorie_idcategorie"),
-                    cursus = null
-                )
+                entreprise = daoEntreprise.chercherParCode(résultat.getInt("entreprise_identreprise")) ,
+                catégorie = daoCategorie.chercherParCode(résultat.getInt("categorie_idcategorie"))
 
             )
         }
@@ -83,11 +77,8 @@ class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
                 estRémunéré = résultat.getBoolean("remunere"),
                 datePost = résultat.getDate("date").toLocalDate(),
                 estVisible = résultat.getBoolean("visible"),
-                employeur = Employeur(),
-                catégorie = Categorie(
-                    idCatégorie = résultat.getInt("categorie_idcategorie"),
-                    cursus = null
-                )
+                entreprise = daoEntreprise.chercherParCode(résultat.getInt("entreprise_identreprise")) ,
+                catégorie = daoCategorie.chercherParCode(résultat.getInt("categorie_idcategorie"))
 
             )
         }
@@ -140,11 +131,8 @@ class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
                     estRémunéré = résultat.getBoolean("remunere"),
                     datePost = résultat.getDate("date").toLocalDate(),
                     estVisible = résultat.getBoolean("visible"),
-                    employeur = Employeur(),
-                    catégorie = Categorie(
-                            idCatégorie = résultat.getInt("categorie_idcategorie"),
-                            cursus = null
-                    )
+                    entreprise = daoEntreprise.chercherParCode(résultat.getInt("entreprise_identreprise")) ,
+                    catégorie = daoCategorie.chercherParCode(résultat.getInt("categorie_idcategorie"))
             )
         }
 

@@ -4,12 +4,14 @@ import com.crosemont.dti.g26.stageavenirapi.Modèle.Candidature
 import com.crosemont.dti.g26.stageavenirapi.Modèle.DemandeStage
 import com.crosemont.dti.g26.stageavenirapi.Modèle.Document
 import com.crosemont.dti.g26.stageavenirapi.Modèle.MappingEnum.MappageEnum
+import com.crosemont.dti.g26.stageavenirapi.Modèle.Utilisateur
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Repository
 
 @Repository
-class DocumentDAOImplement (val bd : JdbcTemplate): DocumentDAO {
+class DocumentDAOImplement (val bd : JdbcTemplate, var daoEtudiant : UtilisateurDAO, var daoDemande : DemandeStageDAO, var daoCategorie : CategorieDAO ): DocumentDAO {
     private var mappage = MappageEnum()
+
 
     override fun ajouterDocumentACandidature(element: Document, code: Int): Document? {
         println("CODE" + code)
@@ -47,7 +49,6 @@ class DocumentDAOImplement (val bd : JdbcTemplate): DocumentDAO {
 
     override fun chercherParCandidature(candidature: Int): List<Document>? {
         var documents = mutableListOf<Document>()
-        var cand = chercherCandidatureParCode(candidature)
 
         bd.query("SELECT * FROM document   WHERE candidature_idcandidature = ?", arrayOf(candidature)) { response, _ ->
             while (response.next()) {
@@ -56,9 +57,9 @@ class DocumentDAOImplement (val bd : JdbcTemplate): DocumentDAO {
                         nom = response.getString("nom"),
                         type = mappage.mapToType(response.getString("type")),
                         contenu = response.getBytes("contenu"),
-                        etudiant = null,
+                        etudiant = daoEtudiant.chercherParCode(response.getInt("utilisateur_idutilisateur")),
                         demande = null,
-                        candidature= cand
+                        candidature = null
                 )
                 println("DAO DOC : ")
                 documents.add(document)
@@ -74,13 +75,13 @@ class DocumentDAOImplement (val bd : JdbcTemplate): DocumentDAO {
         bd.query("SELECT * FROM document WHERE demandeStage_iddemandeStage = ?", arrayOf(demandeStage)) { response, _ ->
             if (response.next()) {
                 var  document = Document(
-                        idDocument = response.getInt("id"),
+                        idDocument = response.getInt("iddocument"),
                         nom = response.getString("nom"),
                         type = mappage.mapToType(response.getString("type")),
                         contenu = response.getBytes("description"),
-                        etudiant = null,
+                        etudiant = daoEtudiant.chercherParCode(response.getInt("idutilisateur")),
                         demande = demande,
-                        candidature= null
+                        candidature = null
                 )
 
                 documents.add(document)
@@ -122,6 +123,23 @@ class DocumentDAOImplement (val bd : JdbcTemplate): DocumentDAO {
         }
     }
 
+    override fun obtenirCvParEtudiant(idEtudiant: Int): Document? {
+        var result = bd.query("SELECT * FROM utilisateur WHERE idutilisateur = ?", arrayOf(idEtudiant)) { response, _ ->
+
+             Document(
+                idDocument = response.getInt("iddocument"),
+                nom = response.getString("nom"),
+                type = mappage.mapToType(response.getString("type")),
+                contenu = response.getBytes("description"),
+                etudiant = daoEtudiant.chercherParCode(response.getInt("idutilisateur")),
+                demande = null,
+                candidature = null
+            )
+
+        }
+        return result.firstOrNull()
+    }
+
 
     override fun chercherParCode(code: Int): Document? {
         var document : Document? = null
@@ -129,13 +147,13 @@ class DocumentDAOImplement (val bd : JdbcTemplate): DocumentDAO {
         bd.query("SELECT * FROM document WHERE iddocument = ?", arrayOf(code)) { response, _ ->
             if (response.next()) {
                 var  document = Document(
-                        idDocument = response.getInt("id"),
+                        idDocument = response.getInt("iddocument"),
                         nom = response.getString("nom"),
                         type = mappage.mapToType(response.getString("type")),
                         contenu = response.getBytes("description"),
-                        etudiant = null,
+                        etudiant = daoEtudiant.chercherParCode(response.getInt("idutilisateur")),
                         demande = null,
-                        candidature= null
+                        candidature = null
                 )
             }
         }
@@ -153,9 +171,9 @@ class DocumentDAOImplement (val bd : JdbcTemplate): DocumentDAO {
                         nom = response.getString("nom"),
                         type = mappage.mapToType(response.getString("type")),
                         contenu = response.getBytes("contenu"),
-                        etudiant = null,
+                        etudiant = daoEtudiant.chercherParCode(response.getInt("idutilisateur")),
                         demande = null,
-                        candidature= null
+                        candidature = null
                 )
                 documents.add(document)
             }
@@ -194,9 +212,9 @@ class DocumentDAOImplement (val bd : JdbcTemplate): DocumentDAO {
                         idDemandeStage = response.getInt("iddemandeStage"),
                         titre = response.getString("titre"),
                         description = response.getString("description"),
-                        posteDemandé  = response.getString("poste"),
-                        etudiant = null,
-                        catégorie = null
+                        posteDemandé = response.getString("poste"),
+                        etudiant = daoEtudiant.chercherParCode(response.getInt("utilisateur_idutilisateur")),
+                        catégorie = daoCategorie.chercherParCode(response.getInt("categorie_idcategorie"))
                 )
             }
         }

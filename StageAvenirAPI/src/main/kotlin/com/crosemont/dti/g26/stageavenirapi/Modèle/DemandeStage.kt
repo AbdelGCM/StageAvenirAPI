@@ -5,6 +5,6 @@ data class DemandeStage(
     val titre: String,
     val description: String,
     val posteDemandé: String,
-    val etudiant: Etudiant?,
+    val etudiant: Utilisateur?,
     val catégorie: Categorie?
 )

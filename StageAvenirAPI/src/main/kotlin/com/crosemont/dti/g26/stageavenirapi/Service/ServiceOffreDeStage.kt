@@ -7,6 +7,7 @@ import com.crosemont.dti.g26.stageavenirapi.DAO.OffreStageDAO
 import com.crosemont.dti.g26.stageavenirapi.Modèle.Candidature
 import com.crosemont.dti.g26.stageavenirapi.Modèle.OffreStage
 import com.crosemont.dti.g26.stageavenirapi.Modèle.*
+import com.crosemont.dti.g26.stageavenirapi.Modèle.Enum.Etat
 import org.springframework.stereotype.Service
 
 @Service
@@ -33,8 +34,7 @@ class ServiceOffreDeStage(val daoOffreStage: OffreStageDAO, val daoCandidature: 
             for (document in nouvelleCandidature.documents!!){
                 daoDocument.ajouterDocumentACandidature(document, nouvelleCandidature.idCandidature)
             }
-            var accordStage =  AccordStage(0, null, nouvelleCandidature.etat, etudiant = Etudiant(idEtudiant), nouvelleCandidature.offre)
-            daoAccord.ajouter(accordStage)
+
         }
         return nouvelleCandidature
     }
@@ -50,9 +50,10 @@ class ServiceOffreDeStage(val daoOffreStage: OffreStageDAO, val daoCandidature: 
     fun annulerCandidature(idCandidature: Int):Candidature?{
         return daoCandidature.annulerCandidature(idCandidature)
     }
-    fun accepterCandidature(idCandidature: Int):Candidature?{
-
-        return daoCandidature.accepterCandidature(idCandidature)
+    fun accepterCandidature(candidature: Candidature):Candidature?{
+        var accordStage =  AccordStage(0, null, Etat.EN_COURS, candidature.etudiant, candidature.offre)
+        daoAccord.ajouter(accordStage)
+        return daoCandidature.accepterCandidature(candidature.idCandidature)
     }
     fun refuserCandidature(idCandidature: Int):Candidature?{
         return daoCandidature.refuserCandidature(idCandidature)
