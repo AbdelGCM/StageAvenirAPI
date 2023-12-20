@@ -1,6 +1,7 @@
 package com.crosemont.dti.g26.stageavenirapi.Modèle
 
 
+import com.crosemont.dti.g26.stageavenirapi.Modèle.Enum.Etat
 import java.time.LocalDate
 
 data class OffreStage(
@@ -12,6 +13,7 @@ data class OffreStage(
         val estRémunéré: Boolean,
         val datePost: LocalDate,
         val estVisible: Boolean,
+        var etat: Etat,
         val entreprise: Entreprise?,
         val catégorie: Categorie?
 

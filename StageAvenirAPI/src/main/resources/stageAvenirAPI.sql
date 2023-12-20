@@ -4,7 +4,7 @@
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `stageavenirapi`.`role` (
     `idRole` INT NOT NULL AUTO_INCREMENT,
-    `nom` ENUM('etudiant', 'coordonnateur', 'employeur') NOT NULL,
+    `nom` ENUM('etudiant', 'coordonnateur', 'employeur','admin') NOT NULL,
     PRIMARY KEY (`idRole`))
     ENGINE = InnoDB;
 
@@ -106,6 +106,7 @@ CREATE TABLE IF NOT EXISTS `stageavenirapi`.`offreStage` (
     `remunere` TINYINT NOT NULL,
     `date` DATE NOT NULL,
     `visible` TINYINT NOT NULL DEFAULT 1,
+    `etat` ENUM('EN_COURS', 'ACCEPTEE', 'REFUSEE', 'ANNULEE') NOT NULL DEFAULT 'EN_COURS',
     `categorie_idcategorie` INT NOT NULL,
     `entreprise_identreprise` INT NOT NULL,
     PRIMARY KEY (`idoffreStage`),
@@ -262,8 +263,6 @@ CREATE TABLE IF NOT EXISTS `stageavenirapi`.`utilisateur_has_utilisateur` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
     ENGINE = InnoDB;
-
-
 
 
 

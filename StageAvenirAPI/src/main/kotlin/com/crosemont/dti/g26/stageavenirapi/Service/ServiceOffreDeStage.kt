@@ -17,11 +17,24 @@ class ServiceOffreDeStage(val daoUtilisateur: UtilisateurDAO, val daoOffreStage:
     fun obtenirOffresStage(): List<OffreStage> = daoOffreStage.chercherTous()
     fun obtenirOffreParCode (code: Int): OffreStage? = daoOffreStage.chercherParCode(code)
     fun obtenirOffresParCatégorie (code: Int): List<OffreStage> = daoOffreStage.chercherParCodeCatégorie(code)
-    fun ajouter (codeEntreprise: Int, offre: OffreStage): OffreStage? = daoOffreStage.ajouterUneOffre(codeEntreprise,offre)
+
     fun effacer(code: Int) = daoOffreStage.effacer(code)
     fun modifier(code: Int, offre: OffreStage): OffreStage? = daoOffreStage.modifier(code, offre)
 
+    fun ajouter (codeEntreprise: Int, offre: OffreStage): OffreStage? {
+        return daoOffreStage.ajouterUneOffre(codeEntreprise,offre)
+    }
+    fun obtenirStagesEnCoursDeValidationPourUnePublication(code_coordo : String ): List<OffreStage> {
+        return daoOffreStage.obtenirOffresEnCoursApprobation()
+    }
 
+    fun approuverPublicationDuneOffre(code_coordo : String, idOffre : Int): OffreStage?{
+        return daoOffreStage.modifierVisibilité(idOffre, true, "ACCEPTEE")
+    }
+
+    fun refuserPublicationDuneOffre(code_coordo : String, idOffre : Int): OffreStage?{
+        return daoOffreStage.modifierVisibilité(idOffre, false, "REFUSEE")
+    }
 
 
 
