@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service
 @Service
 class ServiceDemandeDeStage(val dao : DemandeStageDAOImplement) {
 
+
     fun obtenirToutesDemandesStage(): List<DemandeStage> = dao.chercherTous()
 
     fun obtenirDemandeParId(id: Int): DemandeStage? = dao.chercherParCode(id)
@@ -29,4 +30,5 @@ class ServiceDemandeDeStage(val dao : DemandeStageDAOImplement) {
     fun effacerDemande(id: Int) = dao.effacer(id)
 
     fun modifierDemande(id: Int, demande: DemandeStage): DemandeStage? = dao.modifier(id, demande)
+
 }

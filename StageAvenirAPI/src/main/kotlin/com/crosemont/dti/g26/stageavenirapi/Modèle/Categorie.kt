@@ -1,6 +1,7 @@
 package com.crosemont.dti.g26.stageavenirapi.Modèle
 
-data class Catégorie(
-    val idCatégorie: Int,
-    val cursus: String
+data class Categorie(
+    val idCategorie: Int,
+    val cursus: String?
 )
+

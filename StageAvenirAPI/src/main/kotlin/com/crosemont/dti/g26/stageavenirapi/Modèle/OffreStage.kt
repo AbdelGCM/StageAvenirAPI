@@ -8,8 +8,8 @@ data class OffreStage(
     val posteOffert: String,
     val description: String,
     val estRémunéré: Boolean,
-    val dateDébut: LocalDate,
-    val dateFin: LocalDate,
-    val entrepriseIdEntreprise: Int,
-    val catégorieIdCatégorie: Int
+    val datePost: LocalDate,
+    val estVisible: Boolean,
+    val utilisateur: Employeur,
+    val catégorie:Categorie
 )
