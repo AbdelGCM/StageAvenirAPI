@@ -20,6 +20,8 @@ class RoleDAOImplement (var bd : JdbcTemplate ) :RoleDAO{
         return result.firstOrNull()
     }
 
+
+
     override fun chercherTous(): List<Role> {
         TODO("Not yet implemented")
     }

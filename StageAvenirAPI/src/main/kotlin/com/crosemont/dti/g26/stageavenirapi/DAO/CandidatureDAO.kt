@@ -9,9 +9,9 @@ interface CandidatureDAO :DAO<Candidature> {
     override fun chercherTous(): List<Candidature>
     override fun modifier(id: Int ,element: Candidature): Candidature?
     override fun effacer(elementId: Int)
-    fun chercherParEtudiant(code_etudiant : Int):List<Candidature>
+    fun chercherParEtudiant(code_etudiant : String):List<Candidature>
     fun chercherParOffreStage(code_offre : Int):List<Candidature>
-    fun postulerPourUneOffre(candidature: Candidature, code_etudiant: Int,idOffre:Int):Candidature?
+    fun postulerPourUneOffre(candidature: Candidature, code_etudiant: String,idOffre:Int):Candidature?
     fun annulerCandidature(candidatureId: Int):Candidature?
     fun accepterCandidature(candidatureId: Int):Candidature?
     fun refuserCandidature(candidatureId: Int):Candidature?

@@ -12,7 +12,24 @@ class UtilisateuDAOImplement (var bd : JdbcTemplate, var daoCategorieDAO: Catego
         var result = bd.query("SELECT * FROM utilisateur WHERE idutilisateur = ?", arrayOf(code)) { response, _ ->
 
             Utilisateur(
-                idUtilisateur = response.getInt("idutilisateur"),
+                idUtilisateur = response.getString("idutilisateur"),
+                nom = response.getString("nom"),
+                prénom = response.getString("prenom"),
+                courriel = response.getString("courriel"),
+                no_telephone = response.getString("telephone"),
+                categorie =  daoCategorieDAO.chercherParCode( response.getInt("categorie_idcategorie")),
+                role = daoRole.chercherParCode(response.getInt("role_idRole"))
+            )
+
+        }
+        return result.firstOrNull()
+    }
+
+    override fun chercherUserParCode(code: String): Utilisateur? {
+        var result = bd.query("SELECT * FROM utilisateur WHERE idutilisateur = ?", arrayOf(code)) { response, _ ->
+
+            Utilisateur(
+                idUtilisateur = response.getString("idutilisateur"),
                 nom = response.getString("nom"),
                 prénom = response.getString("prenom"),
                 courriel = response.getString("courriel"),

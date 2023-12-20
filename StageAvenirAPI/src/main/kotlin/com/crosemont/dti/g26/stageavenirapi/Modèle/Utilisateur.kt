@@ -1,7 +1,7 @@
 package com.crosemont.dti.g26.stageavenirapi.Modèle
 
 class Utilisateur(
-    val idUtilisateur: Int,
+    val idUtilisateur: String,
     val nom: String?,
     val prénom: String?,
     val courriel: String?,
@@ -9,7 +9,7 @@ class Utilisateur(
     val categorie: Categorie?,
     val role : Role?
 ) {
-    constructor(idUtilisateur: Int) : this(
+    constructor(idUtilisateur: String) : this(
         idUtilisateur = idUtilisateur,
         nom = null,
         prénom = null,
