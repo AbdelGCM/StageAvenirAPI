@@ -1,16 +1,14 @@
 package com.crosemont.dti.g26.stageavenirapi.DAO
 
-import com.crosemont.dti.g26.stageavenirapi.Modèle.Categorie
-import com.crosemont.dti.g26.stageavenirapi.Modèle.Utilisateur
+import com.crosemont.dti.g26.stageavenirapi.Modèle.Catégorie
 
-interface CategorieDAO: DAO<Categorie>   {
-    override fun ajouter(categorie: Categorie): Categorie?
-    override fun chercherParCode(code: Int): Categorie?
+interface CategorieDAO: DAO<Catégorie>   {
+    override fun ajouter(catégorie: Catégorie): Catégorie?
+    override fun chercherParCode(code: Int): Catégorie?
 
-    fun chercherCategorieParCode(code: Int): Categorie?
-    override fun chercherTous(): List<Categorie>
+    override fun chercherTous(): List<Catégorie>
 
-    override fun modifier(id: Int,categorie: Categorie): Categorie?
+    override fun modifier(id: Int, catégorie: Catégorie): Catégorie?
 
     override fun effacer (id: Int )
 }

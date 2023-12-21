@@ -1,12 +1,11 @@
 package com.crosemont.dti.g26.stageavenirapi.DAO
 
-import com.crosemont.dti.g26.stageavenirapi.Modèle.DemandeStage
 import com.crosemont.dti.g26.stageavenirapi.Modèle.Utilisateur
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Repository
 
 @Repository
-class UtilisateurDAOImplement (val bd : JdbcTemplate): UtilisateurDAO  {
+class UtilisateurDAOImplement (val bd : JdbcTemplate, val daoCategorie: CategorieDAOImplement, val daoRole: RoleDAOImplement): UtilisateurDAO  {
     override fun ajouter(utilisateur: Utilisateur): Utilisateur? {
         val sql = "INSERT INTO utilisateur (idutilisateur, nom, prenom, courriel, telephone, ville, catégorie_idcategorie, role_idRole) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
@@ -19,8 +18,8 @@ class UtilisateurDAOImplement (val bd : JdbcTemplate): UtilisateurDAO  {
             utilisateur.courriel,
             utilisateur.telephone,
             utilisateur.ville,
-            utilisateur.categorie?.idCategorie,
-            utilisateur.role
+            utilisateur.catégorie?.idCatégorie,
+            utilisateur.role?.idRole
         )
 
         return utilisateur
@@ -28,9 +27,10 @@ class UtilisateurDAOImplement (val bd : JdbcTemplate): UtilisateurDAO  {
     override fun chercherParCode(code: Int): Utilisateur? {
         var utilisateur: Utilisateur? = null
 
+
         try {
             bd.query("SELECT * FROM utilisateur WHERE idutilisateur = ?", arrayOf(code)) { response, _ ->
-                if (response.next()) {
+
 
                    utilisateur =  Utilisateur(
                         idutilisateur = response.getInt("idutilisateur"),
@@ -38,18 +38,35 @@ class UtilisateurDAOImplement (val bd : JdbcTemplate): UtilisateurDAO  {
                         prenom = response.getString("prenom"),
                         courriel = response.getString("courriel"),
                         telephone = response.getString("telephone"),
-                        categorie = chercherCategorieParCode(code = response.getInt("categorie_idcategorie")),
-                        role = chercherRoleParCode(code = response.getInt("utilisateur_idutilisateur"))
+                        ville = response.getString("ville"),
+                        catégorie = daoCategorie?.chercherParCode(response.getInt("categorie_idcategorie")),
+                        role = daoRole?.chercherParCode(response.getInt("role_idRole")),
                     )
-                }
+
             }
 
         }catch (e: Exception){
             println("ERREUR DAO :" + e)
         }
 
-        println("DAO : " + demande_de_stage.toString())
-        return demande_de_stage
+        println("DAO utilisateur : " + utilisateur.toString())
+        return utilisateur
+    }
+
+    /* override fun chercherCategorieParCode(code: Int): Categorie? {
+        TODO("Not yet implemented")
+    }*/
+
+    override fun chercherTous(): List<Utilisateur> {
+        TODO("Not yet implemented")
+    }
+
+    override fun modifier(id: Int, utilisateur: Utilisateur): Utilisateur? {
+        TODO("Not yet implemented")
+    }
+
+    override fun effacer(id: Int) {
+        TODO("Not yet implemented")
     }
 
 }

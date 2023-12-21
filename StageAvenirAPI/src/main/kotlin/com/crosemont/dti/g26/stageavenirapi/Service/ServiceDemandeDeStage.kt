@@ -13,7 +13,7 @@ class ServiceDemandeDeStage(val dao : DemandeStageDAOImplement) {
 
     fun obtenirToutesDemandesStage(): List<DemandeStage> = dao.chercherTous()
 
-    fun obtenirDemandeParId(id: Int): DemandeStage? = dao.chercherParCode(id)
+    fun obtenirDemandeParId(code: Int): DemandeStage? = dao.chercherParCode(code)
 
     fun postuler(codeEtudiant: Int, candidature: Candidature, documents: List<Document>) {
         // Implémentation de la logique de postulation pour une demande de stage
@@ -24,6 +24,7 @@ class ServiceDemandeDeStage(val dao : DemandeStageDAOImplement) {
         // Implémentation pour obtenir les candidatures d'un étudiant pour une demande de stage spécifique
         // ...
     }
+    fun modifierStatus(id: Int, demande: DemandeStage): DemandeStage? = dao.modifierStatus(id, demande)
 
     fun ajouterDemande(demande: DemandeStage): DemandeStage? = dao.ajouter(demande)
 

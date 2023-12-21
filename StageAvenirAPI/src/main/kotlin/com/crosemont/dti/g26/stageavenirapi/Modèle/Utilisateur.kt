@@ -1,6 +1,6 @@
 package com.crosemont.dti.g26.stageavenirapi.Modèle
 
-import com.crosemont.dti.g26.stageavenirapi.Modèle.Enum.Role
+
 
 class Utilisateur (
     val idutilisateur: Int?,
@@ -9,7 +9,7 @@ class Utilisateur (
     val courriel: String?,
     val telephone: String?,
     val ville: String?,
-    val categorie: Categorie?,
+    val catégorie: Catégorie?,
     val role: Role?
 
 )

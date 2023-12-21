@@ -2,8 +2,8 @@ package com.crosemont.dti.g26.stageavenirapi.Controleurs
 
 import com.crosemont.dti.g26.stageavenirapi.Exceptions.RessourceInexistanteException
 import com.crosemont.dti.g26.stageavenirapi.Modèle.DemandeStage
+import com.crosemont.dti.g26.stageavenirapi.Modèle.Employeur
 import com.crosemont.dti.g26.stageavenirapi.Service.ServiceDemandeDeStage
-import com.crosemont.dti.g26.stageavenirapi.Service.ServiceOffreDeStage
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -16,16 +16,38 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class Demandes_StagesControlleur(val service: ServiceDemandeDeStage) {
-    @GetMapping
-    fun obtenirToutesDemandesStage() = service.obtenirTouteswDemandesStage()
+    @GetMapping("/demandeStages")
+    fun obtenirToutesDemandesStage() = service.obtenirToutesDemandesStage()
 
     @GetMapping("/demandeStage/{code}")
     fun obtenirDemandeStageParCode(@PathVariable code: Int) =
         service.obtenirDemandeParId(code) ?: throw RessourceInexistanteException("La demande de stage $code n'est pas inscrite au service.")
 
-    @PostMapping
-    fun ajouterDemandeStage(@RequestBody demande: DemandeStage): ResponseEntity<DemandeStage> {
+    @PostMapping("/employeur/{employeur_id}/demande_Stage")
+    fun ajouterDemandeStage(@RequestBody demande: DemandeStage, @PathVariable employeur_id: String): ResponseEntity<DemandeStage> {
         val nouvelleDemande = service.ajouterDemande(demande)
+
+        if (nouvelleDemande != null) {
+            val uri = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{code}")
+                .buildAndExpand(nouvelleDemande.idDemandeStage)
+                .toUri()
+
+            return ResponseEntity.created(uri).body(nouvelleDemande)
+        }
+        return ResponseEntity.internalServerError().build()
+    }
+
+    @DeleteMapping("/demandeStage/{code}")
+    fun supprimerDemandeStage(@PathVariable code: Int): ResponseEntity<Void> {
+        service.effacerDemande(code)
+        return ResponseEntity.noContent().build()
+    }
+
+    @PutMapping("/demandeStage/{code}")
+    fun modifierDemandeStage(@PathVariable code: Int, @RequestBody demande: DemandeStage): ResponseEntity<DemandeStage> {
+        val nouvelleDemande = service.modifierDemande(code, demande)
 
         return nouvelleDemande?.let {
             val uri = ServletUriComponentsBuilder
@@ -35,19 +57,12 @@ class Demandes_StagesControlleur(val service: ServiceDemandeDeStage) {
                 .toUri()
 
             ResponseEntity.created(uri).body(it)
-        } ?: ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build()
+        } ?: ResponseEntity.ok(demande)
+
     }
-
-    @DeleteMapping("/{code}")
-    fun supprimerDemandeStage(@PathVariable code: Int): ResponseEntity<Void> {
-        service.effacerDemande(code)
-        return ResponseEntity.noContent().build()
-    }
-
-    @PutMapping("/{code}")
-    fun modifierDemandeStage(@PathVariable code: Int, @RequestBody demande: DemandeStage): ResponseEntity<DemandeStage> {
-        val nouvelleDemande = service.modifierDemande(code, demande)
-
+    @PutMapping("/demandeStage/status/{code}")
+    fun modifierStatus(@PathVariable code: Int,@RequestBody demande: DemandeStage): ResponseEntity<DemandeStage>{
+        val nouvelleDemande = service.modifierStatus(code, demande)
         return nouvelleDemande?.let {
             val uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()

@@ -1,8 +1,6 @@
 package com.crosemont.dti.g26.stageavenirapi.Modèle.MappingEnum
 
-import com.crosemont.dti.g26.stageavenirapi.Modèle.Enum.Etat
-import com.crosemont.dti.g26.stageavenirapi.Modèle.Enum.Role
-import com.crosemont.dti.g26.stageavenirapi.Modèle.Enum.Type
+import com.crosemont.dti.g26.stageavenirapi.Modèle.Enum.*
 
 class MappageEnum {
 
@@ -18,12 +16,12 @@ class MappageEnum {
         }
 
     }
-    fun mapToRole(roleString: String?): Role {
+    fun mapToNom(roleString: String?): Nom_role {
 
         return when (roleString) {
-            "etudiant" -> Role.etudiant
-            "coordonnateur" -> Role.coordonnateur
-            "employeur" -> Role.employeur
+            "etudiant" -> Nom_role.etudiant
+            "coordonnateur" -> Nom_role.coordonnateur
+            "employeur" -> Nom_role.employeur
             else -> throw Exception("Une erreur est survenue au mappage de l'état")
         }
 

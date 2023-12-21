@@ -1,10 +1,7 @@
 package com.crosemont.dti.g26.stageavenirapi.DAO
 
-import com.crosemont.dti.g26.stageavenirapi.Exceptions.ConflitAvecUneRessourceExistanteException
 import com.crosemont.dti.g26.stageavenirapi.Exceptions.RessourceInexistanteException
 import com.crosemont.dti.g26.stageavenirapi.Modèle.*
-import org.springframework.dao.EmptyResultDataAccessException
-import org.springframework.data.annotation.Id
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Repository
 
@@ -42,7 +39,7 @@ class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
                 datePost = résultat.getDate("date").toLocalDate(),
                 estVisible = résultat.getBoolean("visible"),
                 utilisateur = Employeur(),
-                catégorie = Categorie(
+                catégorie = Catégorie(
                     idCatégorie = résultat.getInt("categorie_idcategorie"),
                     cursus = null
                 )
@@ -64,7 +61,7 @@ class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
                 datePost = résultat.getDate("date").toLocalDate(),
                 estVisible = résultat.getBoolean("visible"),
                 utilisateur = Employeur(),
-                catégorie = Categorie(
+                catégorie = Catégorie(
                     idCatégorie = résultat.getInt("categorie_idcategorie"),
                     cursus = null
                 )

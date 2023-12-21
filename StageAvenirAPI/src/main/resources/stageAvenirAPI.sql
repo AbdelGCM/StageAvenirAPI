@@ -1,6 +1,5 @@
-
+CREATE DATABASE IF NOT EXISTS stageavenirapi;
 USE `stageavenirapi` ;
-
 -- -----------------------------------------------------
 -- Table `role`
 -- -----------------------------------------------------
@@ -58,6 +57,7 @@ CREATE TABLE IF NOT EXISTS `demandeStage` (
     `description` TINYINT NOT NULL,
     `remunere` TINYINT NOT NULL DEFAULT 0,
     `poste` VARCHAR(45) NOT NULL,
+    `visible` TINYINT NOT NULL DEFAULT 0,
     `categorie_idcategorie` INT NOT NULL,
     `utilisateur_idutilisateur` INT NOT NULL,
     PRIMARY KEY (`iddemandeStage`),

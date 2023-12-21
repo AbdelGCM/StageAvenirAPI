@@ -7,6 +7,7 @@ data class DemandeStage(
     val remunere: Boolean?,
     val poste: String?,
     val visible: Boolean?,
-    val categorie: Categorie?,
+    val compétence: List<Compétence>?,
+    val catégorie: Catégorie?,
     val utilisateur: Utilisateur?
 )
