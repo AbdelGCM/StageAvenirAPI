@@ -71,6 +71,10 @@ class AccordStageImplement (val bd : JdbcTemplate) : AccordStageDAO {
         return chercherParCode(element)
     }
 
+    override fun selectionnerAccordParCategorie(categorieId: Int): List<AccordStage>? {
+        TODO("Not yet implemented")
+    }
+
     override fun effacer(code: Int) {
         TODO("Not yet implemented")
     }

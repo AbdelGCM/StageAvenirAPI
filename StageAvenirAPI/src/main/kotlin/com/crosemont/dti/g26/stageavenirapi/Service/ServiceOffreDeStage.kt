@@ -58,7 +58,9 @@ class ServiceOffreDeStage(val daoOffreStage: OffreStageDAO, val daoCandidature: 
 
     //==============================================Accords de stages
 
-
+    fun obtenirAccordsParCategorie(idCategorie: Int): List<AccordStage>?{
+        return daoAccord.selectionnerAccordParCategorie(idCategorie)
+    }
     fun approuverAccordStage(idAccordStage : Int):AccordStage?{
         return daoAccord.approuverUnAccord(idAccordStage)
     }
