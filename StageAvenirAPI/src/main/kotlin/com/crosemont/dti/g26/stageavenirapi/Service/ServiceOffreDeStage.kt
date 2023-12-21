@@ -16,7 +16,16 @@ class ServiceOffreDeStage(val daoUtilisateur: UtilisateurDAO, val daoOffreStage:
     //======================================Offres de stage
     fun obtenirOffresStage(): List<OffreStage> = daoOffreStage.chercherTous()
     fun obtenirOffreParCode (code: Int): OffreStage? = daoOffreStage.chercherParCode(code)
-    fun obtenirOffresParCatégorie (code: Int): List<OffreStage> = daoOffreStage.chercherParCodeCatégorie(code)
+    fun obtenirOffresParCatégorie (code_utilisateur: String): List<OffreStage>? {
+        var etudiant = daoUtilisateur.chercherUserParCode(code_utilisateur)
+        println("ici")
+        if (etudiant != null) {
+            println(etudiant.idUtilisateur)
+           return  etudiant.categorie?.let { daoOffreStage.chercherParCodeCatégorie(it.idCatégorie) }
+        }else{
+            return null
+        }
+    }
 
     fun effacer(code: Int) = daoOffreStage.effacer(code)
     fun modifier(code: Int, offre: OffreStage): OffreStage? = daoOffreStage.modifier(code, offre)

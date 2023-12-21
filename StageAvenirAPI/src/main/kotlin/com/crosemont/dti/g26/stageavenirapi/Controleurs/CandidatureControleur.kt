@@ -124,5 +124,7 @@ class CandidatureControleur(val service : ServiceOffreDeStage) {
         return ResponseEntity.internalServerError().build()
     }
 
+     
+
 
 }
