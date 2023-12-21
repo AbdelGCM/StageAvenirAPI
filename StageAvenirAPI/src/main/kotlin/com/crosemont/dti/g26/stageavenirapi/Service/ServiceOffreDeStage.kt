@@ -126,14 +126,47 @@ class ServiceOffreDeStage(val daoUtilisateur: UtilisateurDAO, val daoOffreStage:
 
     //==============================================Accords de stages
 
-    fun obtenirAccordsParCategorie(idCategorie: Int): List<AccordStage>?{
-        return daoAccord.selectionnerAccordParCategorie(idCategorie)
+    fun obtenirAccords(id_coordo: String): List<AccordStage>?{
+        var utilisateur = daoUtilisateur.chercherUserParCode(id_coordo)
+        if (utilisateur != null) {
+            if (serviceGestionUtilisateur.verifierRoleUtilisateur(utilisateur , "coordonnateur")){
+                return utilisateur.categorie?.let { daoAccord.chercherTous() }
+            }else throw DroitAccèsInsuffisantException("L'étudiant ${utilisateur.nom} n'est pas un coordonnateur")
+        }
+        throw RessourceInexistanteException("L'étudiant avec le code ${id_coordo} n'existe pas")
+
     }
-    fun approuverAccordStage(idAccordStage : Int):AccordStage?{
-        return daoAccord.approuverUnAccord(idAccordStage)
+
+    fun obtenirAccordParCode(code_coordo:String,idAccordStage: Int): AccordStage?{
+        var utilisateur = daoUtilisateur.chercherUserParCode(code_coordo)
+        if (utilisateur != null) {
+            if (serviceGestionUtilisateur.verifierRoleUtilisateur(utilisateur , "coordonnateur")){
+                return utilisateur.categorie?.let { daoAccord.chercherParCode(idAccordStage) }
+            }else throw DroitAccèsInsuffisantException("L'étudiant ${utilisateur.nom} n'est pas un coordonnateur")
+        }
+        throw RessourceInexistanteException("L'étudiant avec le code ${code_coordo} n'existe pas")
+
     }
-    fun refuserAccordStage(idAccordStage: Int):AccordStage?{
-        return daoAccord.désaprouverUnAccord(idAccordStage)
+
+
+    fun approuverAccordStage(code_coordo: String, idAccordStage : Int):AccordStage?{
+        var utilisateur = daoUtilisateur.chercherUserParCode(code_coordo)
+        if (utilisateur != null) {
+            if (serviceGestionUtilisateur.verifierRoleUtilisateur(utilisateur , "coordonnateur")){
+                return  daoAccord.approuverUnAccord(idAccordStage)
+            }else throw DroitAccèsInsuffisantException("L'utilisateur ${utilisateur.nom} n'est pas un coordonnateur")
+        }
+        throw RessourceInexistanteException("L'étudiant avec le code ${code_coordo} n'existe pas")
+    }
+    fun refuserAccordStage(code_coordo: String, idAccordStage: Int):AccordStage?{
+
+        var utilisateur = daoUtilisateur.chercherUserParCode(code_coordo)
+        if (utilisateur != null) {
+            if (serviceGestionUtilisateur.verifierRoleUtilisateur(utilisateur , "coordonnateur")){
+                return daoAccord.désaprouverUnAccord(idAccordStage)
+            }else throw DroitAccèsInsuffisantException("L'utilisateur ${utilisateur.nom} n'est pas un coordonnateur")
+        }
+        throw RessourceInexistanteException("L'étudiant avec le code ${code_coordo} n'existe pas")
     }
 
 

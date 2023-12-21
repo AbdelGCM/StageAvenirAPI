@@ -1,7 +1,7 @@
 package com.crosemont.dti.g26.stageavenirapi.Modèle
 
 data class Entreprise (
-        val idEntreprise : Int,
+        var idEntreprise : Int,
         val nom : String,
         val adresse : String,
         val description: String,

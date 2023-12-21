@@ -6,7 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Repository
 
 @Repository
-class AccordStageImplement (val bd : JdbcTemplate) : AccordStageDAO {
+class AccordStageImplement (val bd : JdbcTemplate, var daoUser : UtilisateurDAO) : AccordStageDAO {
     val mappage = MappageEnum()
     override fun ajouter(element: AccordStage): AccordStage? {
         bd.update(
@@ -23,7 +23,18 @@ class AccordStageImplement (val bd : JdbcTemplate) : AccordStageDAO {
     }
 
     override fun chercherTous(): List<AccordStage> {
-        TODO("Not yet implemented")
+         var result = bd.query("SELECT * FROM accordStage ") { response, _ ->
+
+            AccordStage(
+                    idAccord = response.getInt("idaccordStage"),
+                    commentaire = response.getString("commentaire"),
+                    etat = mappage.mapToEtat(response.getString("etat")),
+                    etudiant = daoUser.chercherUserParCode(response.getString("utilisateur_idutilisateur")) ,
+                    offre = null,
+            )
+
+        }
+        return result
     }
 
     override fun chercherParCode(code: Int): AccordStage? {
@@ -70,7 +81,18 @@ class AccordStageImplement (val bd : JdbcTemplate) : AccordStageDAO {
 
 
     override fun selectionnerAccordParCategorie(categorieId: Int): List<AccordStage>? {
-        TODO("Not yet implemented")
+        var result = bd.query("SELECT * FROM accordStage WHERE utilisateur_idutilisateur = ?", arrayOf(categorieId)) { response, _ ->
+
+            AccordStage(
+                    idAccord = response.getInt("idaccordStage"),
+                    commentaire = response.getString("commentaire"),
+                    etat = mappage.mapToEtat(response.getString("etat")),
+                    etudiant = null ,
+                    offre = null,
+            )
+
+        }
+        return result
     }
 
 
