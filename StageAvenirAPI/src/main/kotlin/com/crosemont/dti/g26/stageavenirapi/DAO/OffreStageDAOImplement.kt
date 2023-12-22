@@ -6,25 +6,27 @@ import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Repository
 
 @Repository
-class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
+class OffreStageDAOImplement(val db: JdbcTemplate, var daoCategorie : CategorieDAO, var daoEntreprise : EntrepriseDAO): OffreStageDAO {
 
     override fun ajouter(offre: OffreStage): OffreStage? {
-        val sql = "INSERT INTO OffreStage (idOffreStage, titreOffre, posteOffert, description, estRémunéré, dateDébut, dateFin, estVisible,catégorieId) " +
+
+        val sql = "INSERT INTO OffreStage ( titreOffre, posteOffert, description, estRémunéré, dateDébut, dateFin, estVisible,catégorieId) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
         db.update(
                 sql,
-                offre.idOffreStage,
+
                 offre.titreOffre,
                 offre.posteOffert,
                 offre.description,
                 offre.estRémunéré,
                 offre.datePost,
                 offre.estVisible,
-                offre.catégorie.idCatégorie
+                offre.catégorie?.idCatégorie ?: 0
         )
 
         return offre
+
     }
 
     override fun chercherTous(): List<OffreStage> {
@@ -38,21 +40,38 @@ class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
                 estRémunéré = résultat.getBoolean("remunere"),
                 datePost = résultat.getDate("date").toLocalDate(),
                 estVisible = résultat.getBoolean("visible"),
-                utilisateur = Employeur(),
-                catégorie = Catégorie(
-                    idCatégorie = résultat.getInt("categorie_idcategorie"),
-                    cursus = null
-                )
+
+                entreprise = daoEntreprise.chercherParCode(résultat.getInt("entreprise_identreprise")) ,
+                catégorie = daoCategorie.chercherParCode(résultat.getInt("categorie_idcategorie"))
+
+
             )
         }
+    }
+
+    override fun ajouterUneOffre(codeEntreprise: Int, offre: OffreStage): OffreStage? {
+        println("l'Offre en question :" + offre)
+        db.update(
+                "INSERT INTO OffreStage (titre, poste_offert, description, remunere, date,visible,categorie_idcategorie,entreprise_identreprise) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                offre.titreOffre,
+                offre.posteOffert,
+                offre.description,
+                offre.estRémunéré,
+                offre.datePost,
+                offre.estVisible,
+                offre.catégorie?.idCatégorie ?: null,
+                codeEntreprise
+        );
+
+        return offre
     }
 
 
     override fun chercherParCode(code: Int): OffreStage? {
         val sql = "SELECT * FROM offreStage WHERE idoffreStage = ?"
-        println("OFFRE DAO")
         val result =  db.query(sql, arrayOf(code)) { résultat, _ ->
             OffreStage(
+
                 idOffreStage = résultat.getInt("idoffreStage"),
                 titreOffre = résultat.getString("titre"),
                 posteOffert = résultat.getString("poste_offert"),
@@ -60,11 +79,11 @@ class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
                 estRémunéré = résultat.getBoolean("remunere"),
                 datePost = résultat.getDate("date").toLocalDate(),
                 estVisible = résultat.getBoolean("visible"),
-                utilisateur = Employeur(),
-                catégorie = Catégorie(
-                    idCatégorie = résultat.getInt("categorie_idcategorie"),
-                    cursus = null
-                )
+
+                entreprise = daoEntreprise.chercherParCode(résultat.getInt("entreprise_identreprise")) ,
+                catégorie = daoCategorie.chercherParCode(résultat.getInt("categorie_idcategorie"))
+
+
             )
         }
 
@@ -73,8 +92,9 @@ class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
 
 
     override fun modifier(id: Int, offre: OffreStage): OffreStage? {
-        val sql = "UPDATE OffreStage SET titreOffre = ?, posteOffert = ?, description = ?, estRémunéré = ?, dateDébut = ?, dateFin = ?, estVisible = ?,catégorieId = ? " +
-                "WHERE idOffreStage = ?"
+
+        val sql = "UPDATE offeStage SET titreOffre = ?, posteOffert = ?, description = ?, estRémunéré = ?, dateDébut = ?, dateFin = ?, estVisible = ?,catégorieId = ? " +
+                " WHERE idoffreStage = ?"
 
         db.update(
                 sql,
@@ -84,7 +104,7 @@ class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
                 offre.estRémunéré,
                 offre.datePost,
                 offre.estVisible,
-                offre.catégorie.idCatégorie,
+                offre.catégorie?.idCatégorie ?: 0,
                 id
         )
 
@@ -102,6 +122,26 @@ class OffreStageDAOImplement(val db: JdbcTemplate): OffreStageDAO {
 
             return ajouter(offre)
         }
+    }
+
+    override fun chercherParCodeCatégorie(code_categorie: Int): List<OffreStage> {
+        val sql = "SELECT * FROM offreStage WHERE categorie_idcategorie = ?"
+        val result =  db.query(sql, arrayOf(code_categorie)) { résultat, _ ->
+            OffreStage(
+                    idOffreStage = résultat.getInt("idoffreStage"),
+                    titreOffre = résultat.getString("titre"),
+                    posteOffert = résultat.getString("poste_offert"),
+                    description = résultat.getString("description"),
+                    estRémunéré = résultat.getBoolean("remunere"),
+                    datePost = résultat.getDate("date").toLocalDate(),
+                    estVisible = résultat.getBoolean("visible"),
+                    entreprise = daoEntreprise.chercherParCode(résultat.getInt("entreprise_identreprise")) ,
+                    catégorie = daoCategorie.chercherParCode(résultat.getInt("categorie_idcategorie"))
+            )
+        }
+
+        return result.toList()
+
     }
 
     override fun effacer(code: Int) {

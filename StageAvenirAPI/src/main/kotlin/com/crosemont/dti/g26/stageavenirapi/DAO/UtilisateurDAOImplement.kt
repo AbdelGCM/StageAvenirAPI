@@ -24,7 +24,8 @@ class UtilisateurDAOImplement (val bd : JdbcTemplate, val daoCategorie: Categori
 
         return utilisateur
     }
-    override fun chercherParCode(code: Int): Utilisateur? {
+    override fun chercherParCodeString(code: String): Utilisateur? {
+
         var utilisateur: Utilisateur? = null
 
 
@@ -33,7 +34,7 @@ class UtilisateurDAOImplement (val bd : JdbcTemplate, val daoCategorie: Categori
 
 
                    utilisateur =  Utilisateur(
-                        idutilisateur = response.getInt("idutilisateur"),
+                        idutilisateur = response.getString("idutilisateur"),
                         nom = response.getString("nom"),
                         prenom = response.getString("prenom"),
                         courriel = response.getString("courriel"),
@@ -51,6 +52,10 @@ class UtilisateurDAOImplement (val bd : JdbcTemplate, val daoCategorie: Categori
 
         println("DAO utilisateur : " + utilisateur.toString())
         return utilisateur
+    }
+
+    override fun chercherParCode(code: Int): Utilisateur? {
+        TODO("Not yet implemented")
     }
 
     /* override fun chercherCategorieParCode(code: Int): Categorie? {

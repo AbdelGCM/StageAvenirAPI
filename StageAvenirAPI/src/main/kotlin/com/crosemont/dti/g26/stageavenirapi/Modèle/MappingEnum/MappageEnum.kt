@@ -29,8 +29,8 @@ class MappageEnum {
 
     fun mapToType (etatString:String?): Type {
         return when (etatString) {
-            "cv" -> Type.CV
-            "supplement" -> Type.SUPPLEMENT
+            "CV" -> Type.CV
+            "SUPPLEMENT" -> Type.SUPPLEMENT
 
             else -> throw Exception("Une erreur est survenue au mappage du type")
         }

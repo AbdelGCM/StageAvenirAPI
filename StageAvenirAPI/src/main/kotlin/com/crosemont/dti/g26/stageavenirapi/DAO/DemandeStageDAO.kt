@@ -10,9 +10,12 @@ interface DemandeStageDAO :DAO<DemandeStage> {
     //fun chercherCategorieParCode(code: Int): Categorie?
     override fun chercherTous(): List<DemandeStage>
 
+
    override fun modifier(id: Int,element: DemandeStage): DemandeStage?
    fun modifierStatus(id: Int, demande: DemandeStage): DemandeStage?
     override fun effacer (id: Int )
+
+
 
 
 

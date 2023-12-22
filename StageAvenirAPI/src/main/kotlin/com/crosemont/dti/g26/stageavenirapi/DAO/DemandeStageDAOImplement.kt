@@ -48,7 +48,7 @@ class DemandeStageDAOImplement(val bd : JdbcTemplate,val daoCategorie: Categorie
                         visible = response.getBoolean("visible"),
                         compétence = daoCompetence.chercherTousCompétenceParDemandeStage(response.getInt("iddemandeStage")),
                         catégorie = daoCategorie.chercherParCode(response.getInt("categorie_idcategorie")),
-                        utilisateur = daoUtilisateur.chercherParCode(response.getInt("utilisateur_idutilisateur"))
+                        utilisateur = daoUtilisateur.chercherParCodeString(response.getString("utilisateur_idutilisateur"))
 
                    )
                     print("allo1")
@@ -82,7 +82,7 @@ class DemandeStageDAOImplement(val bd : JdbcTemplate,val daoCategorie: Categorie
                     visible = response.getBoolean("visible"),
                     compétence = daoCompetence?.chercherTousCompétenceParDemandeStage(response.getInt("iddemandeStage")),
                     catégorie = daoCategorie?.chercherParCode(response.getInt("categorie_idcategorie")),
-                    utilisateur = daoUtilisateur?.chercherParCode(response.getInt("utilisateur_idutilisateur"))
+                    utilisateur = daoUtilisateur?.chercherParCodeString(response.getString("utilisateur_idutilisateur"))
                 )
                 demande_stage.add(demandeStage)
            // }

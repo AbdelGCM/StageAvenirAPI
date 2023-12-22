@@ -4,55 +4,52 @@ package com.crosemont.dti.g26.stageavenirapi.DAO
 import com.crosemont.dti.g26.stageavenirapi.Modèle.Candidature
 import com.crosemont.dti.g26.stageavenirapi.Modèle.Document
 import com.crosemont.dti.g26.stageavenirapi.Modèle.MappingEnum.MappageEnum
+import com.crosemont.dti.g26.stageavenirapi.Modèle.OffreStage
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Repository
 
 @Repository
-class CandidatureDAOImplement(val bd : JdbcTemplate) : CandidatureDAO {
+class CandidatureDAOImplement(val bd : JdbcTemplate , val daoDoc :DocumentDAO , val daoOffre : OffreStageDAO, var daoUser : UtilisateurDAO ) : CandidatureDAO {
 
     private var mappage = MappageEnum()
 
     override fun ajouter(element: Candidature): Candidature? {
-      TODO()
+        TODO()
     }
 
     override fun chercherParCode(code: Int): Candidature? {
         var candidature: Candidature? = null
         println("Requête SQL : SELECT * FROM candidature WHERE idcandidature = $code")
-        try {
-            bd.query("SELECT * FROM candidature WHERE idcandidature = ?", arrayOf(code)) { response, _ ->
-                if (response.next()) {
-                    println("DAO : "+response.getInt("etat"))
-                    candidature = Candidature(
+
+            var result = bd.query("SELECT * FROM candidature WHERE idcandidature = ?", arrayOf(code)) { response, _ ->
+
+                     Candidature(
                         idCandidature = response.getInt("idcandidature"),
                         etat = mappage.mapToEtat(response.getString("etat")),
                         commentaire = response.getString("description"),
-                        offre = null,
-                        etudiant = null ,
-                        documents = mutableListOf<Document>()
+                         offre = daoOffre.chercherParCode(response.getInt("offreStage_idoffreStage")),
+                        etudiant = daoUser.chercherParCode(response.getInt("utilisateur_idutilisateur")) ,
+                        documents =  daoDoc.chercherParCandidature(response.getInt("idcandidature"))
+
                     )
-                }
+
             }
-
-        }catch (e: Exception){
-            println("ERREUR DAO :" + e)
-        }
-
         println("DAO : " + candidature.toString())
-        return candidature
+
+        return result.firstOrNull()
     }
 
     override fun chercherTous(): List<Candidature> {
        val candidatures = mutableListOf<Candidature>()
-       bd.query("SELECT * FROM candidature") { response, _ ->
+       bd.query("SELECT * FROM candidature order by idcandidature") { response, _ ->
             while (response.next()) {
                 val candidature =  Candidature(
-                    idCandidature = response.getInt("id"),
+                    idCandidature = response.getInt("idcandidature"),
                     etat = mappage.mapToEtat(response.getString("etat")),
                     commentaire = response.getString("description"),
-                    offre = null,
-                    etudiant = null,
-                    documents = mutableListOf<Document>()
+                    offre = daoOffre.chercherParCode(response.getInt("offreStage_idoffreStage")),
+                    etudiant = daoUser.chercherParCode(response.getInt("utilisateur_idutilisateur")),
+                    documents =  daoDoc.chercherParCandidature(response.getInt("idcandidature"))
                 )
                 candidatures.add(candidature)
             }
@@ -62,42 +59,49 @@ class CandidatureDAOImplement(val bd : JdbcTemplate) : CandidatureDAO {
 
     override fun modifier(id:Int, element: Candidature): Candidature {
         bd.update(
-            "UPDATE candidature SET description = ? WHERE idcandidature = ?",
-             element.commentaire,
-             element.idCandidature
+                "UPDATE candidature SET description = ? WHERE idcandidature = ?",
+                element.commentaire,
+                element.idCandidature
         )
 
         return chercherParCode(element.idCandidature)!!
     }
 
     override fun effacer(element: Int) {
-         bd.update(
-            "DELETE FROM candidature WHERE idcandidature = ?",
-            element
+        bd.update(
+                "DELETE FROM candidature WHERE idcandidature = ?",
+                element
         )
 
     }
 
     override fun chercherParEtudiant(code_etudiant: Int): List<Candidature> {
-        var candidatures = mutableListOf<Candidature>() 
+        val candidatures = mutableListOf<Candidature>()
 
-        bd.query("SELECT * FROM candidature WHERE utilisateur_idutilisateur = ? AND etat != 'ANNULEE'", arrayOf(code_etudiant)) { response, _ ->
-            while (response.next()) {
-                var candidature = Candidature(
+        bd.query(
+                "SELECT * FROM candidature WHERE utilisateur_idutilisateur = ? AND etat != 'ANNULEE'",
+                arrayOf(code_etudiant)
+        ) { response, _ ->
+            val candidature = Candidature(
                     idCandidature = response.getInt("idcandidature"),
-                    etat = mappage.mapToEtat(response. getString("etat")),
+                    etat = mappage.mapToEtat(response.getString("etat")),
                     commentaire = response.getString("description"),
-                    offre = null,
-                    etudiant = null,
-                    documents = mutableListOf<Document>()
-                )
-                println("candidature boucle :" + candidature.idCandidature)
-                candidatures.add(candidature)
-            }
+                    offre = daoOffre.chercherParCode(response.getInt("offreStage_idoffreStage")),
+                    etudiant = daoUser.chercherParCode(response.getInt("utilisateur_idutilisateur")),
+                    documents = daoDoc.chercherParCandidature(response.getInt("idcandidature"))
+            )
+
+            println("candidature boucle : ${candidature.idCandidature}")
+            candidatures.add(candidature)
         }
+
+
         println(candidatures.toString())
         return candidatures
+
     }
+
+
 
     override fun chercherParOffreStage(code_offre: Int): List<Candidature> {
         var candidatures = mutableListOf<Candidature>()
@@ -108,9 +112,9 @@ class CandidatureDAOImplement(val bd : JdbcTemplate) : CandidatureDAO {
                     idCandidature = response.getInt("idcandidature"),
                     etat = mappage.mapToEtat(response.getString("etat")),
                     commentaire = response.getString("description"),
-                    offre = null,
-                    etudiant = null,
-                    documents = mutableListOf<Document>()
+                    offre = daoOffre.chercherParCode(response.getInt("offreStage_idoffreStage")),
+                    etudiant = daoUser.chercherParCode(response.getInt("utilisateur_idutilisateur")),
+                    documents =  daoDoc.chercherParCandidature(response.getInt("idcandidature"))
                 )
                 candidatures.add(candidature)
             }
@@ -120,25 +124,28 @@ class CandidatureDAOImplement(val bd : JdbcTemplate) : CandidatureDAO {
     }
 
     override fun postulerPourUneOffre(candidature: Candidature, code_etudiant: Int,idOffre:Int):Candidature? {
-        println("postuler offffffre :" +candidature)
-        var generatedId: Int? = null
-        bd.update(
+
+        var nouvelleCandidature = candidature
+         var result = bd.update(
             "INSERT INTO candidature ( etat, description, utilisateur_idutilisateur, offreStage_idoffreStage) VALUES ( ?, ?, ?, ?)",
 
-            candidature.etat?.name ?: "EN_ATTENTE",
+             candidature.etat?.name ?: "EN_ATTENTE",
             candidature.commentaire,
             code_etudiant,
             idOffre
-        );
+        )
+        var generatedId = chercherTous().get(chercherTous().size -1 ).idCandidature
+        nouvelleCandidature.idCandidature = generatedId
+        nouvelleCandidature = chercherTous().get(chercherTous().size -1 )
+       return nouvelleCandidature
 
-       return candidature
     }
 
     override fun annulerCandidature(candidature: Int): Candidature? {
         bd.update(
-            "UPDATE candidature SET etat = 'ANNULEE' WHERE idcandidature = ?",
+                "UPDATE candidature SET etat = 'ANNULEE' WHERE idcandidature = ?",
 
-            candidature
+                candidature
         )
 
         return chercherParCode(candidature)
@@ -146,18 +153,18 @@ class CandidatureDAOImplement(val bd : JdbcTemplate) : CandidatureDAO {
 
     override fun accepterCandidature(candidature: Int): Candidature? {
         bd.update(
-            "UPDATE candidature SET etat = 'acceptee' WHERE idcandidature = ?",
+                "UPDATE candidature SET etat = 'acceptee' WHERE idcandidature = ?",
 
-            candidature
+                candidature
         )
         return chercherParCode(candidature)
     }
 
     override fun refuserCandidature(candidature: Int): Candidature? {
         bd.update(
-            "UPDATE candidature SET etat = 'refusee' WHERE idcandidature = ?",
+                "UPDATE candidature SET etat = 'refusee' WHERE idcandidature = ?",
 
-            candidature
+                candidature
         )
         return chercherParCode(candidature)
     }

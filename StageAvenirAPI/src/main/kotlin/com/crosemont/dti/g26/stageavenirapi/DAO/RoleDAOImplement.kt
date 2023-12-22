@@ -1,12 +1,15 @@
 package com.crosemont.dti.g26.stageavenirapi.DAO
 
+
 import com.crosemont.dti.g26.stageavenirapi.Modèle.DemandeStage
 import com.crosemont.dti.g26.stageavenirapi.Modèle.MappingEnum.MappageEnum
+
 import com.crosemont.dti.g26.stageavenirapi.Modèle.Role
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Repository
 
 @Repository
+
 class RoleDAOImplement  (val bd : JdbcTemplate): RoleDAO{
     private var mappage = MappageEnum()
     override fun chercherParCode(code: Int): Role? {
@@ -31,6 +34,7 @@ class RoleDAOImplement  (val bd : JdbcTemplate): RoleDAO{
 
 
         return role
+
     }
 
     override fun chercherTous(): List<Role> {
@@ -48,5 +52,6 @@ class RoleDAOImplement  (val bd : JdbcTemplate): RoleDAO{
     override fun effacer(code: Int) {
         TODO("Not yet implemented")
     }
+
 
 }

@@ -6,3 +6,4 @@ data class Role(
     val idRole: Int,
     val nom: Nom_role?
 )
+

@@ -1,7 +1,9 @@
 package com.crosemont.dti.g26.stageavenirapi.DAO
 
+
 import com.crosemont.dti.g26.stageavenirapi.Modèle.Catégorie
 import com.crosemont.dti.g26.stageavenirapi.Modèle.DemandeStage
+
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Repository
 
@@ -60,5 +62,6 @@ class CategorieDAOImplement(val bd: JdbcTemplate): CategorieDAO {
 
 
         return catégorie
+
     }
 }

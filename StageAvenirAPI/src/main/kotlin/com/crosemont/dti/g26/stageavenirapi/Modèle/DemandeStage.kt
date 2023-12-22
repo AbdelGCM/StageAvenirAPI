@@ -10,4 +10,5 @@ data class DemandeStage(
     val compétence: List<Compétence>?,
     val catégorie: Catégorie?,
     val utilisateur: Utilisateur?
+
 )
