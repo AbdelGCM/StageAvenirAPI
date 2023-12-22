@@ -18,21 +18,32 @@ class ServiceOffreDeStage(val daoUtilisateur: UtilisateurDAO, val daoOffreStage:
     fun obtenirOffreParCode (code: Int): OffreStage? = daoOffreStage.chercherParCode(code)
     fun obtenirOffresParCatégorie (code_utilisateur: String): List<OffreStage>? {
         var etudiant = daoUtilisateur.chercherUserParCode(code_utilisateur)
-        println("ici")
         if (etudiant != null) {
-            println(etudiant.idUtilisateur)
-           return  etudiant.categorie?.let { daoOffreStage.chercherParCodeCatégorie(it.idCatégorie) }
-        }else{
-            return null
+            if (serviceGestionUtilisateur.verifierRoleUtilisateur(etudiant , "etudiant")){
+                return  etudiant.categorie?.let { daoOffreStage.chercherParCodeCatégorie(it.idCatégorie) }
+
+            }else throw DroitAccèsInsuffisantException("L'utilisateur ${etudiant.nom} n'est pas un etudiant")
+
         }
+    throw RessourceInexistanteException("L'utilisateur avec le code ${code_utilisateur} n'existe pas")
     }
 
     fun effacer(code: Int) = daoOffreStage.effacer(code)
     fun modifier(code: Int, offre: OffreStage): OffreStage? = daoOffreStage.modifier(code, offre)
 
-    fun ajouter (codeEntreprise: Int, offre: OffreStage): OffreStage? {
-        return daoOffreStage.ajouterUneOffre(codeEntreprise,offre)
+    fun ajouter (code_employeur:String, codeEntreprise: Int, offre: OffreStage): OffreStage? {
+
+        var employeur = daoUtilisateur.chercherUserParCode(code_employeur)
+        if (employeur != null) {
+            if (serviceGestionUtilisateur.verifierRoleUtilisateur(employeur , "employeur")){
+                return daoOffreStage.ajouterUneOffre(codeEntreprise,offre)
+
+            }else throw DroitAccèsInsuffisantException("L'utilisateur ${employeur.nom} n'est pas un employeur")
+        }
+        throw RessourceInexistanteException("L'utilisateur avec le code ${code_employeur} n'existe pas")
     }
+
+
     fun obtenirStagesEnCoursDeValidationPourUnePublication(code_coordo : String ): List<OffreStage> {
         return daoOffreStage.obtenirOffresEnCoursApprobation()
     }
