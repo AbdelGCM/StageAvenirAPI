@@ -27,7 +27,25 @@ class ServiceOffreDeStage(val daoEntreprise:EntrepriseDAO, val daoUtilisateur: U
         }
     }
 
-    fun effacer(code: Int) = daoOffreStage.effacer(code)
+    fun effacer(code: Int ) {
+
+        val offre_original = daoOffreStage.chercherParCode(code)
+
+        if(offre_original == null){
+            throw  RessourceInexistanteException("L'offre $code n'est pas inscrit au service.")
+        }
+        val entreprise = daoUtilisateur.chercherParCode(code)
+        if (entreprise == null){
+            throw RessourceInexistanteException("L'entreprise $code n'est pas inscrit au service.")
+        }
+        if (serviceGestionUtilisateur.verifierRoleUtilisateur(entreprise , "employeur")){
+                daoOffreStage.effacer(code)
+        }else {throw DroitAccèsInsuffisantException("L'utilisateur ${entreprise.nom} n'est pas une entreprise. Seul ce rôle permet de supprimer une offre de stage")
+        }
+
+        throw RessourceInexistanteException("L'offre de stage avec le code ${code} n'existe pas")
+    }
+
     fun modifier(code: Int, offre: OffreStage): OffreStage? = daoOffreStage.modifier(code, offre)
 
     fun ajouter (codeEntreprise: Int, offre: OffreStage): OffreStage? {

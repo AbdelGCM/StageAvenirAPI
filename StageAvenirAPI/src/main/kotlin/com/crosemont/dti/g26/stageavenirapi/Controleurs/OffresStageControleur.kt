@@ -2,9 +2,11 @@ package com.crosemont.dti.g26.stageavenirapi.Controleurs
 
 import com.crosemont.dti.g26.stageavenirapi.Exceptions.RessourceInexistanteException
 import com.crosemont.dti.g26.stageavenirapi.Modèle.OffreStage
+import com.crosemont.dti.g26.stageavenirapi.Service.ServiceGestionUtilisateur
 import com.crosemont.dti.g26.stageavenirapi.Service.ServiceOffreDeStage
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -102,9 +104,15 @@ class OffresStageControleur(val service: ServiceOffreDeStage) {
             ]
     )
     @DeleteMapping("/offres_Stage/{code}")
-    fun supprimerOffreStage(@PathVariable code: Int): ResponseEntity<OffreStage>{
-        service.effacer(code)
-        return ResponseEntity.noContent().build()
+    fun supprimerOffreStage(@PathVariable code: Int, principal: Principal?): ResponseEntity<OffreStage>{
+        val offre = principal?.let { service.obtenirOffreParCode(code) }
+
+        if (offre != null) {
+            service.effacer(code)
+            return ResponseEntity.noContent().build()
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build()
+        }
     }
 
     @Operation(
