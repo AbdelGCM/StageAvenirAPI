@@ -27,42 +27,31 @@ class ServiceOffreDeStage(val daoEntreprise:EntrepriseDAO, val daoUtilisateur: U
         }
     }
 
-    fun effacer(code: Int ) {
-
-        val offre_original = daoOffreStage.chercherParCode(code)
-
-        if(offre_original == null){
-            throw  RessourceInexistanteException("L'offre $code n'est pas inscrit au service.")
+    fun effacer(code: Int,code_employeur: String ) {
+        var employeur = daoUtilisateur.chercherUserParCode(code_employeur)
+        if (employeur != null) {
+            if (serviceGestionUtilisateur.verifierRoleUtilisateur(employeur , "employeur")){
+               return daoOffreStage.effacer(code)
+            }else throw DroitAccèsInsuffisantException("L'utilisateur ${employeur.nom} n'est pas un employeur")
         }
-        val entreprise = daoUtilisateur.chercherParCode(code)
-        if (entreprise == null){
-            throw RessourceInexistanteException("L'entreprise $code n'est pas inscrit au service.")
-        }
-        if (serviceGestionUtilisateur.verifierRoleUtilisateur(entreprise , "employeur")){
-                daoOffreStage.effacer(code)
-        }else {throw DroitAccèsInsuffisantException("L'utilisateur ${entreprise.nom} n'est pas une entreprise. Seul ce rôle permet de supprimer une offre de stage")
-        }
+        throw RessourceInexistanteException("L'utilisateur avec le code ${code_employeur} n'existe pas")
 
-        throw RessourceInexistanteException("L'offre de stage avec le code ${code} n'existe pas")
+
     }
+
 
     fun modifier(code: Int, offre: OffreStage): OffreStage? = daoOffreStage.modifier(code, offre)
 
-    fun ajouter (codeEntreprise: Int, offre: OffreStage): OffreStage? {
+    fun ajouter (code_employeur:String, codeEntreprise: Int, offre: OffreStage): OffreStage? {
 
-        val entreprise = daoUtilisateur.chercherParCode(codeEntreprise)
+        var employeur = daoUtilisateur.chercherUserParCode(code_employeur)
+        if (employeur != null) {
+            if (serviceGestionUtilisateur.verifierRoleUtilisateur(employeur , "employeur")){
+                return daoOffreStage.ajouterUneOffre(codeEntreprise,offre)
 
-        if (entreprise == null){
-            throw RessourceInexistanteException("L'entreprise $codeEntreprise, n'est pas inscrit au service de stage.")
+            }else throw DroitAccèsInsuffisantException("L'utilisateur ${employeur.nom} n'est pas un employeur")
         }
-
-        if (serviceGestionUtilisateur.verifierRoleUtilisateur(entreprise,"employeur")){
-            var nouvelleOffreStage = daoOffreStage.ajouterUneOffre(codeEntreprise,offre)
-        } else {
-            throw DroitAccèsInsuffisantException("L'utilisateur $codeEntreprise, n'est  pas une entreprise ")
-        }
-
-        throw RessourceInexistanteException("L'entreprise avec le code ${codeEntreprise} n'existe pas")
+        throw RessourceInexistanteException("L'utilisateur avec le code ${code_employeur} n'existe pas")
     }
     fun obtenirStagesEnCoursDeValidationPourUnePublication(code_coordo : String ): List<OffreStage> {
         return daoOffreStage.obtenirOffresEnCoursApprobation()

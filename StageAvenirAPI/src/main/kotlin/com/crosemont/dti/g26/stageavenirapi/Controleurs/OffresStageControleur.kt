@@ -75,20 +75,16 @@ class OffresStageControleur(val service: ServiceOffreDeStage) {
                 ApiResponse(responseCode = "500", description = "Erreur interne du serveur.")
             ]
     )
-    @PostMapping("/employeur/entreprise/{id}/offresStages")
-    fun ajouterOffreStage(@RequestBody offre: OffreStage, @PathVariable id : Int,principal: Principal? ): ResponseEntity<OffreStage>? {
-
-        val nouvelleOffre = principal?.let { service.ajouter(id,offre) }
-
+    @PostMapping("/employeur/entreprise/{idEntreprise}/offresStages")
+    fun ajouterOffreStage(@RequestBody offre: OffreStage, @PathVariable idEntreprise : Int,principal: Principal? ): ResponseEntity<OffreStage> {
+        val nouvelleOffre = principal?.let { service.ajouter(it.name,idEntreprise,offre) }
         if (nouvelleOffre != null) {
-            val uri = nouvelleOffre?.let{
-                    ServletUriComponentsBuilder
+            val uri = ServletUriComponentsBuilder
                     .fromCurrentRequest()
                     .path("/{code}")
                     .buildAndExpand(nouvelleOffre.idOffreStage)
                     .toUri()
-            }
-            return uri?.let {ResponseEntity.created(it).body(nouvelleOffre)  }
+            return ResponseEntity.created(uri).body(nouvelleOffre)
         }
         return ResponseEntity.internalServerError().build()
     }
@@ -105,14 +101,9 @@ class OffresStageControleur(val service: ServiceOffreDeStage) {
     )
     @DeleteMapping("/offres_Stage/{code}")
     fun supprimerOffreStage(@PathVariable code: Int, principal: Principal?): ResponseEntity<OffreStage>{
-        val offre = principal?.let { service.obtenirOffreParCode(code) }
+        val offre = principal?.let { service.effacer(code, it.name) }
 
-        if (offre != null) {
-            service.effacer(code)
-            return ResponseEntity.noContent().build()
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build()
-        }
+        return ResponseEntity.noContent().build()
     }
 
     @Operation(
