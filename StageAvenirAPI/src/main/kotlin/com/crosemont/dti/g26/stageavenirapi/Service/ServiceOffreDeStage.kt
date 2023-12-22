@@ -111,17 +111,19 @@ class ServiceOffreDeStage(val daoUtilisateur: UtilisateurDAO, val daoOffreStage:
         throw RessourceInexistanteException("L'employeur avec le code ${code_employeur} n'existe pas")
     }
 
-
-    //==============================================Proposition de stage
-    fun obtenirCandidaturesParDemandeStage (codeDemande:Int, code_utilisateur : String):List<Candidature>{
+    fun obtenirCandidaturesParOffreStage (codeDemande:Int, code_utilisateur : String):List<Candidature>{
         var utilisateur = daoUtilisateur.chercherUserParCode(code_utilisateur)
         if (utilisateur != null) {
-            if (serviceGestionUtilisateur.verifierRoleUtilisateur(utilisateur , "etudiant")){
+            if (serviceGestionUtilisateur.verifierRoleUtilisateur(utilisateur , "employeur")){
                 return daoCandidature.chercherParOffreStage(codeDemande)
-            }else throw DroitAccèsInsuffisantException("L'étudiant ${utilisateur.nom} n'est pas un étudiant")
+            }else throw DroitAccèsInsuffisantException("L'utilisateur ${utilisateur.nom} n'est pas un employeur")
         }
         throw RessourceInexistanteException("L'étudiant avec le code ${code_utilisateur} n'existe pas")
     }
+
+
+
+    //==============================================Proposition de stage
 
 
     //==============================================Accords de stages

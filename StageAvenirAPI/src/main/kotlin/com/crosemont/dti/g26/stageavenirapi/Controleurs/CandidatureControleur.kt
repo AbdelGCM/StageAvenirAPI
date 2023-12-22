@@ -36,9 +36,9 @@ class CandidatureControleur(val service : ServiceOffreDeStage) {
         return ResponseEntity.internalServerError().build()
     }
 
-    @GetMapping("/employeur/{id_employeur}/offresStages/{id_offre}/candidatures")
+    @GetMapping("/employeur/offresStages/{id_offre}/candidatures")
     fun obtenirCandidaturesParOffreDeStage(@PathVariable id_offre:String , principal: Principal? ): ResponseEntity<List<Candidature>>? {
-        var listeCandidature = principal?.let { service.obtenirCandidaturesParDemandeStage(id_offre.toInt(), it.name) }
+        var listeCandidature = principal?.let { service.obtenirCandidaturesParOffreStage(id_offre.toInt(), it.name) }
         if (id_offre != null) {
             val uri = listeCandidature?.let {
                 ServletUriComponentsBuilder
@@ -101,7 +101,7 @@ class CandidatureControleur(val service : ServiceOffreDeStage) {
     }
 
    @PutMapping("/employeur/offresStages/{idOffre}/candidatures/{id_candidature}/accepter")
-    fun accepterUneCandidature(@RequestBody candidature:Candidature, principal: Principal?):ResponseEntity<Candidature>?{
+    fun accepterUneCandidature(@PathVariable candidature:Candidature, principal: Principal?):ResponseEntity<Candidature>?{
        println("controlleur : " + candidature)
         var nouvelleCandidature = principal?.let { service.accepterCandidature(candidature, it.name) }
        if (candidature != null) {
