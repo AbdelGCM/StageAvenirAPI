@@ -13,7 +13,7 @@ class EntrepriseDAOImplement(var bd : JdbcTemplate, var daoUser : UtilisateurDAO
         var result = bd.query("SELECT * FROM entreprise WHERE identreprise = ?", arrayOf(code)) { response, _ ->
 
 
-            daoUser.chercherParCodeString(response.getString("utilisateur_idutilisateur"))?.let {
+            daoUser.chercherUserParCode(response.getString("utilisateur_idutilisateur"))?.let {
 
                 Entreprise(
                     idEntreprise = response.getInt("idEntreprise"),
@@ -51,7 +51,7 @@ class EntrepriseDAOImplement(var bd : JdbcTemplate, var daoUser : UtilisateurDAO
     override fun chercherTous(): List<Entreprise> {
 
         var result = bd.query("SELECT * FROM entreprise ") { response, _ ->
-            daoUser.chercherParCodeString(response.getString("utilisateur_idutilisateur"))?.let {
+            daoUser.chercherUserParCode(response.getString("utilisateur_idutilisateur"))?.let {
                 Entreprise(
                         idEntreprise = response.getInt("idEntreprise"),
                         nom = response.getString("nom"),

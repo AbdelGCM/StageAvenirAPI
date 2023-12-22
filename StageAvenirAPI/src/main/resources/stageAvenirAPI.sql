@@ -28,7 +28,6 @@ CREATE TABLE IF NOT EXISTS `stageavenirapi`.`utilisateur` (
     `prenom` VARCHAR(45) NOT NULL,
     `courriel` VARCHAR(45) NOT NULL,
     `telephone` VARCHAR(45) NULL,
-    `ville` VARCHAR(45) NULL,
     `categorie_idcategorie` INT NOT NULL,
     `role_idRole` INT NOT NULL,
     PRIMARY KEY (`idutilisateur`),

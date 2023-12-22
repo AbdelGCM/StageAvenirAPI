@@ -6,7 +6,7 @@ import com.crosemont.dti.g26.stageavenirapi.Modèle.Utilisateur
 
 interface UtilisateurDAO : DAO<Utilisateur>    {
     override fun ajouter(utilisateur: Utilisateur): Utilisateur?
-    fun chercherParCodeString(code: String): Utilisateur?
+    fun chercherUserParCode(code: String): Utilisateur?
 
    // fun chercherCategorieParCode(code: Int): Categorie?
     override fun chercherTous(): List<Utilisateur>

@@ -152,7 +152,7 @@ class DocumentDAOImplement (val bd : JdbcTemplate, var daoEtudiant : Utilisateur
                         nom = response.getString("nom"),
                         type = mappage.mapToType(response.getString("type")),
                         contenu = response.getBytes("description"),
-                        etudiant = daoEtudiant.chercherParCodeString(response.getString("idutilisateur")),
+                        etudiant = daoEtudiant.chercherUserParCode(response.getString("idutilisateur")),
                         demande = null,
                         candidature = null
                 )
@@ -172,7 +172,7 @@ class DocumentDAOImplement (val bd : JdbcTemplate, var daoEtudiant : Utilisateur
                         nom = response.getString("nom"),
                         type = mappage.mapToType(response.getString("type")),
                         contenu = response.getBytes("contenu"),
-                        etudiant = daoEtudiant.chercherParCodeString(response.getString("idutilisateur")),
+                        etudiant = daoEtudiant.chercherUserParCode(response.getString("idutilisateur")),
                         demande = null,
                         candidature = null
                 )

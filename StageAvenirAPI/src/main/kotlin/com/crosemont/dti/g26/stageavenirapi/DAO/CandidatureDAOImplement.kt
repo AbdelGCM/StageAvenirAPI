@@ -28,7 +28,7 @@ class CandidatureDAOImplement(val bd : JdbcTemplate , val daoDoc :DocumentDAO , 
                         etat = mappage.mapToEtat(response.getString("etat")),
                         commentaire = response.getString("description"),
                         offre = daoOffre.chercherParCode(response.getInt("offreStage_idoffreStage")),
-                        etudiant = daoUser.chercherParCodeString(response.getString("utilisateur_idutilisateur")) ,
+                        etudiant = daoUser.chercherUserParCode(response.getString("utilisateur_idutilisateur")) ,
                         documents =  daoDoc.chercherParCandidature(response.getInt("idcandidature"))
 
                     )
@@ -48,7 +48,7 @@ class CandidatureDAOImplement(val bd : JdbcTemplate , val daoDoc :DocumentDAO , 
                     etat = mappage.mapToEtat(response.getString("etat")),
                     commentaire = response.getString("description"),
                     offre = daoOffre.chercherParCode(response.getInt("offreStage_idoffreStage")),
-                    etudiant = daoUser.chercherParCodeString(response.getString("utilisateur_idutilisateur")),
+                    etudiant = daoUser.chercherUserParCode(response.getString("utilisateur_idutilisateur")),
                     documents =  daoDoc.chercherParCandidature(response.getInt("idcandidature"))
                 )
                 candidatures.add(candidature)
@@ -87,7 +87,7 @@ class CandidatureDAOImplement(val bd : JdbcTemplate , val daoDoc :DocumentDAO , 
                     etat = mappage.mapToEtat(response.getString("etat")),
                     commentaire = response.getString("description"),
                     offre = daoOffre.chercherParCode(response.getInt("offreStage_idoffreStage")),
-                    etudiant = daoUser.chercherParCodeString(response.getString("utilisateur_idutilisateur")),
+                    etudiant = daoUser.chercherUserParCode(response.getString("utilisateur_idutilisateur")),
                     documents = daoDoc.chercherParCandidature(response.getInt("idcandidature"))
             )
 
@@ -113,7 +113,7 @@ class CandidatureDAOImplement(val bd : JdbcTemplate , val daoDoc :DocumentDAO , 
                     etat = mappage.mapToEtat(response.getString("etat")),
                     commentaire = response.getString("description"),
                     offre = daoOffre.chercherParCode(response.getInt("offreStage_idoffreStage")),
-                    etudiant = daoUser.chercherParCodeString(response.getString("utilisateur_idutilisateur")),
+                    etudiant = daoUser.chercherUserParCode(response.getString("utilisateur_idutilisateur")),
                     documents =  daoDoc.chercherParCandidature(response.getInt("idcandidature"))
                 )
                 candidatures.add(candidature)

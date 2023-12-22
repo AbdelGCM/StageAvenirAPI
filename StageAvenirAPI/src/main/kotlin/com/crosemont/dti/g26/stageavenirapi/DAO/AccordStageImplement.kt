@@ -29,7 +29,7 @@ class AccordStageImplement (val bd : JdbcTemplate, var daoUser : UtilisateurDAO)
                     idAccord = response.getInt("idaccordStage"),
                     commentaire = response.getString("commentaire"),
                     etat = mappage.mapToEtat(response.getString("etat")),
-                    etudiant = daoUser.chercherParCodeString(response.getString("utilisateur_idutilisateur")) ,
+                    etudiant = daoUser.chercherUserParCode(response.getString("utilisateur_idutilisateur")) ,
                     offre = null,
             )
 

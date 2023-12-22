@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository
 @Repository
 class UtilisateurDAOImplement (val bd : JdbcTemplate, val daoCategorie: CategorieDAOImplement, val daoRole: RoleDAOImplement): UtilisateurDAO  {
     override fun ajouter(utilisateur: Utilisateur): Utilisateur? {
-        val sql = "INSERT INTO utilisateur (idutilisateur, nom, prenom, courriel, telephone, ville, catégorie_idcategorie, role_idRole) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+        val sql = "INSERT INTO utilisateur (idutilisateur, nom, prenom, courriel, telephone, catégorie_idcategorie, role_idRole) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)"
 
         bd.update(
             sql,
@@ -17,14 +17,13 @@ class UtilisateurDAOImplement (val bd : JdbcTemplate, val daoCategorie: Categori
             utilisateur.prenom,
             utilisateur.courriel,
             utilisateur.telephone,
-            utilisateur.ville,
             utilisateur.catégorie?.idCatégorie,
             utilisateur.role?.idRole
         )
 
         return utilisateur
     }
-    override fun chercherParCodeString(code: String): Utilisateur? {
+    override fun chercherUserParCode(code: String): Utilisateur? {
 
         var utilisateur: Utilisateur? = null
 
@@ -39,7 +38,6 @@ class UtilisateurDAOImplement (val bd : JdbcTemplate, val daoCategorie: Categori
                         prenom = response.getString("prenom"),
                         courriel = response.getString("courriel"),
                         telephone = response.getString("telephone"),
-                        ville = response.getString("ville"),
                         catégorie = daoCategorie?.chercherParCode(response.getInt("categorie_idcategorie")),
                         role = daoRole?.chercherParCode(response.getInt("role_idRole")),
                     )

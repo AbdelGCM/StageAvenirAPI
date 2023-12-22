@@ -10,7 +10,6 @@ class Utilisateur (
     val prenom: String?,
     val courriel: String?,
     val telephone: String?,
-    val ville: String?,
     val catégorie: Catégorie?,
     val role: Role?
 
@@ -21,7 +20,6 @@ class Utilisateur (
         prenom = "",
         courriel = "",
         telephone = "",
-        ville = "",
         catégorie = null,
         role = null
     )

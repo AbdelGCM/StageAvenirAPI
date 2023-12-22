@@ -28,7 +28,7 @@ class ServiceGestionUtilisateur (var daoDocument : DocumentDAO, var daoCandidatu
         return daoDocument.ajouterDocumentACandidature(document,idCandidature)
     }
     fun ajouterUnCv(cv :Document, code_etudiant : String ):Document?{
-        var etudiant = daoUtilisateur.chercherParCodeString(code_etudiant)
+        var etudiant = daoUtilisateur.chercherUserParCode(code_etudiant)
         println("CV : " +cv.toString())
         println("etudiant : " + code_etudiant)
         if (etudiant != null) {
@@ -39,7 +39,7 @@ class ServiceGestionUtilisateur (var daoDocument : DocumentDAO, var daoCandidatu
         throw RessourceInexistanteException("L'étudiant avec le code ${code_etudiant} n'existe pas")
     }
     fun modifierUnCv(cv : Document, code_etudiant: String):Document?{
-        var etudiant = daoUtilisateur.chercherParCodeString(code_etudiant)
+        var etudiant = daoUtilisateur.chercherUserParCode(code_etudiant)
         if (etudiant != null) {
             if (verifierRoleUtilisateur(etudiant , "etudiant")){
                 return   daoDocument.modifierCv(cv)
@@ -48,7 +48,7 @@ class ServiceGestionUtilisateur (var daoDocument : DocumentDAO, var daoCandidatu
         throw RessourceInexistanteException("L'étudiant avec le code ${code_etudiant} n'existe pas")
     }
     fun obtenirCVParEtudiant (code_etudiant: String):Document?{
-        var etudiant = daoUtilisateur.chercherParCodeString(code_etudiant)
+        var etudiant = daoUtilisateur.chercherUserParCode(code_etudiant)
         if (etudiant != null) {
             if (verifierRoleUtilisateur(etudiant , "etudiant")){
                 return   daoDocument.obtenirCvParEtudiant(code_etudiant)
@@ -58,7 +58,7 @@ class ServiceGestionUtilisateur (var daoDocument : DocumentDAO, var daoCandidatu
 
     }
     fun récupérerDocumentsParCandidatures(idCandidature: Int, code_employeur : String):List<Document>?{
-        var employeur = daoUtilisateur.chercherParCodeString(code_employeur)
+        var employeur = daoUtilisateur.chercherUserParCode(code_employeur)
         if (employeur != null) {
             if (verifierRoleUtilisateur(employeur , "employeur")){
                 return   daoDocument.chercherParCandidature(idCandidature)
@@ -68,7 +68,7 @@ class ServiceGestionUtilisateur (var daoDocument : DocumentDAO, var daoCandidatu
     }
 
     fun récupérerDocumentsParDemandeDeStage(idDemandeStage: Int, code_etudiant:String): List<Document>{
-        var etudiant = daoUtilisateur.chercherParCodeString(code_etudiant)
+        var etudiant = daoUtilisateur.chercherUserParCode(code_etudiant)
         if (etudiant != null) {
             if (verifierRoleUtilisateur(etudiant , "etudiant")){
                 return   daoDocument.chercherParDemandeStage(idDemandeStage)
@@ -86,7 +86,7 @@ class ServiceGestionUtilisateur (var daoDocument : DocumentDAO, var daoCandidatu
     //Gestion des entreprises
 
     fun ajouterEntrpriseParEmployeur(code_employeur: String, entreprise: Entreprise):Entreprise?{
-        var employeur = daoUtilisateur.chercherParCodeString(code_employeur)
+        var employeur = daoUtilisateur.chercherUserParCode(code_employeur)
         if (employeur != null) {
             if (verifierRoleUtilisateur(employeur , "employeur")){
                 return   daoEntreprise.ajouterEntreprisePourEmployeur(entreprise,code_employeur)
@@ -96,7 +96,7 @@ class ServiceGestionUtilisateur (var daoDocument : DocumentDAO, var daoCandidatu
     }
 
     fun obtenirToutesLesEntreprisesPourUnEmployeur(code_employeur: String):List<Entreprise>?{
-        var employeur = daoUtilisateur.chercherParCodeString(code_employeur)
+        var employeur = daoUtilisateur.chercherUserParCode(code_employeur)
         if (employeur != null) {
             if (verifierRoleUtilisateur(employeur , "employeur")){
                 return   daoEntreprise.chercherTous()

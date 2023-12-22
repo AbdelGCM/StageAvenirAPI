@@ -17,7 +17,7 @@ class ServiceOffreDeStage(val daoUtilisateur: UtilisateurDAO, val daoOffreStage:
     fun obtenirOffresStage(): List<OffreStage> = daoOffreStage.chercherTous()
     fun obtenirOffreParCode (code: Int): OffreStage? = daoOffreStage.chercherParCode(code)
     fun obtenirOffresParCatégorie (code_utilisateur: String): List<OffreStage>? {
-        var etudiant = daoUtilisateur.chercherParCodeString(code_utilisateur)
+        var etudiant = daoUtilisateur.chercherUserParCode(code_utilisateur)
         println("ici")
         if (etudiant != null) {
             println(etudiant.idutilisateur)
@@ -49,7 +49,7 @@ class ServiceOffreDeStage(val daoUtilisateur: UtilisateurDAO, val daoOffreStage:
 
     //========================================Candidatures
     fun postulerPourUneOffre (codeEtudiant : String ,codeOffre:Int, candidature: Candidature):Candidature?{
-        var etudiant = daoUtilisateur.chercherParCodeString(codeEtudiant)
+        var etudiant = daoUtilisateur.chercherUserParCode(codeEtudiant)
         if (etudiant != null) {
             if (serviceGestionUtilisateur.verifierRoleUtilisateur(etudiant , "etudiant")){
                 var nouvelleCandidature = daoCandidature.postulerPourUneOffre(candidature,codeEtudiant,codeOffre)
@@ -67,7 +67,7 @@ class ServiceOffreDeStage(val daoUtilisateur: UtilisateurDAO, val daoOffreStage:
     }
 
     fun obtenirCandidaturesParEtudiant (codeEtudiant:String):List<Candidature>{
-        var etudiant = daoUtilisateur.chercherParCodeString(codeEtudiant)
+        var etudiant = daoUtilisateur.chercherUserParCode(codeEtudiant)
         if (etudiant != null) {
             if (serviceGestionUtilisateur.verifierRoleUtilisateur(etudiant , "etudiant")){
                 return daoCandidature.chercherParEtudiant(codeEtudiant)
@@ -79,7 +79,7 @@ class ServiceOffreDeStage(val daoUtilisateur: UtilisateurDAO, val daoOffreStage:
 
 
     fun annulerCandidature(idCandidature: Int , codeEtudiant : String):Candidature?{
-        var etudiant = daoUtilisateur.chercherParCodeString(codeEtudiant)
+        var etudiant = daoUtilisateur.chercherUserParCode(codeEtudiant)
         if (etudiant != null) {
             if (serviceGestionUtilisateur.verifierRoleUtilisateur(etudiant , "etudiant")){
                 return  daoCandidature.annulerCandidature(idCandidature)
@@ -89,7 +89,7 @@ class ServiceOffreDeStage(val daoUtilisateur: UtilisateurDAO, val daoOffreStage:
 
     }
     fun accepterCandidature(candidature: Candidature, code_employeur : String):Candidature?{
-        var employeur = daoUtilisateur.chercherParCodeString(code_employeur)
+        var employeur = daoUtilisateur.chercherUserParCode(code_employeur)
         if (employeur != null) {
             if (serviceGestionUtilisateur.verifierRoleUtilisateur(employeur , "employeur")){
                 var accordStage =  AccordStage(0, null, Etat.EN_COURS, candidature.etudiant, candidature.offre)
@@ -102,7 +102,7 @@ class ServiceOffreDeStage(val daoUtilisateur: UtilisateurDAO, val daoOffreStage:
 
 
     fun refuserCandidature(idCandidature: Int, code_employeur: String):Candidature?{
-        var employeur = daoUtilisateur.chercherParCodeString(code_employeur)
+        var employeur = daoUtilisateur.chercherUserParCode(code_employeur)
         if (employeur != null) {
             if (serviceGestionUtilisateur.verifierRoleUtilisateur(employeur , "employeur")){
                 return  daoCandidature.refuserCandidature(idCandidature)
@@ -114,7 +114,7 @@ class ServiceOffreDeStage(val daoUtilisateur: UtilisateurDAO, val daoOffreStage:
 
     //==============================================Proposition de stage
     fun obtenirCandidaturesParDemandeStage (codeDemande:Int, code_utilisateur : String):List<Candidature>{
-        var utilisateur = daoUtilisateur.chercherParCodeString(code_utilisateur)
+        var utilisateur = daoUtilisateur.chercherUserParCode(code_utilisateur)
         if (utilisateur != null) {
             if (serviceGestionUtilisateur.verifierRoleUtilisateur(utilisateur , "etudiant")){
                 return daoCandidature.chercherParOffreStage(codeDemande)
@@ -127,7 +127,7 @@ class ServiceOffreDeStage(val daoUtilisateur: UtilisateurDAO, val daoOffreStage:
     //==============================================Accords de stages
 
     fun obtenirAccords(id_coordo: String): List<AccordStage>?{
-        var utilisateur = daoUtilisateur.chercherParCodeString(id_coordo)
+        var utilisateur = daoUtilisateur.chercherUserParCode(id_coordo)
         if (utilisateur != null) {
             if (serviceGestionUtilisateur.verifierRoleUtilisateur(utilisateur , "coordonnateur")){
                 return utilisateur.catégorie?.let { daoAccord.chercherTous() }
@@ -138,7 +138,7 @@ class ServiceOffreDeStage(val daoUtilisateur: UtilisateurDAO, val daoOffreStage:
     }
 
     fun obtenirAccordParCode(code_coordo:String,idAccordStage: Int): AccordStage?{
-        var utilisateur = daoUtilisateur.chercherParCodeString(code_coordo)
+        var utilisateur = daoUtilisateur.chercherUserParCode(code_coordo)
         if (utilisateur != null) {
             if (serviceGestionUtilisateur.verifierRoleUtilisateur(utilisateur , "coordonnateur")){
                 return utilisateur.catégorie?.let { daoAccord.chercherParCode(idAccordStage) }
@@ -150,7 +150,7 @@ class ServiceOffreDeStage(val daoUtilisateur: UtilisateurDAO, val daoOffreStage:
 
 
     fun approuverAccordStage(code_coordo: String, idAccordStage : Int):AccordStage?{
-        var utilisateur = daoUtilisateur.chercherParCodeString(code_coordo)
+        var utilisateur = daoUtilisateur.chercherUserParCode(code_coordo)
         if (utilisateur != null) {
             if (serviceGestionUtilisateur.verifierRoleUtilisateur(utilisateur , "coordonnateur")){
                 return  daoAccord.approuverUnAccord(idAccordStage)
@@ -160,7 +160,7 @@ class ServiceOffreDeStage(val daoUtilisateur: UtilisateurDAO, val daoOffreStage:
     }
     fun refuserAccordStage(code_coordo: String, idAccordStage: Int):AccordStage?{
 
-        var utilisateur = daoUtilisateur.chercherParCodeString(code_coordo)
+        var utilisateur = daoUtilisateur.chercherUserParCode(code_coordo)
         if (utilisateur != null) {
             if (serviceGestionUtilisateur.verifierRoleUtilisateur(utilisateur , "coordonnateur")){
                 return daoAccord.désaprouverUnAccord(idAccordStage)
