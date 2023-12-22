@@ -1,23 +1,40 @@
 package com.crosemont.dti.g26.stageavenirapi.DAO
 
-import com.crosemont.dti.g26.stageavenirapi.Modèle.Categorie
+
+import com.crosemont.dti.g26.stageavenirapi.Modèle.DemandeStage
+import com.crosemont.dti.g26.stageavenirapi.Modèle.MappingEnum.MappageEnum
+
 import com.crosemont.dti.g26.stageavenirapi.Modèle.Role
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Repository
 
 @Repository
-class RoleDAOImplement (var bd : JdbcTemplate ) :RoleDAO{
+
+class RoleDAOImplement  (val bd : JdbcTemplate): RoleDAO{
+    private var mappage = MappageEnum()
     override fun chercherParCode(code: Int): Role? {
-        var result = bd.query("SELECT * FROM role WHERE idrole = ?", arrayOf(code)) { response, _ ->
+        var role: Role? = null
 
-            Role(
-                idRole = response.getInt("idRole"),
-                nom  = response.getString("nom"),
-            )
+        try {
+            bd.query("SELECT * FROM  WHERE idRole = ?", arrayOf(code)) { response, _ ->
+                if (response.next()) {
 
+                    role =  Role(
+                        idRole = response.getInt("idRole"),
+                        nom = mappage.mapToNom(response.getString("nom"))
+                    )
+                }
+            }
+
+        }catch (e: Exception){
+            println("ERREUR DAO :" + e)
         }
 
-        return result.firstOrNull()
+        println("DAO : " + role.toString())
+
+
+        return role
+
     }
 
 

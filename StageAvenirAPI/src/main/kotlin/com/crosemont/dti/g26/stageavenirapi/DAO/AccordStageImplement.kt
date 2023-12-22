@@ -14,7 +14,7 @@ class AccordStageImplement (val bd : JdbcTemplate, var daoUser : UtilisateurDAO)
 
                 element.commentaire,
                 element.etat.toString(),
-                element.etudiant?.idUtilisateur ?: 0,
+                element.etudiant?.idutilisateur ?: 0,
                 element.offre?.idOffreStage ?: 0,
 
         )

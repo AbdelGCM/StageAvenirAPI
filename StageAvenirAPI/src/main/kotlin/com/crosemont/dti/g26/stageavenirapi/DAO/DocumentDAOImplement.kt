@@ -206,7 +206,7 @@ class DocumentDAOImplement (val bd : JdbcTemplate, var daoEtudiant : Utilisateur
 
     private fun chercherDemandeDeStageParCode(code: Int): DemandeStage? {
         var demande: DemandeStage? = null
-
+        /*
         bd.query("SELECT * FROM demandeStage WHERE iddemandeStage = ?", arrayOf(code)) { response, _ ->
             if (response.next()) {
                 demande = DemandeStage(
@@ -219,7 +219,7 @@ class DocumentDAOImplement (val bd : JdbcTemplate, var daoEtudiant : Utilisateur
                 )
             }
         }
-
+        */
         return demande
     }
 
