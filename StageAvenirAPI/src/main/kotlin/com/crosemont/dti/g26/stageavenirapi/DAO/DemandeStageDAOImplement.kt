@@ -86,7 +86,7 @@ class DemandeStageDAOImplement(val bd : JdbcTemplate,val daoCategorie: Categorie
                 )
                 demande_stage.add(demandeStage)
            // }
-            print(daoUtilisateur?.chercherParCode(4))
+
         }
         return demande_stage
     }
