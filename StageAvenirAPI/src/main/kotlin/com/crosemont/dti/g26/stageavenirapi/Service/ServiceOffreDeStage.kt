@@ -10,7 +10,7 @@ import com.crosemont.dti.g26.stageavenirapi.Modèle.Enum.Etat
 import org.springframework.stereotype.Service
 
 @Service
-class ServiceOffreDeStage(val daoUtilisateur: UtilisateurDAO, val daoOffreStage: OffreStageDAO, val daoCandidature: CandidatureDAO,val daoAccord:AccordStageDAO, val daoDocument: DocumentDAO, val serviceGestionUtilisateur: ServiceGestionUtilisateur){
+class ServiceOffreDeStage(val daoEntreprise:EntrepriseDAO, val daoUtilisateur: UtilisateurDAO, val daoOffreStage: OffreStageDAO, val daoCandidature: CandidatureDAO,val daoAccord:AccordStageDAO, val daoDocument: DocumentDAO, val serviceGestionUtilisateur: ServiceGestionUtilisateur){
 
 
     //======================================Offres de stage
@@ -27,11 +27,31 @@ class ServiceOffreDeStage(val daoUtilisateur: UtilisateurDAO, val daoOffreStage:
         }
     }
 
-    fun effacer(code: Int) = daoOffreStage.effacer(code)
+    fun effacer(code: Int,code_employeur: String ) {
+        var employeur = daoUtilisateur.chercherUserParCode(code_employeur)
+        if (employeur != null) {
+            if (serviceGestionUtilisateur.verifierRoleUtilisateur(employeur , "employeur")){
+               return daoOffreStage.effacer(code)
+            }else throw DroitAccèsInsuffisantException("L'utilisateur ${employeur.nom} n'est pas un employeur")
+        }
+        throw RessourceInexistanteException("L'utilisateur avec le code ${code_employeur} n'existe pas")
+
+
+    }
+
+
     fun modifier(code: Int, offre: OffreStage): OffreStage? = daoOffreStage.modifier(code, offre)
 
-    fun ajouter (codeEntreprise: Int, offre: OffreStage): OffreStage? {
-        return daoOffreStage.ajouterUneOffre(codeEntreprise,offre)
+    fun ajouter (code_employeur:String, codeEntreprise: Int, offre: OffreStage): OffreStage? {
+
+        var employeur = daoUtilisateur.chercherUserParCode(code_employeur)
+        if (employeur != null) {
+            if (serviceGestionUtilisateur.verifierRoleUtilisateur(employeur , "employeur")){
+                return daoOffreStage.ajouterUneOffre(codeEntreprise,offre)
+
+            }else throw DroitAccèsInsuffisantException("L'utilisateur ${employeur.nom} n'est pas un employeur")
+        }
+        throw RessourceInexistanteException("L'utilisateur avec le code ${code_employeur} n'existe pas")
     }
     fun obtenirStagesEnCoursDeValidationPourUnePublication(code_coordo : String ): List<OffreStage> {
         return daoOffreStage.obtenirOffresEnCoursApprobation()
