@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class Demandes_StagesControlleur(val service: ServiceDemandeDeStage) {
+class DemandesStagesControleur(val service: ServiceDemandeDeStage) {
     @GetMapping("/demandeStages")
     fun obtenirToutesDemandesStage() = service.obtenirToutesDemandesStage()
 
