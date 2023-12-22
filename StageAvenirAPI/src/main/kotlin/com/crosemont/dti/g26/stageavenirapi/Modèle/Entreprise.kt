@@ -6,6 +6,6 @@ data class Entreprise (
         val adresse : String,
         val description: String,
         val secteur : String,
-        val employeur : Utilisateur
+        val employeur : Utilisateur ?
 )
 

@@ -16,6 +16,9 @@ class EntrepriseControleur(val service : ServiceGestionUtilisateur)  {
 
     @PostMapping("/employeur/entreprises")
     fun ajouterEntreprise( principal: Principal? , @RequestBody entreprise: Entreprise) : ResponseEntity<Entreprise>?{
+        if (principal != null) {
+            println(principal.name)
+        }
         var entrprise = principal?.let { service.ajouterEntrpriseParEmployeur(it.name, entreprise) }
         if (entreprise != null) {
             val uri = entrprise?.let {

@@ -4,6 +4,8 @@ import com.crosemont.dti.g26.stageavenirapi.Modèle.Candidature
 import com.crosemont.dti.g26.stageavenirapi.Modèle.Document
 import com.crosemont.dti.g26.stageavenirapi.Modèle.OffreStage
 import com.crosemont.dti.g26.stageavenirapi.Service.ServiceOffreDeStage
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.responses.ApiResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -68,7 +70,17 @@ class CandidatureControleur(val service : ServiceOffreDeStage) {
 
         return ResponseEntity.internalServerError().build()
     }
-
+    @Operation(
+        summary = "Poster une Candidature.",
+        description = "Inscrit un restaurant au service.",
+        operationId = "inscrireRestaurant",
+        responses = [
+            ApiResponse(responseCode = "201", description = "La candidature  a bien été envoyée."),
+            ApiResponse(responseCode = "400", description = "La requête est mal formulée."),
+            ApiResponse(responseCode = "401", description = "L'utilisateur voulant effectuer l'opération n'est pas correctement authentifié."),
+            ApiResponse(responseCode = "403", description = "L'utilisateur voulant effectuer l'opération n'a pas les droits nécessaires."),
+            ApiResponse(responseCode = "409", description = "La candidature a  déjà au service.")
+        ])
     @PostMapping("/etudiant/{id}/offresStages/{id_offre}/candidature")
     fun posterCandidature(@RequestBody candidature: Candidature, principal: Principal? , @PathVariable id_offre  :String) : ResponseEntity<Candidature>? {
          var nouveauCandidature = principal?.let { service.postulerPourUneOffre(it.name  ,id_offre.toInt(), candidature ) }

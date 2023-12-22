@@ -30,8 +30,8 @@ class ServeurRessourcesOAuth2ConfigurationAccès {
             authorizeHttpRequests {
                 //authorize("/", permitAll)
                 //authorize("/api/**", authenticated) // Require authentication for URLs starting with /api/
-                authorize(anyRequest, authenticated)
                 //authorize(anyRequest, authenticated)
+                authorize(anyRequest, authenticated)
             }
             oauth2ResourceServer {
                 jwt { }
