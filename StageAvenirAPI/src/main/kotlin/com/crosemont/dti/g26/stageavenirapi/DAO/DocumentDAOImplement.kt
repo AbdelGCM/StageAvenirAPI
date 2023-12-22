@@ -52,16 +52,17 @@ class DocumentDAOImplement (val bd : JdbcTemplate, var daoEtudiant : Utilisateur
 
         bd.query("SELECT * FROM document   WHERE candidature_idcandidature = ?", arrayOf(candidature)) { response, _ ->
             while (response.next()) {
+
                 var  document = Document(
                         idDocument = response.getInt("iddocument"),
                         nom = response.getString("nom"),
                         type = mappage.mapToType(response.getString("type")),
                         contenu = response.getBytes("contenu"),
-                        etudiant = daoEtudiant.chercherParCode(response.getInt("utilisateur_idutilisateur")),
+                        etudiant = null,
                         demande = null,
                         candidature = null
                 )
-                println("DAO DOC : ")
+
                 documents.add(document)
             }
         }
@@ -79,7 +80,7 @@ class DocumentDAOImplement (val bd : JdbcTemplate, var daoEtudiant : Utilisateur
                         nom = response.getString("nom"),
                         type = mappage.mapToType(response.getString("type")),
                         contenu = response.getBytes("description"),
-                        etudiant = daoEtudiant.chercherParCode(response.getInt("idutilisateur")),
+                        etudiant = null,
                         demande = demande,
                         candidature = null
                 )
@@ -91,7 +92,7 @@ class DocumentDAOImplement (val bd : JdbcTemplate, var daoEtudiant : Utilisateur
         return documents
     }
 
-    override fun ajouterCv(cv: Document, idEtudiant: Int): Document? {
+    override fun ajouterCv(cv: Document, idEtudiant: String): Document? {
         var idDocument = bd.update(
                 "INSERT INTO document (nom,type,contenu,utilisateur_idutilisateur) VALUES (?, ?, ?, ?)",
                 cv.nom,
@@ -123,15 +124,15 @@ class DocumentDAOImplement (val bd : JdbcTemplate, var daoEtudiant : Utilisateur
         }
     }
 
-    override fun obtenirCvParEtudiant(idEtudiant: Int): Document? {
-        var result = bd.query("SELECT * FROM utilisateur WHERE idutilisateur = ?", arrayOf(idEtudiant)) { response, _ ->
+    override fun obtenirCvParEtudiant(idEtudiant: String): Document? {
+        var result = bd.query("SELECT * FROM document WHERE utilisateur_idutilisateur = ?", arrayOf(idEtudiant)) { response, _ ->
 
              Document(
                 idDocument = response.getInt("iddocument"),
                 nom = response.getString("nom"),
                 type = mappage.mapToType(response.getString("type")),
-                contenu = response.getBytes("description"),
-                etudiant = daoEtudiant.chercherParCode(response.getInt("idutilisateur")),
+                contenu = response.getBytes("contenu"),
+                etudiant = null,
                 demande = null,
                 candidature = null
             )
@@ -151,7 +152,7 @@ class DocumentDAOImplement (val bd : JdbcTemplate, var daoEtudiant : Utilisateur
                         nom = response.getString("nom"),
                         type = mappage.mapToType(response.getString("type")),
                         contenu = response.getBytes("description"),
-                        etudiant = daoEtudiant.chercherParCode(response.getInt("idutilisateur")),
+                        etudiant = daoEtudiant.chercherParCodeString(response.getString("idutilisateur")),
                         demande = null,
                         candidature = null
                 )
@@ -171,7 +172,7 @@ class DocumentDAOImplement (val bd : JdbcTemplate, var daoEtudiant : Utilisateur
                         nom = response.getString("nom"),
                         type = mappage.mapToType(response.getString("type")),
                         contenu = response.getBytes("contenu"),
-                        etudiant = daoEtudiant.chercherParCode(response.getInt("idutilisateur")),
+                        etudiant = daoEtudiant.chercherParCodeString(response.getString("idutilisateur")),
                         demande = null,
                         candidature = null
                 )
@@ -213,7 +214,7 @@ class DocumentDAOImplement (val bd : JdbcTemplate, var daoEtudiant : Utilisateur
                         titre = response.getString("titre"),
                         description = response.getString("description"),
                         posteDemandé = response.getString("poste"),
-                        etudiant = daoEtudiant.chercherParCode(response.getInt("utilisateur_idutilisateur")),
+                        etudiant = daoEtudiant.chercherUserParCode(response.getString("utilisateur_idutilisateur")),
                         catégorie = daoCategorie.chercherParCode(response.getInt("categorie_idcategorie"))
                 )
             }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
+import java.security.Principal
 
 @RestController
 class DocumentControleur(var service : ServiceGestionUtilisateur) {
@@ -34,9 +35,9 @@ class DocumentControleur(var service : ServiceGestionUtilisateur) {
     }
 
 
-    @GetMapping("/employeur/offresStage/{offre_id}/candidatures/{candidature_id}/documents")
-    fun obtenirLesDocumentsParCandidature(@PathVariable candidature_id:String): ResponseEntity<List<Document>>? {
-        var listeDocuments = service.récupérerDocumentsParCandidatures(candidature_id.toInt())
+    @GetMapping("/employeur/offresStage/offre/candidatures/{candidature_id}/documents")
+    fun obtenirLesDocumentsParCandidature(@PathVariable candidature_id:String, principal: Principal?): ResponseEntity<List<Document>>? {
+        var listeDocuments = principal?.let { service.récupérerDocumentsParCandidatures(candidature_id.toInt(), it.name) }
         if (listeDocuments != null) {
 
             val uri = listeDocuments?.let {
@@ -54,8 +55,8 @@ class DocumentControleur(var service : ServiceGestionUtilisateur) {
     }
 
     @GetMapping("/etudiant/demandesStages/{demande_id}/documents")
-    fun obtenirLesDocumentsParDemandeDeStage(@PathVariable demande_id:String ): ResponseEntity<List<Document>>? {
-        var listeDocuments = service.récupérerDocumentsParDemandeDeStage(demande_id.toInt())
+    fun obtenirLesDocumentsParDemandeDeStage(@PathVariable demande_id:String, principal: Principal? ): ResponseEntity<List<Document>>? {
+        var listeDocuments = principal?.let { service.récupérerDocumentsParDemandeDeStage(demande_id.toInt(), it.name) }
         if (listeDocuments != null) {
 
             val uri = listeDocuments?.let {
@@ -73,9 +74,14 @@ class DocumentControleur(var service : ServiceGestionUtilisateur) {
     }
 
 
-    @PostMapping("/etudiant/{id_etudiant}/profil/cv")
-    fun ajouterUnCv(@PathVariable id_etudiant:String, @RequestBody cv:Document): ResponseEntity<Document>? {
-        var cv_ajouté =  service.ajouterUnCv(cv,id_etudiant.toInt())
+    @PostMapping("/etudiant/profil/cv")
+    fun ajouterUnCv(principal: Principal?, @RequestBody cv:Document): ResponseEntity<Document>? {
+        if (principal != null) {
+            println(principal.name)
+        }else {
+            println("controler null")
+        }
+        var cv_ajouté = principal?.let { service.ajouterUnCv(cv, it.name) }
         if (cv != null) {
 
             val uri = cv_ajouté?.let {
@@ -91,9 +97,9 @@ class DocumentControleur(var service : ServiceGestionUtilisateur) {
         }
         return ResponseEntity.internalServerError().build()
     }
-    @PutMapping("/etudiant/{id_etudiant}/profil/cv")
-    fun modifierUnCv(@PathVariable id_etudiant:String, @RequestBody cv:Document): ResponseEntity<Document>? {
-        var  cv_modifié =   service.modifierUnCv(cv)
+    @PutMapping("/etudiant/profil/cv")
+    fun modifierUnCv(principal: Principal?, @RequestBody cv:Document): ResponseEntity<Document>? {
+        var  cv_modifié = principal?.let { service.modifierUnCv(cv, it.name) }
         if (cv != null) {
 
             val uri = cv_modifié?.let {
@@ -109,10 +115,10 @@ class DocumentControleur(var service : ServiceGestionUtilisateur) {
         }
         return ResponseEntity.internalServerError().build()
     }
-    @GetMapping("/etudiant/{id_etudiant}/profil/cv")
-    fun obtenirLeCV(@PathVariable id_etudiant:String, @RequestBody cv:Document): ResponseEntity<Document>? {
-        var  cv_modifié =   service.modifierUnCv(cv)
-        if (cv != null) {
+    @GetMapping("/etudiant/profil/cv")
+    fun obtenirLeCV(principal: Principal?): ResponseEntity<Document>? {
+        var  cv_modifié = principal?.let { service.obtenirCVParEtudiant(it.name) }
+        if (principal != null) {
 
             val uri = cv_modifié?.let {
                 ServletUriComponentsBuilder

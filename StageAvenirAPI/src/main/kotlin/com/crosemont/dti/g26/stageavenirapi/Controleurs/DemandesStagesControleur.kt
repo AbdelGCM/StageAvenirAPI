@@ -2,7 +2,6 @@ package com.crosemont.dti.g26.stageavenirapi.Controleurs
 
 import com.crosemont.dti.g26.stageavenirapi.Exceptions.RessourceInexistanteException
 import com.crosemont.dti.g26.stageavenirapi.Modèle.DemandeStage
-import com.crosemont.dti.g26.stageavenirapi.Modèle.Employeur
 import com.crosemont.dti.g26.stageavenirapi.Service.ServiceDemandeDeStage
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

@@ -9,4 +9,7 @@ interface AccordStageDAO : DAO<AccordStage> {
     fun approuverUnAccord(element: Int):AccordStage?
     fun désaprouverUnAccord(element:Int):AccordStage?
 
+    fun selectionnerAccordParCategorie(categorieId : Int):List<AccordStage>?
+
+
 }

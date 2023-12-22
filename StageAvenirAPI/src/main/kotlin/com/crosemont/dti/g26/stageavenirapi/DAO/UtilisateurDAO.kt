@@ -3,6 +3,7 @@ package com.crosemont.dti.g26.stageavenirapi.DAO
 import com.crosemont.dti.g26.stageavenirapi.Modèle.Utilisateur
 
 
+
 interface UtilisateurDAO : DAO<Utilisateur>    {
     override fun ajouter(utilisateur: Utilisateur): Utilisateur?
     fun chercherParCodeString(code: String): Utilisateur?
@@ -13,5 +14,6 @@ interface UtilisateurDAO : DAO<Utilisateur>    {
     override fun modifier(id: Int,utilisateur: Utilisateur): Utilisateur?
 
     override fun effacer (id: Int )
+
 
 }

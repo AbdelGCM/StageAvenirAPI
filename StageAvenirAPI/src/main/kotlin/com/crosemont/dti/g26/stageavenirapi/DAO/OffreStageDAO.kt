@@ -17,9 +17,11 @@ interface OffreStageDAO : DAO<OffreStage> {
 
     override fun effacer(code: Int)
 
-    fun modifierVisibilité(id: Int,offre: OffreStage): OffreStage?
+    fun modifierVisibilité(id: Int, visibilité :Boolean, état : String): OffreStage?
 
     fun chercherParCodeCatégorie(code_categorie: Int): List<OffreStage>
+
+    fun obtenirOffresEnCoursApprobation():List<OffreStage>
 
 
 

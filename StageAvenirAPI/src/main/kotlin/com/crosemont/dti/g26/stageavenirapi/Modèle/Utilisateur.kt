@@ -3,6 +3,7 @@ package com.crosemont.dti.g26.stageavenirapi.Modèle
 
 
 
+
 class Utilisateur (
     val idutilisateur: String?,
     val nom: String?,

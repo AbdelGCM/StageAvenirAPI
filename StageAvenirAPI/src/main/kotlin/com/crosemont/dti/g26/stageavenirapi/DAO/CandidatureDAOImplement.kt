@@ -27,8 +27,8 @@ class CandidatureDAOImplement(val bd : JdbcTemplate , val daoDoc :DocumentDAO , 
                         idCandidature = response.getInt("idcandidature"),
                         etat = mappage.mapToEtat(response.getString("etat")),
                         commentaire = response.getString("description"),
-                         offre = daoOffre.chercherParCode(response.getInt("offreStage_idoffreStage")),
-                        etudiant = daoUser.chercherParCode(response.getInt("utilisateur_idutilisateur")) ,
+                        offre = daoOffre.chercherParCode(response.getInt("offreStage_idoffreStage")),
+                        etudiant = daoUser.chercherParCodeString(response.getString("utilisateur_idutilisateur")) ,
                         documents =  daoDoc.chercherParCandidature(response.getInt("idcandidature"))
 
                     )
@@ -48,7 +48,7 @@ class CandidatureDAOImplement(val bd : JdbcTemplate , val daoDoc :DocumentDAO , 
                     etat = mappage.mapToEtat(response.getString("etat")),
                     commentaire = response.getString("description"),
                     offre = daoOffre.chercherParCode(response.getInt("offreStage_idoffreStage")),
-                    etudiant = daoUser.chercherParCode(response.getInt("utilisateur_idutilisateur")),
+                    etudiant = daoUser.chercherParCodeString(response.getString("utilisateur_idutilisateur")),
                     documents =  daoDoc.chercherParCandidature(response.getInt("idcandidature"))
                 )
                 candidatures.add(candidature)
@@ -75,7 +75,7 @@ class CandidatureDAOImplement(val bd : JdbcTemplate , val daoDoc :DocumentDAO , 
 
     }
 
-    override fun chercherParEtudiant(code_etudiant: Int): List<Candidature> {
+    override fun chercherParEtudiant(code_etudiant: String): List<Candidature> {
         val candidatures = mutableListOf<Candidature>()
 
         bd.query(
@@ -87,7 +87,7 @@ class CandidatureDAOImplement(val bd : JdbcTemplate , val daoDoc :DocumentDAO , 
                     etat = mappage.mapToEtat(response.getString("etat")),
                     commentaire = response.getString("description"),
                     offre = daoOffre.chercherParCode(response.getInt("offreStage_idoffreStage")),
-                    etudiant = daoUser.chercherParCode(response.getInt("utilisateur_idutilisateur")),
+                    etudiant = daoUser.chercherParCodeString(response.getString("utilisateur_idutilisateur")),
                     documents = daoDoc.chercherParCandidature(response.getInt("idcandidature"))
             )
 
@@ -113,7 +113,7 @@ class CandidatureDAOImplement(val bd : JdbcTemplate , val daoDoc :DocumentDAO , 
                     etat = mappage.mapToEtat(response.getString("etat")),
                     commentaire = response.getString("description"),
                     offre = daoOffre.chercherParCode(response.getInt("offreStage_idoffreStage")),
-                    etudiant = daoUser.chercherParCode(response.getInt("utilisateur_idutilisateur")),
+                    etudiant = daoUser.chercherParCodeString(response.getString("utilisateur_idutilisateur")),
                     documents =  daoDoc.chercherParCandidature(response.getInt("idcandidature"))
                 )
                 candidatures.add(candidature)
@@ -123,7 +123,7 @@ class CandidatureDAOImplement(val bd : JdbcTemplate , val daoDoc :DocumentDAO , 
         return candidatures
     }
 
-    override fun postulerPourUneOffre(candidature: Candidature, code_etudiant: Int,idOffre:Int):Candidature? {
+    override fun postulerPourUneOffre(candidature: Candidature, code_etudiant: String,idOffre:Int):Candidature? {
 
         var nouvelleCandidature = candidature
          var result = bd.update(
@@ -137,6 +137,7 @@ class CandidatureDAOImplement(val bd : JdbcTemplate , val daoDoc :DocumentDAO , 
         var generatedId = chercherTous().get(chercherTous().size -1 ).idCandidature
         nouvelleCandidature.idCandidature = generatedId
         nouvelleCandidature = chercherTous().get(chercherTous().size -1 )
+        println("NOUVEAU ID CANDIDATURE :" + nouvelleCandidature.idCandidature)
        return nouvelleCandidature
 
     }

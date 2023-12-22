@@ -4,6 +4,8 @@ import com.crosemont.dti.g26.stageavenirapi.Modèle.Candidature
 import com.crosemont.dti.g26.stageavenirapi.Modèle.Document
 import com.crosemont.dti.g26.stageavenirapi.Modèle.OffreStage
 import com.crosemont.dti.g26.stageavenirapi.Service.ServiceOffreDeStage
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.responses.ApiResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -12,14 +14,15 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
+import java.security.Principal
 
 @RestController
 class CandidatureControleur(val service : ServiceOffreDeStage) {
 
-    @GetMapping("/etudiant/{codeUtilisateur}/candidatures")
-    fun obtenirCandidaturesParEtudiant(@PathVariable codeUtilisateur: String): ResponseEntity<List<Candidature>>? {
-        var listeCandidature =  service.obtenirCandidaturesParEtudiant(codeUtilisateur.toInt())
-        if (codeUtilisateur != null) {
+    @GetMapping("/etudiant/candidatures")
+    fun obtenirCandidaturesParEtudiant(principal: Principal?): ResponseEntity<List<Candidature>>? {
+        var listeCandidature = principal?.let { service.obtenirCandidaturesParEtudiant(it.name) }
+        if (principal != null) {
             val uri = listeCandidature?.let {
                 ServletUriComponentsBuilder
                     .fromCurrentRequest()
@@ -34,8 +37,8 @@ class CandidatureControleur(val service : ServiceOffreDeStage) {
     }
 
     @GetMapping("/employeur/{id_employeur}/offresStages/{id_offre}/candidatures")
-    fun obtenirCandidaturesParOffreDeStage(@PathVariable id_offre:String ): ResponseEntity<List<Candidature>>? {
-        var listeCandidature = service.obtenirCandidaturesParDemandeStage(id_offre.toInt())
+    fun obtenirCandidaturesParOffreDeStage(@PathVariable id_offre:String , principal: Principal? ): ResponseEntity<List<Candidature>>? {
+        var listeCandidature = principal?.let { service.obtenirCandidaturesParDemandeStage(id_offre.toInt(), it.name) }
         if (id_offre != null) {
             val uri = listeCandidature?.let {
                 ServletUriComponentsBuilder
@@ -50,9 +53,9 @@ class CandidatureControleur(val service : ServiceOffreDeStage) {
         return ResponseEntity.internalServerError().build()
     }
 
-    @PutMapping("/etudiant/{id_etudiant}/candidatures/{id_candidature}")
-    fun annulerCandidature(@PathVariable id_etudiant: String,@PathVariable id_candidature : String): ResponseEntity<Candidature>?{
-        var resultat =  service.annulerCandidature(id_candidature.toInt())
+    @PutMapping("/etudiant/candidatures/{id_candidature}")
+    fun annulerCandidature(principal: Principal?,@PathVariable id_candidature : String): ResponseEntity<Candidature>?{
+        var resultat = principal?.let { service.annulerCandidature(id_candidature.toInt(), it.name ) }
         if (id_candidature != null) {
             val uri = resultat?.let {
                 ServletUriComponentsBuilder
@@ -67,10 +70,20 @@ class CandidatureControleur(val service : ServiceOffreDeStage) {
 
         return ResponseEntity.internalServerError().build()
     }
-
-    @PostMapping("/etudiant/{id}/offresStages/{id_offre}/candidature")
-    fun posterCandidature(@RequestBody candidature: Candidature, @PathVariable id : String , @PathVariable id_offre  :String) : ResponseEntity<Candidature>? {
-         var nouveauCandidature = service.postulerPourUneOffre(id.toInt()  ,id_offre.toInt(), candidature, id.toInt())
+    @Operation(
+        summary = "Poster une Candidature.",
+        description = "Inscrit un restaurant au service.",
+        operationId = "inscrireRestaurant",
+        responses = [
+            ApiResponse(responseCode = "201", description = "La candidature  a bien été envoyée."),
+            ApiResponse(responseCode = "400", description = "La requête est mal formulée."),
+            ApiResponse(responseCode = "401", description = "L'utilisateur voulant effectuer l'opération n'est pas correctement authentifié."),
+            ApiResponse(responseCode = "403", description = "L'utilisateur voulant effectuer l'opération n'a pas les droits nécessaires."),
+            ApiResponse(responseCode = "409", description = "La candidature a  déjà au service.")
+        ])
+    @PostMapping("/etudiant/offresStages/{id_offre}/candidature")
+    fun posterCandidature(@RequestBody candidature: Candidature, principal: Principal? , @PathVariable id_offre  :String) : ResponseEntity<Candidature>? {
+         var nouveauCandidature = principal?.let { service.postulerPourUneOffre(it.name  ,id_offre.toInt(), candidature ) }
 
         if (candidature != null) {
             val uri = nouveauCandidature?.let {
@@ -87,10 +100,10 @@ class CandidatureControleur(val service : ServiceOffreDeStage) {
         return ResponseEntity.internalServerError().build()
     }
 
-   @PutMapping("/employeur/{id_employeur}/offresStages/{idOffre}/candidatures/{id_candidature}/accepter")
-    fun accepterUneCandidature(@RequestBody candidature:Candidature):ResponseEntity<Candidature>?{
+   @PutMapping("/employeur/offresStages/{idOffre}/candidatures/{id_candidature}/accepter")
+    fun accepterUneCandidature(@RequestBody candidature:Candidature, principal: Principal?):ResponseEntity<Candidature>?{
        println("controlleur : " + candidature)
-        var nouvelleCandidature =  service.accepterCandidature(candidature)
+        var nouvelleCandidature = principal?.let { service.accepterCandidature(candidature, it.name) }
        if (candidature != null) {
            val uri = nouvelleCandidature?.let {
                ServletUriComponentsBuilder
@@ -106,9 +119,9 @@ class CandidatureControleur(val service : ServiceOffreDeStage) {
        return ResponseEntity.internalServerError().build()
     }
 
-    @PutMapping("/employeur/{id_employeur}/offresStages/{idOffre}/candidatures/{id_candidature}/refuser")
-    fun refuserUneCandidature(@PathVariable id_candidature:String):ResponseEntity<Candidature>?{
-        var candidature_refusée =  service.refuserCandidature(id_candidature.toInt())
+    @PutMapping("/employeur/offresStages/Offre/candidatures/{id_candidature}/refuser")
+    fun refuserUneCandidature(@PathVariable id_candidature:String, principal: Principal?):ResponseEntity<Candidature>?{
+        var candidature_refusée = principal?.let { service.refuserCandidature(id_candidature.toInt(), it.name) }
         if (id_candidature != null) {
             val uri = candidature_refusée?.let {
                 ServletUriComponentsBuilder
@@ -117,12 +130,13 @@ class CandidatureControleur(val service : ServiceOffreDeStage) {
                     .buildAndExpand(it.idCandidature)
                     .toUri()
             }
-
             return uri?.let { ResponseEntity.created(it).body(candidature_refusée) }
         }
 
         return ResponseEntity.internalServerError().build()
     }
+
+     
 
 
 }
