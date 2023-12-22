@@ -81,7 +81,7 @@ class CandidatureControleur(val service : ServiceOffreDeStage) {
             ApiResponse(responseCode = "403", description = "L'utilisateur voulant effectuer l'opération n'a pas les droits nécessaires."),
             ApiResponse(responseCode = "409", description = "La candidature a  déjà au service.")
         ])
-    @PostMapping("/etudiant/{id}/offresStages/{id_offre}/candidature")
+    @PostMapping("/etudiant/offresStages/{id_offre}/candidature")
     fun posterCandidature(@RequestBody candidature: Candidature, principal: Principal? , @PathVariable id_offre  :String) : ResponseEntity<Candidature>? {
          var nouveauCandidature = principal?.let { service.postulerPourUneOffre(it.name  ,id_offre.toInt(), candidature ) }
 

@@ -63,6 +63,7 @@ class OffresStageControleur(val service: ServiceOffreDeStage) {
         return principal?.let { service.obtenirOffresParCatégorie(it.name) }
     }
 
+
     @Operation(
             summary = "Ajouter une offre de stage",
             description = "Ajoute une nouvelle offre de stage pour une entreprise spécifiée.",
@@ -78,6 +79,7 @@ class OffresStageControleur(val service: ServiceOffreDeStage) {
     @PostMapping("/employeur/entreprise/{idEntreprise}/offresStages")
     fun ajouterOffreStage(@RequestBody offre: OffreStage, @PathVariable idEntreprise : Int,principal: Principal? ): ResponseEntity<OffreStage> {
         val nouvelleOffre = principal?.let { service.ajouter(it.name,idEntreprise,offre) }
+
         if (nouvelleOffre != null) {
             val uri = ServletUriComponentsBuilder
                     .fromCurrentRequest()
