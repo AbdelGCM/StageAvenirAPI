@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
+import java.security.Principal
 
 @RestController
 class OffresStageControleur(val service: ServiceOffreDeStage) {
@@ -22,13 +23,16 @@ class OffresStageControleur(val service: ServiceOffreDeStage) {
     @GetMapping("/offres_Stages/{code}")
     fun obtenirOffresStagesParCode(@PathVariable code: Int) = service.obtenirOffreParCode(code) ?: throw RessourceInexistanteException("L'offre $code n'est pas inscrite au service.")
 
-    @GetMapping("offres_Stages/offresParCategorie/{categorie_id}")
-    fun obtenirOffresStagesParCatégorie(@PathVariable categorie_id: Int ) = service.obtenirOffresParCatégorie(categorie_id) ?: throw RessourceInexistanteException("La catégorie $categorie_id n'est pas inscrite au service.")
+    @GetMapping("etudiant/offres_Stages")
+    fun obtenirOffresStagesParCatégorie( principal: Principal? ) : List<OffreStage>? {
+        return principal?.let { service.obtenirOffresParCatégorie(it.name) }
+    }
 
-    @PostMapping("/employeur/entreprise/{id}/offresStages")
-    fun ajouterOffreStage(@RequestBody offre: OffreStage, @PathVariable id : Int ): ResponseEntity<OffreStage> {
 
-        val nouvelleOffre = service.ajouter(id,offre)
+    @PostMapping("/employeur/entreprise/{idEntreprise}/offresStages")
+    fun ajouterOffreStage(@RequestBody offre: OffreStage, @PathVariable idEntreprise : Int ): ResponseEntity<OffreStage> {
+
+        val nouvelleOffre = service.ajouter(idEntreprise,offre)
 
         if (nouvelleOffre != null) {
             val uri = ServletUriComponentsBuilder
@@ -63,5 +67,54 @@ class OffresStageControleur(val service: ServiceOffreDeStage) {
         }
         return ResponseEntity.ok(offre)
     }
+    @GetMapping("coordonateur/demandesPublication")
+    fun obtenirsOffresStagesEncoursDeValidation (principal: Principal?): ResponseEntity<List<OffreStage>>? {
+        var listeOffres = principal?.let { service.obtenirStagesEnCoursDeValidationPourUnePublication(it.name) }
+        if (principal != null) {
+            val uri = listeOffres?.let {
+                ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{code}")
+                    .buildAndExpand(it.size)
+                    .toUri()
+            }
+
+            return uri?.let { ResponseEntity.created(it).body(listeOffres) }
+        }
+        return ResponseEntity.internalServerError().build()
+
+    }
+    @PutMapping("coordonnateur/demandesPublication/{idOffre}/accepter")
+    fun accepterPublicationOffreStage(@PathVariable idOffre : String, principal: Principal?): ResponseEntity<OffreStage> {
+        val offreAcceptée = principal?.let { service.approuverPublicationDuneOffre(it.name, idOffre.toInt()) }
+
+        if (offreAcceptée != null) {
+            val uri = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{code}")
+                .buildAndExpand(offreAcceptée.idOffreStage)
+                .toUri()
+
+            return ResponseEntity.created(uri).body(offreAcceptée)
+        }
+        return ResponseEntity.ok(offreAcceptée)
+    }
+    @PutMapping("coordonnateur/demandesPublication/{idOffre}/refuser")
+    fun refuserPublicationOffreStage(@PathVariable idOffre : String, principal: Principal?): ResponseEntity<OffreStage> {
+        val offreRefusée = principal?.let { service.refuserPublicationDuneOffre(it.name, idOffre.toInt()) }
+
+        if (offreRefusée != null) {
+            val uri = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{code}")
+                .buildAndExpand(offreRefusée.idOffreStage)
+                .toUri()
+
+            return ResponseEntity.created(uri).body(offreRefusée)
+        }
+        return ResponseEntity.ok(offreRefusée)
+    }
+
+
 
 }

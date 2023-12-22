@@ -2,12 +2,13 @@ package com.crosemont.dti.g26.stageavenirapi.DAO
 
 import com.crosemont.dti.g26.stageavenirapi.Exceptions.RessourceInexistanteException
 import com.crosemont.dti.g26.stageavenirapi.Modèle.*
+import com.crosemont.dti.g26.stageavenirapi.Modèle.MappingEnum.MappageEnum
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Repository
 
 @Repository
 class OffreStageDAOImplement(val db: JdbcTemplate, var daoCategorie : CategorieDAO, var daoEntreprise : EntrepriseDAO): OffreStageDAO {
-
+    private var mappage = MappageEnum()
     override fun ajouter(offre: OffreStage): OffreStage? {
 
         val sql = "INSERT INTO OffreStage ( titreOffre, posteOffert, description, estRémunéré, dateDébut, dateFin, estVisible,catégorieId) " +
@@ -40,6 +41,7 @@ class OffreStageDAOImplement(val db: JdbcTemplate, var daoCategorie : CategorieD
                 estRémunéré = résultat.getBoolean("remunere"),
                 datePost = résultat.getDate("date").toLocalDate(),
                 estVisible = résultat.getBoolean("visible"),
+                etat = mappage.mapToEtat(résultat.getString("etat")),
                 entreprise = daoEntreprise.chercherParCode(résultat.getInt("entreprise_identreprise")) ,
                 catégorie = daoCategorie.chercherParCode(résultat.getInt("categorie_idcategorie"))
 
@@ -50,13 +52,13 @@ class OffreStageDAOImplement(val db: JdbcTemplate, var daoCategorie : CategorieD
     override fun ajouterUneOffre(codeEntreprise: Int, offre: OffreStage): OffreStage? {
         println("l'Offre en question :" + offre)
         db.update(
-                "INSERT INTO OffreStage (titre, poste_offert, description, remunere, date,visible,categorie_idcategorie,entreprise_identreprise) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                "INSERT INTO offrestage (titre, poste_offert, description, remunere, date,visible,categorie_idcategorie,entreprise_identreprise) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                 offre.titreOffre,
                 offre.posteOffert,
                 offre.description,
                 offre.estRémunéré,
                 offre.datePost,
-                offre.estVisible,
+                false,
                 offre.catégorie?.idCatégorie ?: null,
                 codeEntreprise
         );
@@ -77,6 +79,7 @@ class OffreStageDAOImplement(val db: JdbcTemplate, var daoCategorie : CategorieD
                 estRémunéré = résultat.getBoolean("remunere"),
                 datePost = résultat.getDate("date").toLocalDate(),
                 estVisible = résultat.getBoolean("visible"),
+                etat = mappage.mapToEtat(résultat.getString("etat")),
                 entreprise = daoEntreprise.chercherParCode(résultat.getInt("entreprise_identreprise")) ,
                 catégorie = daoCategorie.chercherParCode(résultat.getInt("categorie_idcategorie"))
 
@@ -89,7 +92,7 @@ class OffreStageDAOImplement(val db: JdbcTemplate, var daoCategorie : CategorieD
 
     override fun modifier(id: Int, offre: OffreStage): OffreStage? {
 
-        val sql = "UPDATE offeStage SET titreOffre = ?, posteOffert = ?, description = ?, estRémunéré = ?, dateDébut = ?, dateFin = ?, estVisible = ?,catégorieId = ? " +
+        val sql = "UPDATE offeStage SET titre = ?, posteOffert = ?, description = ?, estRémunéré = ?, dateDébut = ?, dateFin = ?, estVisible = ?,catégorieId = ? " +
                 " WHERE idoffreStage = ?"
 
         db.update(
@@ -107,16 +110,17 @@ class OffreStageDAOImplement(val db: JdbcTemplate, var daoCategorie : CategorieD
         return chercherParCode(id)
     }
 
-    override fun modifierVisibilité(id: Int, offre: OffreStage): OffreStage? {
-        val sql = "UPDATE OffreStage SET estVisible = ? WHERE idOffreStage = ?"
+    override fun modifierVisibilité(id: Int, visibilité :Boolean, état : String): OffreStage? {
 
-        val affectedRows = db.update(sql, offre.estVisible, id)
+        val sql = "UPDATE OffreStage SET visible = ? , etat = ?  WHERE idoffreStage = ?"
+
+        val affectedRows = db.update(sql, visibilité,état , id)
 
         if (affectedRows > 0) {
             return chercherParCode(id)
         } else {
 
-            return ajouter(offre)
+            return chercherParCode(id)
         }
     }
 
@@ -131,6 +135,7 @@ class OffreStageDAOImplement(val db: JdbcTemplate, var daoCategorie : CategorieD
                     estRémunéré = résultat.getBoolean("remunere"),
                     datePost = résultat.getDate("date").toLocalDate(),
                     estVisible = résultat.getBoolean("visible"),
+                    etat = mappage.mapToEtat(résultat.getString("etat")),
                     entreprise = daoEntreprise.chercherParCode(résultat.getInt("entreprise_identreprise")) ,
                     catégorie = daoCategorie.chercherParCode(résultat.getInt("categorie_idcategorie"))
             )
@@ -138,6 +143,25 @@ class OffreStageDAOImplement(val db: JdbcTemplate, var daoCategorie : CategorieD
 
         return result.toList()
 
+    }
+
+    override fun obtenirOffresEnCoursApprobation(): List<OffreStage> {
+        val sql = "SELECT * FROM offreStage WHERE visible = false and etat='EN_COURS'"
+        return db.query(sql) { résultat, _ ->
+            OffreStage(
+                idOffreStage = résultat.getInt("idoffreStage"),
+                titreOffre = résultat.getString("titre"),
+                posteOffert = résultat.getString("poste_offert"),
+                description = résultat.getString("description"),
+                estRémunéré = résultat.getBoolean("remunere"),
+                datePost = résultat.getDate("date").toLocalDate(),
+                estVisible = résultat.getBoolean("visible"),
+                etat = mappage.mapToEtat(résultat.getString("etat")),
+                entreprise = daoEntreprise.chercherParCode(résultat.getInt("entreprise_identreprise")) ,
+                catégorie = daoCategorie.chercherParCode(résultat.getInt("categorie_idcategorie"))
+
+            )
+        }
     }
 
     override fun effacer(code: Int) {
