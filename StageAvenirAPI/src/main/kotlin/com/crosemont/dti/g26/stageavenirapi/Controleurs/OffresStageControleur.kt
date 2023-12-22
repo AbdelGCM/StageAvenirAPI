@@ -29,10 +29,10 @@ class OffresStageControleur(val service: ServiceOffreDeStage) {
     }
 
 
-    @PostMapping("/employeur/entreprise/{id}/offresStages")
-    fun ajouterOffreStage(@RequestBody offre: OffreStage, @PathVariable id : Int ): ResponseEntity<OffreStage> {
+    @PostMapping("/employeur/entreprise/{idEntreprise}/offresStages")
+    fun ajouterOffreStage(@RequestBody offre: OffreStage, @PathVariable idEntreprise : Int ): ResponseEntity<OffreStage> {
 
-        val nouvelleOffre = service.ajouter(id,offre)
+        val nouvelleOffre = service.ajouter(idEntreprise,offre)
 
         if (nouvelleOffre != null) {
             val uri = ServletUriComponentsBuilder
