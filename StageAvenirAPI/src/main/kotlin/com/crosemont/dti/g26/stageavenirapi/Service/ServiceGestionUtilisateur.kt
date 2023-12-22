@@ -17,8 +17,6 @@ class ServiceGestionUtilisateur (var daoDocument : DocumentDAO, var daoCandidatu
         return utilisateur.role?.nom ?: "null"  == role
     }
 
-
-
     //Gestion des documents
     fun ajouterUnDocumentAuneDemandeDeStage(document: Document, idDemande :Int):Document?{
         return daoDocument.ajouterDocumentADemandeStage(document,idDemande)

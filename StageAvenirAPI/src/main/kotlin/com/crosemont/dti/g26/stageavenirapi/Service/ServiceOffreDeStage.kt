@@ -10,7 +10,7 @@ import com.crosemont.dti.g26.stageavenirapi.Modèle.Enum.Etat
 import org.springframework.stereotype.Service
 
 @Service
-class ServiceOffreDeStage(val daoUtilisateur: UtilisateurDAO, val daoOffreStage: OffreStageDAO, val daoCandidature: CandidatureDAO,val daoAccord:AccordStageDAO, val daoDocument: DocumentDAO, val serviceGestionUtilisateur: ServiceGestionUtilisateur){
+class ServiceOffreDeStage(val daoEntreprise:EntrepriseDAO, val daoUtilisateur: UtilisateurDAO, val daoOffreStage: OffreStageDAO, val daoCandidature: CandidatureDAO,val daoAccord:AccordStageDAO, val daoDocument: DocumentDAO, val serviceGestionUtilisateur: ServiceGestionUtilisateur){
 
 
     //======================================Offres de stage
@@ -31,7 +31,20 @@ class ServiceOffreDeStage(val daoUtilisateur: UtilisateurDAO, val daoOffreStage:
     fun modifier(code: Int, offre: OffreStage): OffreStage? = daoOffreStage.modifier(code, offre)
 
     fun ajouter (codeEntreprise: Int, offre: OffreStage): OffreStage? {
-        return daoOffreStage.ajouterUneOffre(codeEntreprise,offre)
+
+        val entreprise = daoUtilisateur.chercherParCode(codeEntreprise)
+
+        if (entreprise == null){
+            throw RessourceInexistanteException("L'entreprise $codeEntreprise, n'est pas inscrit au service de stage.")
+        }
+
+        if (serviceGestionUtilisateur.verifierRoleUtilisateur(entreprise,"employeur")){
+            var nouvelleOffreStage = daoOffreStage.ajouterUneOffre(codeEntreprise,offre)
+        } else {
+            throw DroitAccèsInsuffisantException("L'utilisateur $codeEntreprise, n'est  pas une entreprise ")
+        }
+
+        throw RessourceInexistanteException("L'entreprise avec le code ${codeEntreprise} n'existe pas")
     }
     fun obtenirStagesEnCoursDeValidationPourUnePublication(code_coordo : String ): List<OffreStage> {
         return daoOffreStage.obtenirOffresEnCoursApprobation()

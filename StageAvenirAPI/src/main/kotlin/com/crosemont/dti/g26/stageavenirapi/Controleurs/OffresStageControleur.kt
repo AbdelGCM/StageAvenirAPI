@@ -74,18 +74,19 @@ class OffresStageControleur(val service: ServiceOffreDeStage) {
             ]
     )
     @PostMapping("/employeur/entreprise/{id}/offresStages")
-    fun ajouterOffreStage(@RequestBody offre: OffreStage, @PathVariable id : Int ): ResponseEntity<OffreStage> {
+    fun ajouterOffreStage(@RequestBody offre: OffreStage, @PathVariable id : Int,principal: Principal? ): ResponseEntity<OffreStage>? {
 
-        val nouvelleOffre = service.ajouter(id,offre)
+        val nouvelleOffre = principal?.let { service.ajouter(id,offre) }
 
         if (nouvelleOffre != null) {
-            val uri = ServletUriComponentsBuilder
+            val uri = nouvelleOffre?.let{
+                    ServletUriComponentsBuilder
                     .fromCurrentRequest()
                     .path("/{code}")
                     .buildAndExpand(nouvelleOffre.idOffreStage)
                     .toUri()
-
-            return ResponseEntity.created(uri).body(nouvelleOffre)
+            }
+            return uri?.let {ResponseEntity.created(it).body(nouvelleOffre)  }
         }
         return ResponseEntity.internalServerError().build()
     }
