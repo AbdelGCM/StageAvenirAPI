@@ -1,12 +1,17 @@
 package com.crosemont.dti.g26.stageavenirapi.DAO
 
-import com.crosemont.dti.g26.stageavenirapi.Modèle.Categorie
+
+import com.crosemont.dti.g26.stageavenirapi.Modèle.DemandeStage
+import com.crosemont.dti.g26.stageavenirapi.Modèle.MappingEnum.MappageEnum
+
 import com.crosemont.dti.g26.stageavenirapi.Modèle.Role
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Repository
 
 @Repository
-class RoleDAOImplement (var bd : JdbcTemplate ) :RoleDAO{
+
+class RoleDAOImplement  (val bd : JdbcTemplate): RoleDAO{
+    private var mappage = MappageEnum()
     override fun chercherParCode(code: Int): Role? {
         var result = bd.query("SELECT * FROM role WHERE idrole = ?", arrayOf(code)) { response, _ ->
 
@@ -16,7 +21,6 @@ class RoleDAOImplement (var bd : JdbcTemplate ) :RoleDAO{
             )
 
         }
-
         return result.firstOrNull()
     }
 

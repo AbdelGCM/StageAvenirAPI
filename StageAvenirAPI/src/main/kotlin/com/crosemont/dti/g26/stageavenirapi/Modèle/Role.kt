@@ -1,10 +1,9 @@
 package com.crosemont.dti.g26.stageavenirapi.Modèle
 
-class Role(
-    var idRole : Int,
-    var nom  : String
+import com.crosemont.dti.g26.stageavenirapi.Modèle.Enum.Nom_role
+
+data class Role(
+    val idRole: Int,
+    val nom: String?
 )
-{
 
-
-}

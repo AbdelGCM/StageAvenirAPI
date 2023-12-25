@@ -20,10 +20,9 @@ class ServiceOffreDeStage(val daoEntreprise:EntrepriseDAO, val daoUtilisateur: U
         var etudiant = daoUtilisateur.chercherUserParCode(code_utilisateur)
         if (etudiant != null) {
             if (serviceGestionUtilisateur.verifierRoleUtilisateur(etudiant , "etudiant")){
-                return  etudiant.categorie?.let { daoOffreStage.chercherParCodeCatégorie(it.idCatégorie) }
+                return  etudiant.catégorie?.let { daoOffreStage.chercherParCodeCatégorie(it.idCatégorie) }
 
             }else throw DroitAccèsInsuffisantException("L'utilisateur ${etudiant.nom} n'est pas un etudiant")
-
         }
     throw RessourceInexistanteException("L'utilisateur avec le code ${code_utilisateur} n'existe pas")
     }
@@ -73,6 +72,10 @@ class ServiceOffreDeStage(val daoEntreprise:EntrepriseDAO, val daoUtilisateur: U
     //========================================Candidatures
     fun postulerPourUneOffre (codeEtudiant : String ,codeOffre:Int, candidature: Candidature):Candidature?{
         var etudiant = daoUtilisateur.chercherUserParCode(codeEtudiant)
+        println("service postuler Offre")
+        if (etudiant != null) {
+            println("service postuler :"+ (etudiant.role?.nom ?: "Pas de role"))
+        }
         if (etudiant != null) {
             if (serviceGestionUtilisateur.verifierRoleUtilisateur(etudiant , "etudiant")){
                 var nouvelleCandidature = daoCandidature.postulerPourUneOffre(candidature,codeEtudiant,codeOffre)
@@ -91,6 +94,9 @@ class ServiceOffreDeStage(val daoEntreprise:EntrepriseDAO, val daoUtilisateur: U
 
     fun obtenirCandidaturesParEtudiant (codeEtudiant:String):List<Candidature>{
         var etudiant = daoUtilisateur.chercherUserParCode(codeEtudiant)
+        if (etudiant != null) {
+            println(etudiant.catégorie)
+        }
         if (etudiant != null) {
             if (serviceGestionUtilisateur.verifierRoleUtilisateur(etudiant , "etudiant")){
                 return daoCandidature.chercherParEtudiant(codeEtudiant)
@@ -155,8 +161,10 @@ class ServiceOffreDeStage(val daoEntreprise:EntrepriseDAO, val daoUtilisateur: U
         var utilisateur = daoUtilisateur.chercherUserParCode(id_coordo)
         if (utilisateur != null) {
             if (serviceGestionUtilisateur.verifierRoleUtilisateur(utilisateur , "coordonnateur")){
-                return utilisateur.categorie?.let { daoAccord.chercherTous() }
+
+                return utilisateur.catégorie?.let { daoAccord.chercherTous() }
             }else throw DroitAccèsInsuffisantException("L'Utilisateur ${utilisateur.nom} n'est pas un coordonnateur")
+
         }
         throw RessourceInexistanteException("L'étudiant avec le code ${id_coordo} n'existe pas")
 
@@ -166,8 +174,8 @@ class ServiceOffreDeStage(val daoEntreprise:EntrepriseDAO, val daoUtilisateur: U
         var utilisateur = daoUtilisateur.chercherUserParCode(code_coordo)
         if (utilisateur != null) {
             if (serviceGestionUtilisateur.verifierRoleUtilisateur(utilisateur , "coordonnateur")){
-                return utilisateur.categorie?.let { daoAccord.chercherParCode(idAccordStage) }
-            }else throw DroitAccèsInsuffisantException("L'Utilisateur ${utilisateur.nom} n'est pas un coordonnateur")
+                return utilisateur.catégorie?.let { daoAccord.chercherParCode(idAccordStage) }
+            }else throw DroitAccèsInsuffisantException("L'étudiant ${utilisateur.nom} n'est pas un coordonnateur")
         }
         throw RessourceInexistanteException("L'Utilisateur avec le code ${code_coordo} n'existe pas")
 
