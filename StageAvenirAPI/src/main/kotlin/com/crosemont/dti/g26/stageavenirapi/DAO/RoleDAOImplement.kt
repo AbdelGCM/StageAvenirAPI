@@ -13,28 +13,15 @@ import org.springframework.stereotype.Repository
 class RoleDAOImplement  (val bd : JdbcTemplate): RoleDAO{
     private var mappage = MappageEnum()
     override fun chercherParCode(code: Int): Role? {
-        var role: Role? = null
+        var result = bd.query("SELECT * FROM role WHERE idrole = ?", arrayOf(code)) { response, _ ->
 
-        try {
-            bd.query("SELECT * FROM  WHERE idRole = ?", arrayOf(code)) { response, _ ->
-                if (response.next()) {
+            Role(
+                idRole = response.getInt("idRole"),
+                nom  = response.getString("nom"),
+            )
 
-                    role =  Role(
-                        idRole = response.getInt("idRole"),
-                        nom = mappage.mapToNom(response.getString("nom"))
-                    )
-                }
-            }
-
-        }catch (e: Exception){
-            println("ERREUR DAO :" + e)
         }
-
-        println("DAO : " + role.toString())
-
-
-        return role
-
+        return result.firstOrNull()
     }
 
 
