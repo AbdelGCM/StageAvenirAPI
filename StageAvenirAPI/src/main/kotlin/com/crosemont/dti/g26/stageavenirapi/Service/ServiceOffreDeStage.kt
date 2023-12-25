@@ -144,7 +144,7 @@ class ServiceOffreDeStage(val daoUtilisateur: UtilisateurDAO, val daoOffreStage:
         if (utilisateur != null) {
             if (serviceGestionUtilisateur.verifierRoleUtilisateur(utilisateur , "coordonnateur")){
                 return utilisateur.categorie?.let { daoAccord.chercherTous() }
-            }else throw DroitAccèsInsuffisantException("L'étudiant ${utilisateur.nom} n'est pas un coordonnateur")
+            }else throw DroitAccèsInsuffisantException("L'Utilisateur ${utilisateur.nom} n'est pas un coordonnateur")
         }
         throw RessourceInexistanteException("L'étudiant avec le code ${id_coordo} n'existe pas")
 
@@ -155,9 +155,9 @@ class ServiceOffreDeStage(val daoUtilisateur: UtilisateurDAO, val daoOffreStage:
         if (utilisateur != null) {
             if (serviceGestionUtilisateur.verifierRoleUtilisateur(utilisateur , "coordonnateur")){
                 return utilisateur.categorie?.let { daoAccord.chercherParCode(idAccordStage) }
-            }else throw DroitAccèsInsuffisantException("L'étudiant ${utilisateur.nom} n'est pas un coordonnateur")
+            }else throw DroitAccèsInsuffisantException("L'Utilisateur ${utilisateur.nom} n'est pas un coordonnateur")
         }
-        throw RessourceInexistanteException("L'étudiant avec le code ${code_coordo} n'existe pas")
+        throw RessourceInexistanteException("L'Utilisateur avec le code ${code_coordo} n'existe pas")
 
     }
 
@@ -169,7 +169,7 @@ class ServiceOffreDeStage(val daoUtilisateur: UtilisateurDAO, val daoOffreStage:
                 return  daoAccord.approuverUnAccord(idAccordStage)
             }else throw DroitAccèsInsuffisantException("L'utilisateur ${utilisateur.nom} n'est pas un coordonnateur")
         }
-        throw RessourceInexistanteException("L'étudiant avec le code ${code_coordo} n'existe pas")
+        throw RessourceInexistanteException("L'utilisateur avec le code ${code_coordo} n'existe pas")
     }
     fun refuserAccordStage(code_coordo: String, idAccordStage: Int):AccordStage?{
 
@@ -179,7 +179,7 @@ class ServiceOffreDeStage(val daoUtilisateur: UtilisateurDAO, val daoOffreStage:
                 return daoAccord.désaprouverUnAccord(idAccordStage)
             }else throw DroitAccèsInsuffisantException("L'utilisateur ${utilisateur.nom} n'est pas un coordonnateur")
         }
-        throw RessourceInexistanteException("L'étudiant avec le code ${code_coordo} n'existe pas")
+        throw RessourceInexistanteException("L'utilisateur avec le code ${code_coordo} n'existe pas")
     }
 
 
