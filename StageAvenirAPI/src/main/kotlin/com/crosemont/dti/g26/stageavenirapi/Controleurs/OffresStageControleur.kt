@@ -77,7 +77,9 @@ class OffresStageControleur(val service: ServiceOffreDeStage) {
             ]
     )
     @PostMapping("/employeur/entreprise/{idEntreprise}/offresStages")
+
     fun ajouterOffreStage(@RequestBody offre: OffreStage, @PathVariable idEntreprise : Int,principal: Principal? ): ResponseEntity<OffreStage> {
+
         val nouvelleOffre = principal?.let { service.ajouter(it.name,idEntreprise,offre) }
 
         if (nouvelleOffre != null) {
