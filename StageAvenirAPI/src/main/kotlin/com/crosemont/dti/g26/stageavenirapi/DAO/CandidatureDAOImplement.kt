@@ -19,7 +19,6 @@ class CandidatureDAOImplement(val bd : JdbcTemplate , val daoDoc :DocumentDAO , 
 
     override fun chercherParCode(code: Int): Candidature? {
         var candidature: Candidature? = null
-        println("Requête SQL : SELECT * FROM candidature WHERE idcandidature = $code")
 
             var result = bd.query("SELECT * FROM candidature WHERE idcandidature = ?", arrayOf(code)) { response, _ ->
 
@@ -34,7 +33,6 @@ class CandidatureDAOImplement(val bd : JdbcTemplate , val daoDoc :DocumentDAO , 
                     )
 
             }
-        println("DAO : " + candidature.toString())
 
         return result.firstOrNull()
     }
@@ -90,15 +88,10 @@ class CandidatureDAOImplement(val bd : JdbcTemplate , val daoDoc :DocumentDAO , 
                     etudiant = daoUser.chercherUserParCode(response.getString("utilisateur_idutilisateur")),
                     documents = daoDoc.chercherParCandidature(response.getInt("idcandidature"))
             )
-
-            println("candidature boucle : ${candidature.idCandidature}")
             candidatures.add(candidature)
         }
-
-
         println(candidatures.toString())
         return candidatures
-
     }
 
 
@@ -137,7 +130,6 @@ class CandidatureDAOImplement(val bd : JdbcTemplate , val daoDoc :DocumentDAO , 
         var generatedId = chercherTous().get(chercherTous().size -1 ).idCandidature
         nouvelleCandidature.idCandidature = generatedId
         nouvelleCandidature = chercherTous().get(chercherTous().size -1 )
-        println("NOUVEAU ID CANDIDATURE :" + nouvelleCandidature.idCandidature)
        return nouvelleCandidature
 
     }

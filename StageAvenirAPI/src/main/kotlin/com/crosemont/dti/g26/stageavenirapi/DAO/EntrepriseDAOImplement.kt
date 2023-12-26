@@ -12,7 +12,9 @@ class EntrepriseDAOImplement(var bd : JdbcTemplate, var daoUser : UtilisateurDAO
 
         var result = bd.query("SELECT * FROM entreprise WHERE identreprise = ?", arrayOf(code)) { response, _ ->
 
+
             daoUser.chercherUserParCode(response.getString("utilisateur_idutilisateur"))?.let {
+
                 Entreprise(
                     idEntreprise = response.getInt("idEntreprise"),
                     nom = response.getString("nom"),

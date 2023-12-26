@@ -1,10 +1,9 @@
 package com.crosemont.dti.g26.stageavenirapi.Modèle
 
-class Role(
-    var idRole : Int,
-    var nom  : String
+
+
+data class Role(
+    val idRole: Int,
+    val nom: String?
 )
-{
 
-
-}

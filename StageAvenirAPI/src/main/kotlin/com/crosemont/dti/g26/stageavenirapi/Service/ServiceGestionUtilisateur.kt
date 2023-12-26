@@ -29,8 +29,6 @@ class ServiceGestionUtilisateur (var daoDocument : DocumentDAO, var daoCandidatu
     }
     fun ajouterUnCv(cv :Document, code_etudiant : String ):Document?{
         var etudiant = daoUtilisateur.chercherUserParCode(code_etudiant)
-        println("CV : " +cv.toString())
-        println("etudiant : " + code_etudiant)
         if (etudiant != null) {
             if (verifierRoleUtilisateur(etudiant , "etudiant")){
                 return  daoDocument.ajouterCv(cv, code_etudiant)

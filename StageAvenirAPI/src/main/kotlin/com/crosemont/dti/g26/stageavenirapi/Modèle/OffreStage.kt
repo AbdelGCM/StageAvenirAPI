@@ -6,6 +6,7 @@ import java.time.LocalDate
 
 data class OffreStage(
 
+
         val idOffreStage: Int,
         val titreOffre: String,
         val posteOffert: String,
@@ -15,6 +16,6 @@ data class OffreStage(
         val estVisible: Boolean,
         var etat: Etat,
         val entreprise: Entreprise?,
-        val catégorie: Categorie?
+        val catégorie: Catégorie?
 
 )

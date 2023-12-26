@@ -14,7 +14,7 @@ class AccordStageImplement (val bd : JdbcTemplate, var daoUser : UtilisateurDAO)
 
                 element.commentaire,
                 element.etat.toString(),
-                element.etudiant?.idUtilisateur ?: 0,
+                element.etudiant?.idutilisateur ?: 0,
                 element.offre?.idOffreStage ?: 0,
 
         )
@@ -57,12 +57,10 @@ class AccordStageImplement (val bd : JdbcTemplate, var daoUser : UtilisateurDAO)
     }
 
     override fun approuverUnAccord(element: Int): AccordStage? {
-        println("ID " + element)
         try {
             bd.update(
                     "UPDATE accordStage SET etat = 'ACCEPTEE' WHERE idaccordStage = ?", element
             )
-            println("ici 1")
             return chercherParCode(element)
         } catch (e: Exception) {
             e.printStackTrace()
