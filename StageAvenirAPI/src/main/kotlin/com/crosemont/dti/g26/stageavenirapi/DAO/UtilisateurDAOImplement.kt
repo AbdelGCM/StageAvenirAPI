@@ -47,8 +47,6 @@ class UtilisateurDAOImplement (val bd : JdbcTemplate, val daoCategorie: Categori
         }catch (e: Exception){
             println("ERREUR DAO :" + e)
         }
-
-        println("DAO utilisateur : " + utilisateur.toString())
         return utilisateur
     }
 

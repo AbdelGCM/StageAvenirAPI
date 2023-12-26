@@ -2,6 +2,8 @@ package com.crosemont.dti.g26.stageavenirapi.controlleurs
 
 import com.crosemont.dti.g26.stageavenirapi.Modèle.Entreprise
 import com.crosemont.dti.g26.stageavenirapi.Service.ServiceGestionUtilisateur
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.responses.ApiResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -13,7 +15,17 @@ import java.security.Principal
 
 @RestController
 class EntrepriseControleur(val service : ServiceGestionUtilisateur)  {
-
+    @Operation(
+            summary = "Ajouter une entreprise ",
+            description = "Ajoute une entreprise et la lie avec l'employeur qui envoie la requête.",
+            operationId = "ajouterEntreprise",
+            responses = [
+                ApiResponse(responseCode = "200", description = "Entrprise ajoutée avec succès."),
+                ApiResponse(responseCode = "401", description = "L'utilisateur voulant effectuer l'opération n'est pas correctement authentifié."),
+                ApiResponse(responseCode = "403", description = "L'utilisateur voulant effectuer l'opération n'a pas les droits nécessaires."),
+                ApiResponse(responseCode = "500", description = "Erreur interne du serveur.")
+            ]
+    )
     @PostMapping("/employeur/entreprises")
     fun ajouterEntreprise( principal: Principal? , @RequestBody entreprise: Entreprise) : ResponseEntity<Entreprise>?{
         if (principal != null) {
@@ -35,7 +47,17 @@ class EntrepriseControleur(val service : ServiceGestionUtilisateur)  {
         return ResponseEntity.internalServerError().build()
     }
 
-
+    @Operation(
+            summary = "Obtenir les entreprises d'un employeur ",
+            description = "Permet de récupérer la liste des entreprises d'un employeur ",
+            operationId = "obtenirEntreprises",
+            responses = [
+                ApiResponse(responseCode = "200", description = "Liste des entreprises récupérée avec succès."),
+                ApiResponse(responseCode = "401", description = "L'utilisateur voulant effectuer l'opération n'est pas correctement authentifié."),
+                ApiResponse(responseCode = "403", description = "L'utilisateur voulant effectuer l'opération n'a pas les droits nécessaires."),
+                ApiResponse(responseCode = "500", description = "Erreur interne du serveur.")
+            ]
+    )
     @GetMapping("/employeur/entreprises")
     fun obtenirEntreprises(principal: Principal?): ResponseEntity<List<Entreprise>>?{
         var listeEntreprise = principal?.let { service.obtenirToutesLesEntreprisesPourUnEmployeur(it.name) }
@@ -54,7 +76,17 @@ class EntrepriseControleur(val service : ServiceGestionUtilisateur)  {
         return ResponseEntity.internalServerError().build()
 
     }
-
+    @Operation(
+            summary = "Obtenir une entreprise d'un employeur ",
+            description = "Permet de récupérer une entreprises sécifique d'un employeur ",
+            operationId = "obtenirEntreprise",
+            responses = [
+                ApiResponse(responseCode = "200", description = "Entreprise récupérée avec succès."),
+                ApiResponse(responseCode = "401", description = "L'utilisateur voulant effectuer l'opération n'est pas correctement authentifié."),
+                ApiResponse(responseCode = "403", description = "L'utilisateur voulant effectuer l'opération n'a pas les droits nécessaires."),
+                ApiResponse(responseCode = "500", description = "Erreur interne du serveur.")
+            ]
+    )
     @GetMapping("/employeur/entreprises/{code_entreprise}")
     fun obtenirEntrepriseParCode(principal: Principal?, @PathVariable code_entreprise : String ): ResponseEntity<Entreprise>?{
 

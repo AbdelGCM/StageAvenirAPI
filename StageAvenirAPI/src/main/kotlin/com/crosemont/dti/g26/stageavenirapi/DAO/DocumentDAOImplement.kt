@@ -179,7 +179,6 @@ class DocumentDAOImplement (val bd : JdbcTemplate, var daoEtudiant : Utilisateur
                 documents.add(document)
             }
         }
-        println("DAO tous les docs taille tab :"+ documents.size)
         return documents
     }
 

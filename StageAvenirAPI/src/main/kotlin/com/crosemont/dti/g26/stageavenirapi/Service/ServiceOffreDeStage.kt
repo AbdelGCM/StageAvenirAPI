@@ -72,7 +72,6 @@ class ServiceOffreDeStage(val daoEntreprise:EntrepriseDAO, val daoUtilisateur: U
     //========================================Candidatures
     fun postulerPourUneOffre (codeEtudiant : String ,codeOffre:Int, candidature: Candidature):Candidature?{
         var etudiant = daoUtilisateur.chercherUserParCode(codeEtudiant)
-        println("service postuler Offre")
         if (etudiant != null) {
             println("service postuler :"+ (etudiant.role?.nom ?: "Pas de role"))
         }
@@ -161,7 +160,6 @@ class ServiceOffreDeStage(val daoEntreprise:EntrepriseDAO, val daoUtilisateur: U
         var utilisateur = daoUtilisateur.chercherUserParCode(id_coordo)
         if (utilisateur != null) {
             if (serviceGestionUtilisateur.verifierRoleUtilisateur(utilisateur , "coordonnateur")){
-
                 return utilisateur.catégorie?.let { daoAccord.chercherTous() }
             }else throw DroitAccèsInsuffisantException("L'Utilisateur ${utilisateur.nom} n'est pas un coordonnateur")
 

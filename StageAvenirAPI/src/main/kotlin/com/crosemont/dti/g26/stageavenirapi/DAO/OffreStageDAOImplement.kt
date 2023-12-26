@@ -44,8 +44,6 @@ class OffreStageDAOImplement(val db: JdbcTemplate, var daoCategorie : CategorieD
                 etat = mappage.mapToEtat(résultat.getString("etat")),
                 entreprise = daoEntreprise.chercherParCode(résultat.getInt("entreprise_identreprise")) ,
                 catégorie = daoCategorie.chercherParCode(résultat.getInt("categorie_idcategorie"))
-
-
             )
         }
     }
@@ -83,8 +81,6 @@ class OffreStageDAOImplement(val db: JdbcTemplate, var daoCategorie : CategorieD
                 etat = mappage.mapToEtat(résultat.getString("etat")),
                 entreprise = daoEntreprise.chercherParCode(résultat.getInt("entreprise_identreprise")) ,
                 catégorie = daoCategorie.chercherParCode(résultat.getInt("categorie_idcategorie"))
-
-
             )
         }
 
