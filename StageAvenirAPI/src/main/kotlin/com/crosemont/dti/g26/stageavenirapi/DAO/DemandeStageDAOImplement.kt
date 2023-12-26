@@ -38,7 +38,6 @@ class DemandeStageDAOImplement(val bd : JdbcTemplate,val daoCategorie: Categorie
         try {
             bd.query("SELECT * FROM demandeStage WHERE iddemandeStage = ?", arrayOf(code)) { response, _ ->
                 //if (response.next()) {
-                    print("teste")
                     demande_de_stage =  DemandeStage(
                         idDemandeStage = response.getInt("iddemandeStage"),
                         titre = response.getString("titre"),
@@ -49,20 +48,13 @@ class DemandeStageDAOImplement(val bd : JdbcTemplate,val daoCategorie: Categorie
                         compétence = daoCompetence.chercherTousCompétenceParDemandeStage(response.getInt("iddemandeStage")),
                         catégorie = daoCategorie.chercherParCode(response.getInt("categorie_idcategorie")),
                         utilisateur = daoUtilisateur.chercherUserParCode(response.getString("utilisateur_idutilisateur"))
-
                    )
-                    print("allo1")
                // }
-                print("allo2")
             }
 
         }catch (e: Exception){
             println("ERREUR DAO :" + e)
         }
-
-        println("DAO : " + demande_de_stage.toString())
-
-
         return demande_de_stage
     }
 

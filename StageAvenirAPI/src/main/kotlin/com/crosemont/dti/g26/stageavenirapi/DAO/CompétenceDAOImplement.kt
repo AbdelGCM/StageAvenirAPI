@@ -26,12 +26,8 @@ class CompétenceDAOImplement (val bd: JdbcTemplate): CompétenceDAO {
             }
 
         }catch (e: Exception){
-            println("ERREUR DAO :" + e)
+
         }
-
-        println("DAO : " + compétences.toString())
-
-
         return compétences
     }
 

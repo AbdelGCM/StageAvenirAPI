@@ -41,27 +41,15 @@ class CategorieDAOImplement(val bd: JdbcTemplate): CategorieDAO {
 
         try {
             bd.query("SELECT * FROM categorie WHERE idcategorie = ?", arrayOf(code)) { response, _ ->
-                //if (response.next()) {
-                print("teste")
                 catégorie =  Catégorie(
                     idCatégorie= response.getInt("idcategorie"),
                     cursus =  response.getString("nom"),
-
-
                 )
-                print("allo1")
-                // }
-                print("allo2")
             }
-
         }catch (e: Exception){
             println("ERREUR DAO :" + e)
         }
 
-        println("DAO : " + catégorie.toString())
-
-
         return catégorie
-
     }
 }
