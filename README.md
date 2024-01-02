@@ -21,10 +21,11 @@ Elle peut être testée avec PostMan. Nous avons prévu une librairie de liens �
 ## Auteurs
 Sous-équipe 1 Composée de Abdel et Jimson : Ils sont responsables de la partie de l'API qui concerne les offres de stage , et les demandes de stages 
 
- 
-
 Sous-équipe 2 composée de Wissem et Marwa : Ils seront résponsable de la partie de l'API qui concerne les documents, les candidatures, les entreprises et les accords de stages
 
+## Présentation
+Le support que nous avons utilisé pour présenter notre API est disponible sur Canvas. Vous pouvez accéder à celui ci via le lien ci-dessous : 
+https://www.canva.com/design/DAF3owXeZwo/U54V4CB1SXMoPC3JmxZkPQ/edit?utm_content=DAF3owXeZwo&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
 
 
 ## Licence
